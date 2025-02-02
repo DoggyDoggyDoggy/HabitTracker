@@ -13,9 +13,7 @@ import androidx.compose.ui.layout.Layout
 fun HabitTable(
 
 ) {
-
     MonthsGrid(days = 31)
-
 }
 
 @Composable

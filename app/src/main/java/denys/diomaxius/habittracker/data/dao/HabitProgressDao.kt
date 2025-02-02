@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface HabitProgressDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertProgress(progress: HabitProgress)
+    suspend fun insertProgress(habitProgress: HabitProgress)
 
     @Query("SELECT * FROM habit_progress WHERE habitId = :habitId ORDER BY date ASC")
     fun getProgressByHabit(habitId: Int): Flow<List<HabitProgress>>
@@ -16,5 +16,5 @@ interface HabitProgressDao {
     fun getAllProgress(): Flow<List<HabitProgress>>
 
     @Delete
-    suspend fun deleteProgress(progress: HabitProgress)
+    suspend fun deleteProgress(habitProgress: HabitProgress)
 }
