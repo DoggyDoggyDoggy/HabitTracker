@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import denys.diomaxius.habittracker.data.model.Habit
+import denys.diomaxius.habittracker.data.model.HabitProgress
 import denys.diomaxius.habittracker.data.repository.HabitProgressRepository
 import denys.diomaxius.habittracker.data.repository.HabitRepository
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -17,12 +18,26 @@ class MainScreenViewModel @Inject constructor(
     private val habitRepository: HabitRepository,
     private val habitProgressRepository: HabitProgressRepository
 ) : ViewModel() {
+
     private val _habitList = MutableStateFlow<List<Habit>>(emptyList())
     val habitList = _habitList.asStateFlow()
+
+    private val _habitProgress = MutableStateFlow<List<HabitProgress>>(emptyList())
+    val habitProgress = _habitProgress.asStateFlow()
 
     init {
         viewModelScope.launch {
             habitRepository.getAllHabits().collect { _habitList.value = it }
+        }
+
+        viewModelScope.launch {
+            habitProgressRepository.getAllProgress().collect{_habitProgress.value = it}
+        }
+    }
+
+    fun addHabitProgress(habitProgress: HabitProgress) {
+        viewModelScope.launch{
+            habitProgressRepository.insertProgress(habitProgress)
         }
     }
 
