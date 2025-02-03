@@ -42,6 +42,12 @@ class MainScreenViewModel @Inject constructor(
         }
     }
 
+    fun insertProgress(habitProgress: HabitProgress) {
+        viewModelScope.launch {
+            habitProgressRepository.insertProgress(habitProgress)
+        }
+    }
+
     fun addHabit(habit: Habit) {
         viewModelScope.launch {
             habitRepository.insertHabit(habit)
