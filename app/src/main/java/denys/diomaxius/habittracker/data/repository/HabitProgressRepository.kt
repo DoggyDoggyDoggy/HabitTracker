@@ -13,8 +13,8 @@ class HabitProgressRepository @Inject constructor(
         dao.insertProgress(habitProgress)
     }
 
-    fun getProgressByHabit(habitId: Int) {
-        dao.getProgressByHabit(habitId)
+    fun getProgressByHabit(habitId: Int): Flow<List<HabitProgress>> {
+        return dao.getProgressByHabit(habitId)
     }
     fun getAllProgress(): Flow<List<HabitProgress>> {
         return dao.getAllProgress()
