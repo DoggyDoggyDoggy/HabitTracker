@@ -37,10 +37,10 @@ fun HabitTable(
     insertProgress: (HabitProgress) -> Unit,
     checkTodayProgress: suspend (Int, LocalDate) -> Boolean
 ) {
-    var isTracked by remember { mutableStateOf(false) }
+    var isHabitTrackedForToday by remember { mutableStateOf(false) }
 
-    LaunchedEffect(isTracked) {
-        isTracked = checkTodayProgress(habit.id, LocalDate.now())
+    LaunchedEffect(isHabitTrackedForToday) {
+        isHabitTrackedForToday = checkTodayProgress(habit.id, LocalDate.now())
     }
 
     Card(
@@ -62,37 +62,12 @@ fun HabitTable(
 
                 Spacer(modifier = Modifier.weight(1f))
 
-                IconButton(
-                    colors = IconButtonDefaults.iconButtonColors(
-                        containerColor = if (isTracked) Color.Gray else Color.White
-                    ),
-                    onClick = {if (!isTracked) {
-                        insertProgress(
-                            HabitProgress(
-                                habit.id,
-                                date = LocalDate.now(),
-                                isCompleted = true
-                            )
-                        )
-                        isTracked = true
-                    } else {
-                        insertProgress(
-                            HabitProgress(
-                                habit.id,
-                                date = LocalDate.now(),
-                                isCompleted = false
-                            )
-                        )
-                        isTracked = false
-                    }
-
-                    }
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.Check,
-                        contentDescription = "Check"
-                    )
-                }
+                CheckedIcon(
+                    habitId = habit.id,
+                    insertProgress = insertProgress,
+                    isHabitTrackedForToday = isHabitTrackedForToday,
+                    toggleTracked = { isHabitTrackedForToday = !isHabitTrackedForToday }
+                )
             }
 
             Row(
@@ -107,14 +82,43 @@ fun HabitTable(
     }
 }
 
+@Composable
+fun CheckedIcon(
+    insertProgress: (HabitProgress) -> Unit,
+    isHabitTrackedForToday: Boolean,
+    toggleTracked: () -> Unit,
+    habitId: Int
+) {
+    IconButton(
+        colors = IconButtonDefaults.iconButtonColors(
+            containerColor = if (isHabitTrackedForToday) Color.Gray else Color.White
+        ),
+        onClick = {
+                insertProgress(
+                    HabitProgress(
+                        habitId = habitId,
+                        date = LocalDate.now(),
+                        isCompleted = !isHabitTrackedForToday
+                    )
+                )
+                toggleTracked()
+        }
+    ) {
+        Icon(
+            imageVector = Icons.Default.Check,
+            contentDescription = "Check"
+        )
+    }
+}
+
 @Preview
 @Composable
 fun PreviewHabitTable() {
     HabitTable(
-        habit = habit,
-        habitProgress = habitProgress,
+        habit = dummyHabit,
+        habitProgress = dummyHabitProgress,
         insertProgress = {},
-        checkTodayProgress = { _, _ -> false},
+        checkTodayProgress = { _, _ -> false },
     )
 }
 
