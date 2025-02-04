@@ -43,13 +43,15 @@ class MainScreenViewModel @Inject constructor(
         }
     }
 
-    fun checkTodayProgress(habitId: Int, date: LocalDate, onResult: (Boolean) -> Unit) {
-        viewModelScope.launch {
-            val result = habitProgressRepository.checkCurrentDate(habitId, date) > 0
-            onResult(result)
-        }
+    suspend fun checkTodayProgress(habitId: Int, date: LocalDate): Boolean {
+        return habitProgressRepository.checkCurrentDate(habitId, date) > 0
     }
 
+    fun deleteProgress(habitProgress: HabitProgress) {
+        viewModelScope.launch {
+            habitProgressRepository.deleteProgress(habitProgress)
+        }
+    }
 
     fun insertProgress(habitProgress: HabitProgress) {
         viewModelScope.launch {

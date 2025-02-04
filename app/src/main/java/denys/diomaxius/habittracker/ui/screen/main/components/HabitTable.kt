@@ -26,18 +26,22 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.hilt.navigation.compose.hiltViewModel
 import denys.diomaxius.habittracker.data.model.Habit
 import denys.diomaxius.habittracker.data.model.HabitProgress
-import denys.diomaxius.habittracker.ui.screen.main.MainScreenViewModel
 import java.time.LocalDate
 
 @Composable
 fun HabitTable(
     habit: Habit,
     habitProgress: List<HabitProgress>,
-    insertProgress: (HabitProgress) -> Unit
+    insertProgress: (HabitProgress) -> Unit,
+    checkTodayProgress: suspend (Int, LocalDate) -> Boolean
 ) {
+    var isTracked by remember { mutableStateOf(false) }
+
+    LaunchedEffect(isTracked) {
+        isTracked = checkTodayProgress(habit.id, LocalDate.now())
+    }
 
     Card(
         modifier = Modifier
@@ -60,9 +64,9 @@ fun HabitTable(
 
                 IconButton(
                     colors = IconButtonDefaults.iconButtonColors(
-
+                        containerColor = if (isTracked) Color.Gray else Color.White
                     ),
-                    onClick = {
+                    onClick = {if (!isTracked) {
                         insertProgress(
                             HabitProgress(
                                 habit.id,
@@ -70,6 +74,18 @@ fun HabitTable(
                                 isCompleted = true
                             )
                         )
+                        isTracked = true
+                    } else {
+                        insertProgress(
+                            HabitProgress(
+                                habit.id,
+                                date = LocalDate.now(),
+                                isCompleted = false
+                            )
+                        )
+                        isTracked = false
+                    }
+
                     }
                 ) {
                     Icon(
@@ -84,7 +100,6 @@ fun HabitTable(
                     .horizontalScroll(rememberScrollState())
             ) {
                 HabitGrid(
-                    days = 365,
                     habitProgress = habitProgress
                 )
             }
@@ -99,6 +114,7 @@ fun PreviewHabitTable() {
         habit = habit,
         habitProgress = habitProgress,
         insertProgress = {},
+        checkTodayProgress = { _, _ -> false},
     )
 }
 

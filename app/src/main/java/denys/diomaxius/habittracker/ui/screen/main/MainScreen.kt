@@ -26,7 +26,8 @@ fun MainScreen(
             HabitTable(
                 habit = habit,
                 habitProgress = habitProgress,
-                insertProgress = { viewModel.insertProgress(it) }
+                insertProgress = { viewModel.insertProgress(it) },
+                checkTodayProgress = {id: Int, date: LocalDate -> viewModel.checkTodayProgress(id, date)}
             )
         }
         Button(onClick = { viewModel.addHabit(Habit(name = "Example"))}) {

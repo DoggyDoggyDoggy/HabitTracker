@@ -13,7 +13,7 @@ interface HabitProgressDao {
     @Query("SELECT * FROM habit_progress WHERE habitId = :habitId ORDER BY date ASC")
     fun getProgressByHabit(habitId: Int): Flow<List<HabitProgress>>
 
-    @Query("SELECT COUNT(*) FROM habit_progress WHERE habitId = :habitId AND date = :date")
+    @Query("SELECT COUNT(*) FROM habit_progress WHERE habitId = :habitId AND date = :date AND isCompleted = 1")
     suspend fun checkCurrentDate(habitId: Int, date: LocalDate): Int
 
     @Query("SELECT * FROM habit_progress ORDER BY date ASC")
