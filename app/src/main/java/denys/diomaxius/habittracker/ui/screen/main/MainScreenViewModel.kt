@@ -11,6 +11,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import java.time.LocalDate
 import javax.inject.Inject
 
 @HiltViewModel
@@ -41,6 +42,14 @@ class MainScreenViewModel @Inject constructor(
             }
         }
     }
+
+    fun checkTodayProgress(habitId: Int, date: LocalDate, onResult: (Boolean) -> Unit) {
+        viewModelScope.launch {
+            val result = habitProgressRepository.checkCurrentDate(habitId, date) > 0
+            onResult(result)
+        }
+    }
+
 
     fun insertProgress(habitProgress: HabitProgress) {
         viewModelScope.launch {
