@@ -24,7 +24,6 @@ fun MainScreen(
         habitList.forEach { habit ->
             val habitProgress by viewModel.getProgressByHabit(habit.id).collectAsState(emptyList())
             HabitTable(
-                viewModel = viewModel,
                 habit = habit,
                 habitProgress = habitProgress,
                 insertProgress = { viewModel.insertProgress(it) }
