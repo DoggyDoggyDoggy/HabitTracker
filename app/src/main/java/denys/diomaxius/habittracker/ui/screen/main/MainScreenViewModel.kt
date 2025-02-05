@@ -47,21 +47,9 @@ class MainScreenViewModel @Inject constructor(
         return habitProgressRepository.checkCurrentDate(habitId, date) > 0
     }
 
-    fun deleteProgress(habitProgress: HabitProgress) {
-        viewModelScope.launch {
-            habitProgressRepository.deleteProgress(habitProgress)
-        }
-    }
-
     fun insertProgress(habitProgress: HabitProgress) {
         viewModelScope.launch {
             habitProgressRepository.insertProgress(habitProgress)
-        }
-    }
-
-    fun addHabit(habit: Habit) {
-        viewModelScope.launch {
-            habitRepository.insertHabit(habit)
         }
     }
 

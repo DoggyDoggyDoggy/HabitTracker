@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -35,11 +36,12 @@ fun HabitTable(
     habit: Habit,
     habitProgress: List<HabitProgress>,
     insertProgress: (HabitProgress) -> Unit,
-    checkTodayProgress: suspend (Int, LocalDate) -> Boolean
+    checkTodayProgress: suspend (Int, LocalDate) -> Boolean,
+    deleteHabit: () -> Unit
 ) {
-    var isHabitTrackedForToday by remember { mutableStateOf(false) }
+    var isHabitTrackedForToday by remember(habit.id) { mutableStateOf(false) }
 
-    LaunchedEffect(isHabitTrackedForToday) {
+    LaunchedEffect(habit.id) {
         isHabitTrackedForToday = checkTodayProgress(habit.id, LocalDate.now())
     }
 
@@ -62,6 +64,10 @@ fun HabitTable(
 
                 Spacer(modifier = Modifier.weight(1f))
 
+                DeleteIcon(
+                    deleteHabit = deleteHabit
+                )
+
                 CheckedIcon(
                     habitId = habit.id,
                     insertProgress = insertProgress,
@@ -83,6 +89,13 @@ fun HabitTable(
 }
 
 @Composable
+fun DeleteIcon(deleteHabit: () -> Unit) {
+    IconButton(onClick = deleteHabit) {
+        Icon(imageVector = Icons.Default.Delete, contentDescription = "Delete habit table")
+    }
+}
+
+@Composable
 fun CheckedIcon(
     insertProgress: (HabitProgress) -> Unit,
     isHabitTrackedForToday: Boolean,
@@ -94,14 +107,14 @@ fun CheckedIcon(
             containerColor = if (isHabitTrackedForToday) Color.Gray else Color.White
         ),
         onClick = {
-                insertProgress(
-                    HabitProgress(
-                        habitId = habitId,
-                        date = LocalDate.now(),
-                        isCompleted = !isHabitTrackedForToday
-                    )
+            insertProgress(
+                HabitProgress(
+                    habitId = habitId,
+                    date = LocalDate.now(),
+                    isCompleted = !isHabitTrackedForToday
                 )
-                toggleTracked()
+            )
+            toggleTracked()
         }
     ) {
         Icon(
@@ -119,6 +132,7 @@ fun PreviewHabitTable() {
         habitProgress = dummyHabitProgress,
         insertProgress = {},
         checkTodayProgress = { _, _ -> false },
+        deleteHabit = {}
     )
 }
 
