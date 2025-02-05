@@ -17,9 +17,24 @@ class ViewModelAddHabitTable @Inject constructor(
     private val _name = mutableStateOf("")
     val name: State<String> get() = _name
 
+    private val _description = mutableStateOf("")
+    val description: State<String> get() = _description
+
+    private val _category = mutableStateOf("")
+    val category: State<String> get() = _category
+
     fun onTextChanged(newText: String) {
         _name.value = newText
     }
+
+    fun onCategoryChanged(newText: String) {
+        _category.value = newText
+    }
+
+    fun onDescriptionChanged(newText: String) {
+        _description.value = newText
+    }
+
     fun addHabit(habit: Habit) {
         viewModelScope.launch {
             habitRepository.insertHabit(habit)

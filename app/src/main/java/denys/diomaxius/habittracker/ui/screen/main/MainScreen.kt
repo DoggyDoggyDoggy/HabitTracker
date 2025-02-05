@@ -47,10 +47,7 @@ fun MainScreen(
                     habitProgress = habitProgress,
                     insertProgress = { viewModel.insertProgress(it) },
                     checkTodayProgress = { id: Int, date: LocalDate ->
-                        viewModel.checkTodayProgress(
-                            id,
-                            date
-                        )
+                        viewModel.checkTodayProgress(id, date)
                     }
                 )
             }

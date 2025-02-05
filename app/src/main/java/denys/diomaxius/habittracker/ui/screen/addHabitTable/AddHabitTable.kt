@@ -4,13 +4,22 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Button
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExposedDropdownMenuBox
+import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import denys.diomaxius.habittracker.data.constants.CategoryData
 import denys.diomaxius.habittracker.data.model.Habit
 
 @Composable
@@ -19,6 +28,8 @@ fun AddHabitTable(
     navHostController: NavHostController
 ) {
     val name = viewModel.name.value
+    val description = viewModel.description.value
+    val category = viewModel.category.value
 
     Column(
         modifier = Modifier.fillMaxSize(),
@@ -33,6 +44,19 @@ fun AddHabitTable(
             }
         )
 
+        OutlinedTextField(
+            value = description,
+            onValueChange = { viewModel.onDescriptionChanged(it) },
+            label = {
+                Text(text = "Enter your description for habit")
+            }
+        )
+
+        DropDownMenu(
+            category = category,
+            onCategoryChange = { viewModel.onCategoryChanged(it) }
+        )
+
         Button(
             onClick = {
                 viewModel.addHabit(Habit(name = name))
@@ -40,6 +64,48 @@ fun AddHabitTable(
             }
         ) {
             Text(text = "Add table")
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun DropDownMenu(
+    modifier: Modifier = Modifier,
+    options: List<String> = CategoryData.categories,
+    category: String,
+    onCategoryChange: (String) -> Unit
+) {
+    var expanded by remember { mutableStateOf(false) }
+
+    Column(modifier = modifier) {
+        ExposedDropdownMenuBox(
+            expanded = expanded,
+            onExpandedChange = { expanded = !expanded }
+        ) {
+            OutlinedTextField(
+                value = category,
+                onValueChange = {},
+                readOnly = true,
+                label = { Text("Choose category") },
+                trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
+                modifier = Modifier.menuAnchor()
+            )
+
+            ExposedDropdownMenu(
+                expanded = expanded,
+                onDismissRequest = { expanded = false }
+            ) {
+                options.forEach { option ->
+                    DropdownMenuItem(
+                        text = { Text(option) },
+                        onClick = {
+                            onCategoryChange(option)
+                            expanded = false
+                        }
+                    )
+                }
+            }
         }
     }
 }
