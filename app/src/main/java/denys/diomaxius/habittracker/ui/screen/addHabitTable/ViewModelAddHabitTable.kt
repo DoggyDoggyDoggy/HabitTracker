@@ -20,8 +20,15 @@ class ViewModelAddHabitTable @Inject constructor(
     private val _description = mutableStateOf("")
     val description: State<String> get() = _description
 
-    private val _category = mutableStateOf("")
+    private val _category = mutableStateOf("None")
     val category: State<String> get() = _category
+
+    private val _iconId = mutableStateOf(0)
+    val iconId: State<Int> get() = _iconId
+
+    fun onIconIdChange(id: Int) {
+        _iconId.value = id
+    }
 
     fun onTextChanged(newText: String) {
         _name.value = newText

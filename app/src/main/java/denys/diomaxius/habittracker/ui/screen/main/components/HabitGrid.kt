@@ -18,6 +18,7 @@ fun HabitGrid(
     boxSize: Int = 16,
     fixHeight: Int = 1,
     days: Int = 365,
+    rows: Int = 7,
     habitProgress: List<HabitProgress>
 ) {
     val density = LocalDensity.current.density
@@ -38,7 +39,7 @@ fun HabitGrid(
     ) { measurables, constraints ->
         layout(
             width = constraints.maxWidth,
-            height = (((boxSize * density) + spacing - fixHeight) * 7).toInt()
+            height = (((boxSize * density) + spacing - fixHeight) * rows).toInt()
         ) {
             var x = 0
             var y = 0

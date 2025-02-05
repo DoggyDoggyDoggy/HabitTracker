@@ -1,12 +1,16 @@
 package denys.diomaxius.habittracker.ui.screen.main.components
 
+import denys.diomaxius.habittracker.R
 import denys.diomaxius.habittracker.data.model.Habit
 import denys.diomaxius.habittracker.data.model.HabitProgress
 import java.time.LocalDate
 
 val dummyHabit = Habit(
     id = 1,
-    name = "Example"
+    name = "Example",
+    iconResId = R.drawable.ic_android_black_24dp,
+    description = "",
+    category = ""
 )
 
 val dummyHabitProgress = listOf<HabitProgress>(
