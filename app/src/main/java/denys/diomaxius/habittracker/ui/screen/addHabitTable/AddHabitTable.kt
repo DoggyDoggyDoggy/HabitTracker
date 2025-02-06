@@ -71,26 +71,9 @@ fun AddHabitTable(
             onCategoryChange = { viewModel.onCategoryChanged(it) }
         )
 
-        Column {
-            repeat(1){
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceEvenly
-                ) {
-                    repeat(5){
-                        IconButton(onClick = {
-                            viewModel.onIconIdChange(it)
-                        }) {
-                            Icon(
-                                painter = painterResource(id = IconData.icons[it]),
-                                contentDescription = "Icon",
-                                tint = Color.Unspecified
-                            )
-                        }
-                    }
-                }
-            }
-        }
+        IconsTable(
+            onIconChange = {viewModel.onIconIdChange(it)}
+        )
 
         Button(
             onClick = {
@@ -106,6 +89,31 @@ fun AddHabitTable(
             }
         ) {
             Text(text = "Add table")
+        }
+    }
+}
+
+@Composable
+fun IconsTable(
+    onIconChange: (Int) -> Unit
+) {
+    Column {
+        repeat(1){
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceEvenly
+            ) {
+                repeat(5){
+                    IconButton(onClick = { onIconChange(it) }
+                    ) {
+                        Icon(
+                            painter = painterResource(id = IconData.icons[it]),
+                            contentDescription = "Icon",
+                            tint = Color.Unspecified
+                        )
+                    }
+                }
+            }
         }
     }
 }
