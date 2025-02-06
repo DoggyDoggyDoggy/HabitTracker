@@ -19,7 +19,9 @@ fun HabitGrid(
     fixHeight: Int = 1,
     days: Int = 365,
     rows: Int = 7,
-    habitProgress: List<HabitProgress>
+    habitProgress: List<HabitProgress>,
+    boxColorUnchecked: Color,
+    boxColorChecked: Color
 ) {
     val density = LocalDensity.current.density
 
@@ -31,7 +33,8 @@ fun HabitGrid(
                     modifier = Modifier
                         .size(boxSize.dp)
                         .background(
-                            if (habitProgress.any { it.date.dayOfYear == (day + 1) && it.isCompleted }) Color.Blue else Color.Gray
+                            if (habitProgress.any { it.date.dayOfYear == (day + 1) && it.isCompleted })
+                                boxColorChecked else boxColorUnchecked
                         )
                 )
             }

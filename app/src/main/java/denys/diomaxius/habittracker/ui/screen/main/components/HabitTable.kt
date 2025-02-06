@@ -95,7 +95,9 @@ fun HabitTable(
                     .horizontalScroll(rememberScrollState())
             ) {
                 HabitGrid(
-                    habitProgress = habitProgress
+                    habitProgress = habitProgress,
+                    boxColorUnchecked = TableThemes.tableThemes[habit.colorTheme].boxColorUnchecked,
+                    boxColorChecked = TableThemes.tableThemes[habit.colorTheme].boxColorChecked
                 )
             }
         }
@@ -118,7 +120,7 @@ fun CheckedIcon(
 ) {
     IconButton(
         colors = IconButtonDefaults.iconButtonColors(
-            containerColor = if (isHabitTrackedForToday) Color.Gray else Color.White
+            containerColor = if (isHabitTrackedForToday) Color(0xFF89D2A3) else Color.White
         ),
         onClick = {
             insertProgress(
