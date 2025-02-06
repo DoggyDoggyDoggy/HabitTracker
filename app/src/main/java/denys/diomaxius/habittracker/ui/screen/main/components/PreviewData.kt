@@ -10,7 +10,8 @@ val dummyHabit = Habit(
     name = "Example",
     iconResId = R.drawable.ic_android_black_24dp,
     description = "",
-    category = ""
+    category = "",
+    colorTheme = 0
 )
 
 val dummyHabitProgress = listOf<HabitProgress>(

@@ -1,12 +1,16 @@
 package denys.diomaxius.habittracker.ui.screen.addHabitTable
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Menu
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Button
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -24,16 +28,14 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import denys.diomaxius.habittracker.R
 import denys.diomaxius.habittracker.data.constants.CategoryData
-import denys.diomaxius.habittracker.data.constants.IconData
+import denys.diomaxius.habittracker.ui.icons.IconData
 import denys.diomaxius.habittracker.data.model.Habit
+import denys.diomaxius.habittracker.ui.tableThemes.TableThemes
 
 @Composable
 fun AddHabitTable(
@@ -44,6 +46,7 @@ fun AddHabitTable(
     val description = viewModel.description.value
     val category = viewModel.category.value
     val iconId = viewModel.iconId.value
+    val themeId = viewModel.themeId.value
 
     Column(
         modifier = Modifier.fillMaxSize(),
@@ -72,7 +75,15 @@ fun AddHabitTable(
         )
 
         IconsTable(
-            onIconChange = {viewModel.onIconIdChange(it)}
+            modifier = Modifier.padding(12.dp),
+            onIconChange = { viewModel.onIconIdChange(it) },
+            iconId = iconId
+        )
+
+        ThemeTable(
+            modifier = Modifier.padding(12.dp),
+            onColorChange = { viewModel.onThemeIdChange(it) },
+            themeId = themeId
         )
 
         Button(
@@ -82,7 +93,8 @@ fun AddHabitTable(
                         name = name,
                         iconResId = IconData.icons[iconId],
                         category = category,
-                        description = description
+                        description = description,
+                        colorTheme = themeId
                     )
                 )
                 navHostController.popBackStack()
@@ -94,17 +106,60 @@ fun AddHabitTable(
 }
 
 @Composable
-fun IconsTable(
-    onIconChange: (Int) -> Unit
+fun ThemeTable(
+    modifier: Modifier = Modifier,
+    onColorChange: (Int) -> Unit,
+    themeId: Int
 ) {
-    Column {
-        repeat(1){
+    Column(
+        modifier = modifier
+    ) {
+        repeat(1) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceEvenly
             ) {
-                repeat(5){
-                    IconButton(onClick = { onIconChange(it) }
+                repeat(5) {
+                    Box(
+                        modifier = Modifier
+                            .size(32.dp)
+                            .clickable { onColorChange(it) }
+                            .background(TableThemes.tableThemes[it].themeButton)
+                            .border(
+                                width = 1.dp,
+                                color = if (themeId == it) Color.Black else Color.LightGray
+                            )
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun IconsTable(
+    modifier: Modifier = Modifier,
+    onIconChange: (Int) -> Unit,
+    iconId: Int
+) {
+    Column(
+        modifier = modifier
+    ) {
+        repeat(1) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceEvenly
+            ) {
+                repeat(5) {
+                    IconButton(
+                        modifier = Modifier
+                            .border(
+                                width = 1.dp,
+                                color = if (iconId == it) Color.Black else Color.LightGray
+                            ),
+                        onClick = {
+                            onIconChange(it)
+                        }
                     ) {
                         Icon(
                             painter = painterResource(id = IconData.icons[it]),

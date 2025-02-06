@@ -26,8 +26,15 @@ class ViewModelAddHabitTable @Inject constructor(
     private val _iconId = mutableStateOf(0)
     val iconId: State<Int> get() = _iconId
 
+    private val _themeId = mutableStateOf(0)
+    val themeId: State<Int> get() = _themeId
+
     fun onIconIdChange(id: Int) {
         _iconId.value = id
+    }
+
+    fun onThemeIdChange(id: Int) {
+        _themeId.value = id
     }
 
     fun onTextChanged(newText: String) {

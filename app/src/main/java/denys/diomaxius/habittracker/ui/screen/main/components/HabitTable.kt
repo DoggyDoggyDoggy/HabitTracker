@@ -13,6 +13,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
@@ -31,6 +32,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import denys.diomaxius.habittracker.data.model.Habit
 import denys.diomaxius.habittracker.data.model.HabitProgress
+import denys.diomaxius.habittracker.ui.tableThemes.TableThemes
 import java.time.LocalDate
 
 @Composable
@@ -49,7 +51,10 @@ fun HabitTable(
 
     Card(
         modifier = Modifier
-            .padding(8.dp)
+            .padding(8.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = TableThemes.tableThemes[habit.colorTheme].tableColor
+        )
     ) {
         Column(
             modifier = Modifier

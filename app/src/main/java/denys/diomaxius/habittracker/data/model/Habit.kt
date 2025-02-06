@@ -10,6 +10,6 @@ data class Habit(
     val name: String,
     val description: String,
     val category: String,
-    //val color_theme: Int,
+    val colorTheme: Int,
     val iconResId: Int
 )
