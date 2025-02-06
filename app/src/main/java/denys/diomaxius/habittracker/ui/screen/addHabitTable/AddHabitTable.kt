@@ -37,7 +37,10 @@ fun AddHabitTable(
     ) {
         OutlinedTextField(
             value = name,
-            onValueChange = { viewModel.onTextChanged(it) },
+            onValueChange = {
+                if (it.length <= 10)
+                    viewModel.onTextChanged(it)
+            },
             label = {
                 Text(text = "Enter your habit")
             }
@@ -45,7 +48,10 @@ fun AddHabitTable(
 
         OutlinedTextField(
             value = description,
-            onValueChange = { viewModel.onDescriptionChanged(it) },
+            onValueChange = {
+                if (it.length <= 15)
+                    viewModel.onDescriptionChanged(it)
+            },
             label = {
                 Text(text = "Enter your description for habit")
             }

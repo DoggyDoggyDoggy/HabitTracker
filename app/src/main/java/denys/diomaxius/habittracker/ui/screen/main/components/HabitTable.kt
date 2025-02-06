@@ -72,9 +72,16 @@ fun HabitTable(
                     tint = Color.Unspecified
                 )
 
-                Text(
-                    text = habit.name
-                )
+                Column(
+                    modifier = Modifier.padding(start = 8.dp)
+                ) {
+                    Text(
+                        text = habit.name
+                    )
+                    Text(
+                        text = habit.description
+                    )
+                }
 
                 Spacer(modifier = Modifier.weight(1f))
 
