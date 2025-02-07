@@ -32,6 +32,24 @@ class ViewModelAddHabitTable @Inject constructor(
     private val _nameFieldError = mutableStateOf(false)
     val nameFieldError: State<Boolean> get() = _nameFieldError
 
+    private val _isHabitLoaded = mutableStateOf(false)
+    val isHabitLoaded: State<Boolean> get() = _isHabitLoaded
+
+    fun getHabitById(habitId: Int) {
+        if (!_isHabitLoaded.value) {
+            viewModelScope.launch {
+                val habit: Habit = habitRepository.getHabitById(habitId)
+                _name.value = habit.name
+                _description.value = habit.description
+                _category.value = habit.category
+                _iconId.value = habit.iconId
+                _themeId.value = habit.colorTheme
+                _iconId.value = habit.iconId
+                _isHabitLoaded.value = true
+            }
+        }
+    }
+
     fun onNameFieldErrorChange() {
         _nameFieldError.value = _name.value.isEmpty()
     }
@@ -44,7 +62,7 @@ class ViewModelAddHabitTable @Inject constructor(
         _themeId.value = id
     }
 
-    fun onTextChanged(name: String) {
+    fun onNameChanged(name: String) {
         _name.value = name
         onNameFieldErrorChange()
     }

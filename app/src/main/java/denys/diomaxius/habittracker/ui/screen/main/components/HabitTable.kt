@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
-import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
@@ -33,6 +32,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import denys.diomaxius.habittracker.data.model.Habit
 import denys.diomaxius.habittracker.data.model.HabitProgress
+import denys.diomaxius.habittracker.ui.icons.IconData
 import denys.diomaxius.habittracker.ui.tableThemes.TableThemes
 import kotlinx.coroutines.delay
 import java.time.LocalDate
@@ -42,8 +42,7 @@ fun HabitTable(
     habit: Habit,
     habitProgress: List<HabitProgress>,
     insertProgress: (HabitProgress) -> Unit,
-    checkTodayProgress: suspend (Int, LocalDate) -> Boolean,
-    deleteHabit: () -> Unit
+    checkTodayProgress: suspend (Int, LocalDate) -> Boolean
 ) {
     var isHabitTrackedForToday by remember(habit.id) { mutableStateOf(false) }
     var currentDate by remember(habit.id) { mutableStateOf(LocalDate.now()) }
@@ -80,7 +79,7 @@ fun HabitTable(
             ) {
                 Icon(
                     modifier = Modifier.size(42.dp),
-                    painter = painterResource(id = habit.iconResId),
+                    painter = painterResource(id = IconData.icons[habit.iconId]),
                     contentDescription = "Habit icon",
                     tint = Color.Unspecified
                 )
@@ -91,7 +90,7 @@ fun HabitTable(
                     Text(
                         text = habit.name
                     )
-                    if (habit.description.isNotEmpty()){
+                    if (habit.description.isNotEmpty()) {
                         Text(
                             text = habit.description
                         )
@@ -99,10 +98,6 @@ fun HabitTable(
                 }
 
                 Spacer(modifier = Modifier.weight(1f))
-
-                DeleteIcon(
-                    deleteHabit = deleteHabit
-                )
 
                 CheckedIcon(
                     habitId = habit.id,
@@ -125,13 +120,6 @@ fun HabitTable(
                 )
             }
         }
-    }
-}
-
-@Composable
-fun DeleteIcon(deleteHabit: () -> Unit) {
-    IconButton(onClick = deleteHabit) {
-        Icon(imageVector = Icons.Default.Delete, contentDescription = "Delete habit table")
     }
 }
 
@@ -183,8 +171,7 @@ fun PreviewHabitTable() {
         habit = dummyHabit,
         habitProgress = dummyHabitProgress,
         insertProgress = {},
-        checkTodayProgress = { _, _ -> false },
-        deleteHabit = {}
+        checkTodayProgress = { _, _ -> false }
     )
 }
 

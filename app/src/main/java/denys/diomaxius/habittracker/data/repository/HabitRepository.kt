@@ -12,6 +12,10 @@ class HabitRepository @Inject constructor(
         dao.insertHabit(habit)
     }
 
+    suspend fun getHabitById(habitId: Int) : Habit {
+        return dao.getHabitById(habitId)
+    }
+
     fun getAllHabits(): Flow<List<Habit>> {
         return dao.getAllHabits()
     }

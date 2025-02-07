@@ -52,10 +52,4 @@ class MainScreenViewModel @Inject constructor(
             habitProgressRepository.insertProgress(habitProgress)
         }
     }
-
-    fun deleteHabit(habit: Habit) {
-        viewModelScope.launch {
-            habitRepository.deleteHabit(habit)
-        }
-    }
 }

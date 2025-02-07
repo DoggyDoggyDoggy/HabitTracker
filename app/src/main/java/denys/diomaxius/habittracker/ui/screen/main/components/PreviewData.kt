@@ -8,7 +8,7 @@ import java.time.LocalDate
 val dummyHabit = Habit(
     id = 1,
     name = "Example",
-    iconResId = R.drawable.ic_android_black_24dp,
+    iconId = R.drawable.ic_android_black_24dp,
     description = "Dummy description",
     category = "",
     colorTheme = 0

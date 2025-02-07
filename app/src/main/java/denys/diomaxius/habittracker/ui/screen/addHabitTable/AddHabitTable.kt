@@ -13,7 +13,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import denys.diomaxius.habittracker.ui.icons.IconData
 import denys.diomaxius.habittracker.data.model.Habit
 import denys.diomaxius.habittracker.ui.screen.addHabitTable.components.CategoryDropdown
 import denys.diomaxius.habittracker.ui.screen.addHabitTable.components.IconsTable
@@ -22,8 +21,12 @@ import denys.diomaxius.habittracker.ui.screen.addHabitTable.components.ThemeTabl
 @Composable
 fun AddHabitTable(
     viewModel: ViewModelAddHabitTable = hiltViewModel(),
-    navHostController: NavHostController
+    navHostController: NavHostController,
+    habitId: Int?
 ) {
+    if (habitId != null && !viewModel.isHabitLoaded.value) {
+        viewModel.getHabitById(habitId)
+    }
     val name = viewModel.name.value
     val description = viewModel.description.value
     val category = viewModel.category.value
@@ -41,7 +44,7 @@ fun AddHabitTable(
             value = name,
             onValueChange = {
                 if (it.length <= 10)
-                    viewModel.onTextChanged(it)
+                    viewModel.onNameChanged(it)
             },
             label = {
                 Text(text = "Enter your habit")
@@ -80,15 +83,28 @@ fun AddHabitTable(
             onClick = {
                 viewModel.onNameFieldErrorChange()
                 if (!nameFieldError && name.isNotEmpty()) {
-                    viewModel.addHabit(
-                        Habit(
-                            name = name,
-                            iconResId = IconData.icons[iconId],
-                            category = category,
-                            description = description,
-                            colorTheme = themeId
+                    if (habitId != null) {
+                        viewModel.addHabit(
+                            Habit(
+                                id = habitId,
+                                name = name,
+                                iconId = iconId,
+                                category = category,
+                                description = description,
+                                colorTheme = themeId
+                            )
                         )
-                    )
+                    } else {
+                        viewModel.addHabit(
+                            Habit(
+                                name = name,
+                                iconId = iconId,
+                                category = category,
+                                description = description,
+                                colorTheme = themeId
+                            )
+                        )
+                    }
                     navHostController.popBackStack()
                 }
 
