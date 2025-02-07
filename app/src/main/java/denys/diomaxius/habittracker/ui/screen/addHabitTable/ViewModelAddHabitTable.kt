@@ -29,6 +29,13 @@ class ViewModelAddHabitTable @Inject constructor(
     private val _themeId = mutableStateOf(0)
     val themeId: State<Int> get() = _themeId
 
+    private val _nameFieldError = mutableStateOf(false)
+    val nameFieldError: State<Boolean> get() = _nameFieldError
+
+    fun onNameFieldErrorChange() {
+        _nameFieldError.value = _name.value.isEmpty()
+    }
+
     fun onIconIdChange(id: Int) {
         _iconId.value = id
     }
@@ -37,16 +44,17 @@ class ViewModelAddHabitTable @Inject constructor(
         _themeId.value = id
     }
 
-    fun onTextChanged(newText: String) {
-        _name.value = newText
+    fun onTextChanged(name: String) {
+        _name.value = name
+        onNameFieldErrorChange()
     }
 
-    fun onCategoryChanged(newText: String) {
-        _category.value = newText
+    fun onCategoryChanged(category: String) {
+        _category.value = category
     }
 
-    fun onDescriptionChanged(newText: String) {
-        _description.value = newText
+    fun onDescriptionChanged(description: String) {
+        _description.value = description
     }
 
     fun addHabit(habit: Habit) {

@@ -29,6 +29,7 @@ fun AddHabitTable(
     val category = viewModel.category.value
     val iconId = viewModel.iconId.value
     val themeId = viewModel.themeId.value
+    val nameFieldError = viewModel.nameFieldError.value
 
     Column(
         modifier = Modifier.fillMaxSize(),
@@ -36,6 +37,7 @@ fun AddHabitTable(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         OutlinedTextField(
+            isError = nameFieldError,
             value = name,
             onValueChange = {
                 if (it.length <= 10)
@@ -76,16 +78,20 @@ fun AddHabitTable(
 
         Button(
             onClick = {
-                viewModel.addHabit(
-                    Habit(
-                        name = name,
-                        iconResId = IconData.icons[iconId],
-                        category = category,
-                        description = description,
-                        colorTheme = themeId
+                viewModel.onNameFieldErrorChange()
+                if (!nameFieldError && name.isNotEmpty()) {
+                    viewModel.addHabit(
+                        Habit(
+                            name = name,
+                            iconResId = IconData.icons[iconId],
+                            category = category,
+                            description = description,
+                            colorTheme = themeId
+                        )
                     )
-                )
-                navHostController.popBackStack()
+                    navHostController.popBackStack()
+                }
+
             }
         ) {
             Text(text = "Add table")
