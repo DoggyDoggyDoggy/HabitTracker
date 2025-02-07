@@ -93,7 +93,8 @@ fun HabitTable(
                     habitId = habit.id,
                     insertProgress = insertProgress,
                     isHabitTrackedForToday = isHabitTrackedForToday,
-                    toggleTracked = { isHabitTrackedForToday = !isHabitTrackedForToday }
+                    toggleTracked = { isHabitTrackedForToday = !isHabitTrackedForToday },
+                    habitColorTheme = habit.colorTheme
                 )
             }
 
@@ -123,11 +124,12 @@ fun CheckedIcon(
     insertProgress: (HabitProgress) -> Unit,
     isHabitTrackedForToday: Boolean,
     toggleTracked: () -> Unit,
-    habitId: Int
+    habitId: Int,
+    habitColorTheme: Int
 ) {
     IconButton(
         colors = IconButtonDefaults.iconButtonColors(
-            containerColor = if (isHabitTrackedForToday) Color(0xFF89D2A3) else Color.White
+            containerColor = checkedIconColor(isHabitTrackedForToday, habitColorTheme)
         ),
         onClick = {
             insertProgress(
@@ -144,6 +146,17 @@ fun CheckedIcon(
             imageVector = Icons.Default.Check,
             contentDescription = "Check"
         )
+    }
+}
+
+fun checkedIconColor(
+    isHabitTrackedForToday: Boolean,
+    habitColorTheme: Int
+): Color {
+    return if (isHabitTrackedForToday) {
+        TableThemes.tableThemes[habitColorTheme].checkedIcon
+    } else {
+        TableThemes.tableThemes[habitColorTheme].unCheckedIcon
     }
 }
 
