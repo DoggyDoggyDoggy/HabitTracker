@@ -41,7 +41,7 @@ fun HabitGrid(
         }
     ) { measurables, constraints ->
         layout(
-            width = constraints.maxWidth,
+            width = (((boxSize * density) + spacing) * days/rows + ((boxSize * density) + spacing)).toInt(),
             height = (((boxSize * density) + spacing - fixHeight) * rows).toInt()
         ) {
             var x = 0
