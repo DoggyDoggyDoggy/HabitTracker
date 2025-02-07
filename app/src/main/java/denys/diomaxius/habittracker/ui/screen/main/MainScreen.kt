@@ -18,6 +18,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import denys.diomaxius.habittracker.data.model.Habit
+import denys.diomaxius.habittracker.data.model.HabitProgress
 import denys.diomaxius.habittracker.navigation.Screen
 import denys.diomaxius.habittracker.ui.screen.main.components.HabitTable
 import java.time.LocalDate
@@ -28,6 +30,7 @@ fun MainScreen(
     navHostController: NavHostController
 ) {
     val habitList by viewModel.habitList.collectAsState()
+    val habitProgressMap by viewModel.habitProgressMap.collectAsState()
 
     Scaffold(
         topBar = {
@@ -36,25 +39,39 @@ fun MainScreen(
             )
         }
     ) { innerPadding ->
-        LazyColumn(
-            modifier = Modifier.padding(innerPadding)
-        ) {
-            items(habitList) { habit ->
-                val habitProgress by viewModel.getProgressByHabit(habit.id)
-                    .collectAsState(emptyList())
-                HabitTable(
-                    habit = habit,
-                    habitProgress = habitProgress,
-                    insertProgress = { viewModel.insertProgress(it) },
-                    checkTodayProgress = { id: Int, date: LocalDate ->
-                        viewModel.checkTodayProgress(id, date)
-                    }
-                )
-            }
+        Content(
+            modifier = Modifier.padding(innerPadding),
+            habitList = habitList,
+            habitProgressMap = habitProgressMap,
+            insertProgress = { viewModel.insertProgress(it) },
+            checkTodayProgress = { id, date -> viewModel.checkTodayProgress(id, date) }
+        )
+    }
+}
+
+
+@Composable
+fun Content(
+    modifier: Modifier = Modifier,
+    habitList: List<Habit>,
+    habitProgressMap: Map<Int, List<HabitProgress>>,
+    insertProgress: (HabitProgress) -> Unit,
+    checkTodayProgress: suspend (Int, LocalDate) -> Boolean
+) {
+    LazyColumn(
+        modifier = modifier
+    ) {
+        items(habitList) { habit ->
+            val habitProgress = habitProgressMap[habit.id] ?: emptyList()
+
+            HabitTable(
+                habit = habit,
+                habitProgress = habitProgress,
+                insertProgress = insertProgress,
+                checkTodayProgress = checkTodayProgress
+            )
         }
     }
-
-
 }
 
 @Composable

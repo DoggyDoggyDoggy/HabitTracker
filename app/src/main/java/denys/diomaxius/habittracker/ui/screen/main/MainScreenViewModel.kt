@@ -10,6 +10,7 @@ import denys.diomaxius.habittracker.data.repository.HabitRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 import javax.inject.Inject
@@ -23,22 +24,19 @@ class MainScreenViewModel @Inject constructor(
     private val _habitList = MutableStateFlow<List<Habit>>(emptyList())
     val habitList = _habitList.asStateFlow()
 
-    private val _habitProgressMap = mutableMapOf<Int, MutableStateFlow<List<HabitProgress>>>()
+    private val _habitProgressMap = MutableStateFlow<Map<Int, List<HabitProgress>>>(emptyMap())
+    val habitProgressMap: StateFlow<Map<Int, List<HabitProgress>>> = _habitProgressMap
 
     init {
         viewModelScope.launch {
-            habitRepository.getAllHabits().collect { _habitList.value = it }
-        }
-    }
-
-    fun getProgressByHabit(habitId: Int): StateFlow<List<HabitProgress>> {
-        return _habitProgressMap.getOrPut(habitId) {
-            MutableStateFlow(emptyList<HabitProgress>()).also { stateFlow ->
-                viewModelScope.launch {
-                    habitProgressRepository.getProgressByHabit(habitId).collect {
-                        stateFlow.value = it
-                    }
-                }
+            combine(
+                habitRepository.getAllHabits(),
+                habitProgressRepository.getAllProgress()
+            ) { habits, progress ->
+                habits to progress.groupBy { it.habitId }
+            }.collect { (habits, progressMap) ->
+                _habitList.value = habits
+                _habitProgressMap.value = progressMap
             }
         }
     }
