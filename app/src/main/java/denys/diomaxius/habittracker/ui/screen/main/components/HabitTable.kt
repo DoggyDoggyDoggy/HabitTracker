@@ -34,6 +34,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import denys.diomaxius.habittracker.data.model.Habit
 import denys.diomaxius.habittracker.data.model.HabitProgress
 import denys.diomaxius.habittracker.ui.tableThemes.TableThemes
+import kotlinx.coroutines.delay
 import java.time.LocalDate
 
 @Composable
@@ -45,9 +46,20 @@ fun HabitTable(
     deleteHabit: () -> Unit
 ) {
     var isHabitTrackedForToday by remember(habit.id) { mutableStateOf(false) }
+    var currentDate by remember(habit.id) { mutableStateOf(LocalDate.now()) }
 
-    LaunchedEffect(habit.id) {
-        isHabitTrackedForToday = checkTodayProgress(habit.id, LocalDate.now())
+    LaunchedEffect(habit.id, currentDate) {
+        isHabitTrackedForToday = checkTodayProgress(habit.id, currentDate)
+    }
+
+    LaunchedEffect(Unit) {
+        while (true) {
+            delay(30_000) //30 seconds
+            val newDate = LocalDate.now()
+            if (newDate != currentDate) {
+                currentDate = newDate
+            }
+        }
     }
 
     Card(
