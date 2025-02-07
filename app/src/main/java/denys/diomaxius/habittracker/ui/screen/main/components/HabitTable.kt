@@ -17,6 +17,7 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -88,11 +89,13 @@ fun HabitTable(
                     modifier = Modifier.padding(start = 8.dp)
                 ) {
                     Text(
-                        text = habit.name
+                        text = habit.name,
+                        style = MaterialTheme.typography.titleSmall
                     )
                     if (habit.description.isNotEmpty()) {
                         Text(
-                            text = habit.description
+                            text = habit.description,
+                            style = MaterialTheme.typography.bodySmall
                         )
                     }
                 }

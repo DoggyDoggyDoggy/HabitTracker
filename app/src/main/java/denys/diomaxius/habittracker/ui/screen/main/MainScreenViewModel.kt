@@ -27,6 +27,9 @@ class MainScreenViewModel @Inject constructor(
     private val _habitProgressMap = MutableStateFlow<Map<Int, List<HabitProgress>>>(emptyMap())
     val habitProgressMap: StateFlow<Map<Int, List<HabitProgress>>> = _habitProgressMap
 
+    private val _isLoading = MutableStateFlow(true)
+    val isLoading = _isLoading.asStateFlow()
+
     init {
         viewModelScope.launch {
             combine(
@@ -37,6 +40,7 @@ class MainScreenViewModel @Inject constructor(
             }.collect { (habits, progressMap) ->
                 _habitList.value = habits
                 _habitProgressMap.value = progressMap
+                _isLoading.value = false
             }
         }
     }

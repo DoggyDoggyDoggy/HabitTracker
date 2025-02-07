@@ -54,7 +54,7 @@ fun AddHabitTable(
         OutlinedTextField(
             value = description,
             onValueChange = {
-                if (it.length <= 15)
+                if (it.length <= 23)
                     viewModel.onDescriptionChanged(it)
             },
             label = {

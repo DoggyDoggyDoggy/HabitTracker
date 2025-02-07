@@ -1,5 +1,6 @@
 package denys.diomaxius.habittracker.ui.screen.editHabitTable
 
+import android.util.Log
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -46,6 +47,7 @@ fun EditHabitTable(
         items(habitList) { habit ->
             HabitTable(
                 habit = habit,
+                habitList = habitList,
                 onDeleteTable = { viewModel.deleteHabit(it) },
                 navHostController = navHostController
             )
@@ -58,7 +60,8 @@ fun HabitTable(
     modifier: Modifier = Modifier,
     habit: Habit,
     onDeleteTable: (Habit) -> Unit,
-    navHostController: NavHostController
+    navHostController: NavHostController,
+    habitList: List<Habit>
 ) {
     Card(
         modifier = modifier
@@ -99,7 +102,13 @@ fun HabitTable(
             }
 
             IconButton(
-                onClick = { onDeleteTable(habit) }
+                onClick = {
+                    onDeleteTable(habit)
+                    if (habitList.size == 1) {
+                        Log.i("hello there", "Asd")
+                        navHostController.popBackStack()
+                    }
+                }
             ) {
                 Icon(
                     imageVector = Icons.Default.Delete,
@@ -122,5 +131,7 @@ fun PreviewHabitTable() {
             category = ""
         ),
         onDeleteTable = {},
-        navHostController = rememberNavController())
+        navHostController = rememberNavController(),
+        habitList = listOf()
+    )
 }
