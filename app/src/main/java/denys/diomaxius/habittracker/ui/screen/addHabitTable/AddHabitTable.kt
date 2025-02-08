@@ -2,9 +2,12 @@ package denys.diomaxius.habittracker.ui.screen.addHabitTable
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -16,7 +19,7 @@ import androidx.navigation.NavHostController
 import denys.diomaxius.habittracker.data.model.Habit
 import denys.diomaxius.habittracker.ui.screen.addHabitTable.components.CategoryDropdown
 import denys.diomaxius.habittracker.ui.screen.addHabitTable.components.IconsTable
-import denys.diomaxius.habittracker.ui.screen.addHabitTable.components.ThemeTable
+import denys.diomaxius.habittracker.ui.screen.addHabitTable.components.ColorTable
 
 @Composable
 fun AddHabitTable(
@@ -39,6 +42,8 @@ fun AddHabitTable(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        Spacer(modifier = Modifier.weight(1f))
+
         OutlinedTextField(
             isError = nameFieldError,
             value = name,
@@ -67,17 +72,21 @@ fun AddHabitTable(
             onCategoryChange = { viewModel.onCategoryChanged(it) }
         )
 
+        Spacer(modifier = Modifier.height(12.dp))
+
         IconsTable(
-            modifier = Modifier.padding(12.dp),
             onIconChange = { viewModel.onIconIdChange(it) },
             iconId = iconId
         )
-
-        ThemeTable(
-            modifier = Modifier.padding(12.dp),
+        
+        Spacer(modifier = Modifier.height(8.dp))
+        
+        ColorTable(
             onColorChange = { viewModel.onThemeIdChange(it) },
             themeId = themeId
         )
+
+        Spacer(modifier = Modifier.weight(1f))
 
         Button(
             onClick = {
@@ -110,7 +119,12 @@ fun AddHabitTable(
 
             }
         ) {
-            Text(text = "Add table")
+            Text(
+                text = "Add table",
+                style = MaterialTheme.typography.labelMedium
+            )
         }
+
+        Spacer(modifier = Modifier.weight(0.5f))
     }
 }

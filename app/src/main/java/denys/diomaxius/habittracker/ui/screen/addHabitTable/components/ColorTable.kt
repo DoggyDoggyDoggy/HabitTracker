@@ -20,7 +20,7 @@ import androidx.compose.ui.unit.dp
 import denys.diomaxius.habittracker.ui.tableThemes.TableThemes
 
 @Composable
-fun ThemeTable(
+fun ColorTable(
     modifier: Modifier = Modifier,
     onColorChange: (Int) -> Unit,
     themeId: Int
@@ -28,16 +28,21 @@ fun ThemeTable(
     Column(
         modifier = modifier
     ) {
-        repeat(2) {
+        repeat(3) { row ->
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(vertical = 10.dp),
-                horizontalArrangement = Arrangement.SpaceEvenly
+                    .padding(top = 12.dp),
+                horizontalArrangement = Arrangement.Center
             ) {
-                repeat(5) { boxId ->
+                repeat(6) { boxId ->
                     ColorBox(
-                        boxId = if(it == 0) boxId else boxId + 5,
+                        modifier = Modifier.padding(horizontal = 8.dp),
+                        boxId = when (row) {
+                            0 -> boxId
+                            1 -> boxId + 6
+                            else -> boxId + 12
+                        },
                         themeId = themeId,
                         onColorChange = onColorChange
                     )
@@ -47,16 +52,18 @@ fun ThemeTable(
     }
 }
 
+
 @Composable
 fun ColorBox(
+    modifier: Modifier = Modifier,
     boxId: Int,
     themeId: Int,
     onColorChange: (Int) -> Unit
 ) {
     Box(
-        modifier = Modifier
+        modifier = modifier
             .clip(RoundedCornerShape(8.dp))
-            .size(32.dp)
+            .size(36.dp)
             .clickable { onColorChange(boxId) }
             .background(TableThemes.tableThemes[boxId].themeButton),
         contentAlignment = Alignment.Center
@@ -64,8 +71,8 @@ fun ColorBox(
         if (themeId == boxId) {
             Box(
                 modifier = Modifier
-                    .clip(RoundedCornerShape(4.dp))
-                    .size(14.dp)
+                    .clip(RoundedCornerShape(5.dp))
+                    .size(16.dp)
                     .background(Color.White)
             )
         }
@@ -75,7 +82,7 @@ fun ColorBox(
 @Preview(showBackground = true)
 @Composable
 fun PreviewThemeTable() {
-    ThemeTable(
+    ColorTable(
         onColorChange = {},
         themeId = 0
     )

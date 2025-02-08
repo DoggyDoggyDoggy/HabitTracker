@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
@@ -24,31 +25,50 @@ fun IconsTable(
     Column(
         modifier = modifier
     ) {
-        repeat(1) {
+        repeat(3) { row ->
             Row(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 8.dp),
                 horizontalArrangement = Arrangement.SpaceEvenly
             ) {
-                repeat(5) {
-                    IconButton(
-                        modifier = Modifier
-                            .border(
-                                width = 1.dp,
-                                color = if (iconId == it) Color.Black else Color.LightGray
-                            ),
-                        onClick = {
-                            onIconChange(it)
-                        }
-                    ) {
-                        Icon(
-                            painter = painterResource(id = IconData.icons[it]),
-                            contentDescription = "Icon",
-                            tint = Color.Unspecified
-                        )
-                    }
+                repeat(5) { inconIndex ->
+                    CustomIconButton(
+                        iconIndex = when (row) {
+                            0 -> inconIndex
+                            1 -> inconIndex + 5
+                            else -> inconIndex + 10
+                        },
+                        onIconChange = onIconChange,
+                        iconId = iconId
+                    )
                 }
             }
         }
+    }
+}
+
+@Composable
+fun CustomIconButton(
+    iconIndex: Int,
+    onIconChange: (Int) -> Unit,
+    iconId: Int
+) {
+    IconButton(
+        modifier = Modifier
+            .border(
+                width = 1.dp,
+                color = if (iconId == iconIndex) Color.Black else Color.LightGray
+            ),
+        onClick = {
+            onIconChange(iconIndex)
+        }
+    ) {
+        Icon(
+            painter = painterResource(id = IconData.icons[iconIndex]),
+            contentDescription = "Icon",
+            tint = Color.Unspecified
+        )
     }
 }
 
