@@ -63,7 +63,7 @@ class ViewModelAddHabitTable @Inject constructor(
     }
 
     fun onNameChanged(name: String) {
-        _name.value = name
+        _name.value = name.trimStart()
         onNameFieldErrorChange()
     }
 
@@ -72,7 +72,7 @@ class ViewModelAddHabitTable @Inject constructor(
     }
 
     fun onDescriptionChanged(description: String) {
-        _description.value = description
+        _description.value = description.trimStart()
     }
 
     fun addHabit(habit: Habit) {

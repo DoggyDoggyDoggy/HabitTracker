@@ -46,6 +46,7 @@ fun AddHabitTable(
         OutlinedTextField(
             isError = nameFieldError,
             value = name,
+            singleLine = true,
             onValueChange = {
                 if (it.length <= 16)
                     viewModel.onNameChanged(it)
@@ -57,6 +58,7 @@ fun AddHabitTable(
 
         OutlinedTextField(
             value = description,
+            singleLine = true,
             onValueChange = {
                 if (it.length <= 23)
                     viewModel.onDescriptionChanged(it)
