@@ -43,7 +43,7 @@ fun AddHabitTable(
             isError = nameFieldError,
             value = name,
             onValueChange = {
-                if (it.length <= 10)
+                if (it.length <= 16)
                     viewModel.onNameChanged(it)
             },
             label = {

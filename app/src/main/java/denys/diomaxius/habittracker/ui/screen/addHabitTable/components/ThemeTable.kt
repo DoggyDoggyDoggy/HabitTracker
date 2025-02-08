@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
@@ -27,14 +28,16 @@ fun ThemeTable(
     Column(
         modifier = modifier
     ) {
-        repeat(1) {
+        repeat(2) {
             Row(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 10.dp),
                 horizontalArrangement = Arrangement.SpaceEvenly
             ) {
                 repeat(5) { boxId ->
                     ColorBox(
-                        boxId = boxId,
+                        boxId = if(it == 0) boxId else boxId + 5,
                         themeId = themeId,
                         onColorChange = onColorChange
                     )

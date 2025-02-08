@@ -90,12 +90,15 @@ fun HabitTable(
                 ) {
                     Text(
                         text = habit.name,
-                        style = MaterialTheme.typography.titleSmall
+                        style = MaterialTheme.typography.titleSmall,
+                        color = TableThemes.tableThemes[habit.colorTheme].fontColor
                     )
+
                     if (habit.description.isNotEmpty()) {
                         Text(
                             text = habit.description,
-                            style = MaterialTheme.typography.bodySmall
+                            style = MaterialTheme.typography.bodySmall,
+                            color = TableThemes.tableThemes[habit.colorTheme].fontColor
                         )
                     }
                 }
@@ -136,7 +139,7 @@ fun CheckedIcon(
 ) {
     IconButton(
         colors = IconButtonDefaults.iconButtonColors(
-            containerColor = checkedIconColor(isHabitTrackedForToday, habitColorTheme)
+            containerColor = checkIconColor(isHabitTrackedForToday, habitColorTheme)
         ),
         onClick = {
             insertProgress(
@@ -151,12 +154,13 @@ fun CheckedIcon(
     ) {
         Icon(
             imageVector = Icons.Default.Check,
-            contentDescription = "Check"
+            contentDescription = "Check",
+            tint = checkIconTint(isHabitTrackedForToday, habitColorTheme)
         )
     }
 }
 
-fun checkedIconColor(
+fun checkIconColor(
     isHabitTrackedForToday: Boolean,
     habitColorTheme: Int
 ): Color {
@@ -164,6 +168,17 @@ fun checkedIconColor(
         TableThemes.tableThemes[habitColorTheme].checkedIcon
     } else {
         TableThemes.tableThemes[habitColorTheme].unCheckedIcon
+    }
+}
+
+fun checkIconTint(
+    isHabitTrackedForToday: Boolean,
+    habitColorTheme: Int
+): Color {
+    return if (isHabitTrackedForToday) {
+        TableThemes.tableThemes[habitColorTheme].iconTintChecked
+    } else {
+        Color.Black
     }
 }
 
