@@ -5,9 +5,18 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
+import denys.diomaxius.habittracker.R
 
+val Ubuntu = FontFamily(
+    Font(R.font.ubuntu_medium, FontWeight.Medium),
+    Font(R.font.ubuntu_bold, FontWeight.Bold),
+    Font(R.font.ubuntu_regular, FontWeight.Normal),
+    Font(R.font.ubuntu_light, FontWeight.Light)
+)
 
 val Typography = Typography(
     //Main screen "No habits"
@@ -28,11 +37,13 @@ val Typography = Typography(
     titleSmall = TextStyle(
         fontSize = 16.sp,
         fontWeight = FontWeight.Bold,
-        shadow = Shadow(Color.Black, Offset(1f,1f), blurRadius = 1.5f)
+        shadow = Shadow(Color.Black, Offset(1f,1f), blurRadius = 1.5f),
+        fontFamily = Ubuntu
     ),
     //Habit table description
     bodySmall = TextStyle(
         fontSize = 14.sp,
-        //shadow = Shadow(Color.Black, Offset(1.5f,1.5f), blurRadius = 1.5f)
+        fontWeight = FontWeight.Medium,
+        fontFamily = Ubuntu
     )
 )

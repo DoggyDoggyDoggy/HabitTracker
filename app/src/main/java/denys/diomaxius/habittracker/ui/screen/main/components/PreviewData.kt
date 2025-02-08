@@ -10,7 +10,7 @@ val dummyHabit = Habit(
     iconId = 0,
     description = "Dummy description",
     category = "",
-    colorTheme = 9,
+    colorTheme = 0,
 )
 
 val dummyHabitProgress = listOf<HabitProgress>(

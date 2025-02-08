@@ -1,6 +1,7 @@
 package denys.diomaxius.habittracker.ui.screen.editHabitTable
 
 import android.util.Log
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -84,11 +85,23 @@ fun HabitTable(
                 tint = Color.Unspecified
             )
 
-            Text(
-                text = habit.name,
-                style = MaterialTheme.typography.titleSmall,
-                color = TableThemes.tableThemes[habit.colorTheme].fontColor
-            )
+            Column{
+                Text(
+                    text = habit.name,
+                    style = MaterialTheme.typography.titleSmall,
+                    color = TableThemes.tableThemes[habit.colorTheme].fontColor
+                )
+
+                if (habit.description.isNotEmpty()) {
+                    Text(
+                        text = habit.description,
+                        style = MaterialTheme.typography.bodySmall,
+                        color = TableThemes.tableThemes[habit.colorTheme].fontColor
+                    )
+                }
+            }
+            
+
 
             Spacer(modifier = Modifier.weight(1f))
 
