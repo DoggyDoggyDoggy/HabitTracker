@@ -18,6 +18,10 @@ val Ubuntu = FontFamily(
     Font(R.font.ubuntu_light, FontWeight.Light)
 )
 
+val Roboto = FontFamily(
+    Font(R.font.roboto_condensed_semi_bold, FontWeight.SemiBold)
+)
+
 val Typography = Typography(
     //Main screen "No habits"
     headlineMedium = TextStyle(
@@ -39,6 +43,13 @@ val Typography = Typography(
         fontWeight = FontWeight.Bold,
         shadow = Shadow(Color.Black, Offset(1f,1f), blurRadius = 1.5f),
         fontFamily = Ubuntu
+    ),
+    //Day of the week
+    titleMedium = TextStyle(
+        fontSize = 14.sp,
+        fontWeight = FontWeight.Bold,
+        shadow = Shadow(Color.Black, Offset(1f,1f), blurRadius = 1.5f),
+        fontFamily = Roboto
     ),
     //Habit table description
     bodySmall = TextStyle(

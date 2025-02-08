@@ -119,6 +119,17 @@ fun HabitTable(
                     .wrapContentWidth()
                     .horizontalScroll(rememberScrollState())
             ) {
+                //Column(
+                //    modifier = Modifier.padding(end = 5.dp)
+                //) {
+                //    listOf("Mon", "Tues", "Wed", "Thurs", "Fri", "Sat", "Sun",).forEach {
+                //        Text(
+                //            text = it,
+                //            color = Color.White,
+                //            style = MaterialTheme.typography.titleMedium
+                //        )
+                //    }
+                //}
                 HabitGrid(
                     habitProgress = habitProgress,
                     boxColorUnchecked = TableThemes.tableThemes[habit.colorTheme].boxColorUnchecked,

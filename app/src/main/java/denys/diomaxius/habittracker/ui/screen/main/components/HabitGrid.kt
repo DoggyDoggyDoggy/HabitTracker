@@ -1,10 +1,13 @@
 package denys.diomaxius.habittracker.ui.screen.main.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.platform.LocalDensity
@@ -32,6 +35,8 @@ fun HabitGrid(
                 Box(
                     modifier = Modifier
                         .size(boxSize.dp)
+                        .clip(RoundedCornerShape(4.dp))
+                        .border(1.dp, Color.Black, RoundedCornerShape(4.dp))
                         .background(
                             if (habitProgress.any { it.date.dayOfYear == (day + 1) && it.isCompleted })
                                 boxColorChecked else boxColorUnchecked
