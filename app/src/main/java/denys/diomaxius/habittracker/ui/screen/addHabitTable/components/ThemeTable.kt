@@ -1,7 +1,6 @@
 package denys.diomaxius.habittracker.ui.screen.addHabitTable.components
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -9,8 +8,11 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -30,19 +32,39 @@ fun ThemeTable(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceEvenly
             ) {
-                repeat(5) {
-                    Box(
-                        modifier = Modifier
-                            .size(32.dp)
-                            .clickable { onColorChange(it) }
-                            .background(TableThemes.tableThemes[it].themeButton)
-                            .border(
-                                width = 1.dp,
-                                color = if (themeId == it) Color.Black else Color.LightGray
-                            )
+                repeat(5) { boxId ->
+                    ColorBox(
+                        boxId = boxId,
+                        themeId = themeId,
+                        onColorChange = onColorChange
                     )
                 }
             }
+        }
+    }
+}
+
+@Composable
+fun ColorBox(
+    boxId: Int,
+    themeId: Int,
+    onColorChange: (Int) -> Unit
+) {
+    Box(
+        modifier = Modifier
+            .clip(RoundedCornerShape(8.dp))
+            .size(32.dp)
+            .clickable { onColorChange(boxId) }
+            .background(TableThemes.tableThemes[boxId].themeButton),
+        contentAlignment = Alignment.Center
+    ) {
+        if (themeId == boxId) {
+            Box(
+                modifier = Modifier
+                    .clip(RoundedCornerShape(4.dp))
+                    .size(14.dp)
+                    .background(Color.White)
+            )
         }
     }
 }
@@ -52,5 +74,6 @@ fun ThemeTable(
 fun PreviewThemeTable() {
     ThemeTable(
         onColorChange = {},
-        themeId = 0)
+        themeId = 0
+    )
 }
