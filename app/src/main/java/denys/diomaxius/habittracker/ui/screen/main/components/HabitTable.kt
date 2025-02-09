@@ -1,5 +1,8 @@
 package denys.diomaxius.habittracker.ui.screen.main.components
 
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -28,6 +31,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -137,11 +141,24 @@ fun CheckedIcon(
     habitId: Int,
     habitColorTheme: Int
 ) {
+    var playAnimation by remember {
+        mutableStateOf(false)
+    }
+
+    val scale by animateFloatAsState(
+        targetValue = if (playAnimation) 1.2f else 1f,
+        animationSpec = tween(durationMillis = 350, easing = LinearEasing),
+        label = "",
+        finishedListener = {playAnimation = false}
+    )
+
     IconButton(
+        modifier = Modifier.scale(scale),
         colors = IconButtonDefaults.iconButtonColors(
             containerColor = checkIconColor(isHabitTrackedForToday, habitColorTheme)
         ),
         onClick = {
+            playAnimation = !isHabitTrackedForToday
             insertProgress(
                 HabitProgress(
                     habitId = habitId,
