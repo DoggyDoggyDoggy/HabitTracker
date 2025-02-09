@@ -28,4 +28,28 @@ class EditHabitTableViewModel @Inject constructor(
             habitRepository.deleteHabit(habit)
         }
     }
+
+    fun reorderHabits(fromIndex: Int, toIndex: Int) {
+        viewModelScope.launch {
+            val currentHabit = _habitList.value.toMutableList()
+            if (fromIndex < 0 || toIndex < 0 || fromIndex >= currentHabit.size || toIndex >= currentHabit.size) {
+                return@launch
+            }
+
+            // Move an element in a list
+            val movedNote = currentHabit.removeAt(fromIndex)
+            currentHabit.add(toIndex, movedNote)
+
+            // Update the order: for each element, set a new position value
+            val updatedNotes = currentHabit.mapIndexed { index, habit ->
+                habit.copy(position = index)
+            }
+
+            // Updating local StateFlow
+            _habitList.value = updatedNotes
+
+            // Updating the order in the database
+            habitRepository.updateHabits(updatedNotes)
+        }
+    }
 }

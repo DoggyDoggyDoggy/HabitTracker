@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
@@ -44,6 +45,7 @@ fun AddHabitTable(
         Spacer(modifier = Modifier.weight(1f))
 
         OutlinedTextField(
+            modifier = Modifier.fillMaxWidth(0.75f),
             isError = nameFieldError,
             value = name,
             singleLine = true,
@@ -57,10 +59,11 @@ fun AddHabitTable(
         )
 
         OutlinedTextField(
+            modifier = Modifier.fillMaxWidth(0.75f),
             value = description,
             singleLine = true,
             onValueChange = {
-                if (it.length <= 23)
+                if (it.length <= 35)
                     viewModel.onDescriptionChanged(it)
             },
             label = {
@@ -69,6 +72,7 @@ fun AddHabitTable(
         )
 
         CategoryDropdown(
+            modifier = Modifier.fillMaxWidth(0.90f),
             category = category,
             onCategoryChange = { viewModel.onCategoryChanged(it) }
         )

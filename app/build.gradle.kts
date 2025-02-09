@@ -53,14 +53,18 @@ android {
 
 dependencies {
     val room_version = "2.6.1"
-
+    //Room
     implementation("androidx.room:room-runtime:$room_version")
     kapt("androidx.room:room-compiler:$room_version")
     implementation("androidx.room:room-ktx:$room_version")
 
+    //Hilt
     implementation("com.google.dagger:hilt-android:2.51.1")
     kapt("com.google.dagger:hilt-android-compiler:2.51.1")
     implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
+
+    //Reodable LazyColumn
+    implementation("sh.calvin.reorderable:reorderable:2.4.3")
 
     implementation("androidx.core:core-ktx:1.15.0")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.8.7")
@@ -71,7 +75,6 @@ dependencies {
     implementation("androidx.compose.ui:ui-tooling-preview")
     //implementation("androidx.compose.material3:material3") //broken
     implementation("androidx.compose.material3:material3:1.3.1")
-
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.2.1")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.6.1")
