@@ -1,18 +1,21 @@
 package denys.diomaxius.habittracker.ui.screen.editHabitTable
 
 import android.util.Log
+import android.view.View
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
@@ -24,10 +27,14 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.core.view.HapticFeedbackConstantsCompat
+import androidx.core.view.ViewCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
@@ -35,35 +42,54 @@ import denys.diomaxius.habittracker.data.model.Habit
 import denys.diomaxius.habittracker.navigation.Screen
 import denys.diomaxius.habittracker.ui.icons.IconData
 import denys.diomaxius.habittracker.ui.tableThemes.TableThemes
+import sh.calvin.reorderable.ReorderableCollectionItemScope
+import sh.calvin.reorderable.ReorderableItem
+import sh.calvin.reorderable.rememberReorderableLazyListState
 
 @Composable
 fun EditHabitTable(
     viewModel: EditHabitTableViewModel = hiltViewModel(),
     navHostController: NavHostController
 ) {
+    val view = LocalView.current
     val habitList by viewModel.habitList.collectAsState()
+    val lazyListState = rememberLazyListState()
+
+    val reorderableLazyListState = rememberReorderableLazyListState(lazyListState) { from, to ->
+        viewModel.reorderHabits(from.index, to.index)
+        // Tactile feedback when moving
+        ViewCompat.performHapticFeedback(
+            view,
+            HapticFeedbackConstantsCompat.SEGMENT_FREQUENT_TICK
+        )
+    }
 
     LazyColumn(
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier.fillMaxSize(),
+        state = lazyListState,
     ) {
-        items(habitList) { habit ->
-            HabitTable(
-                habit = habit,
-                habitList = habitList,
-                onDeleteTable = { viewModel.deleteHabit(it) },
-                navHostController = navHostController
-            )
+        items(habitList, key = {it.id}) { habit ->
+            ReorderableItem(state = reorderableLazyListState, key = habit.id) {
+                HabitTable(
+                    habit = habit,
+                    habitList = habitList,
+                    onDeleteTable = { viewModel.deleteHabit(it) },
+                    navHostController = navHostController,
+                    view = view
+                )
+            }
         }
     }
 }
 
 @Composable
-fun HabitTable(
+fun ReorderableCollectionItemScope.HabitTable(
     modifier: Modifier = Modifier,
     habit: Habit,
     onDeleteTable: (Habit) -> Unit,
     navHostController: NavHostController,
-    habitList: List<Habit>
+    habitList: List<Habit>,
+    view: View
 ) {
     Card(
         modifier = modifier
@@ -85,7 +111,11 @@ fun HabitTable(
                 tint = Color.Unspecified
             )
 
-            Column{
+            Column(
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(start = 8.dp)
+            ){
                 Text(
                     text = habit.name,
                     style = MaterialTheme.typography.titleSmall,
@@ -96,42 +126,67 @@ fun HabitTable(
                     Text(
                         text = habit.description,
                         style = MaterialTheme.typography.bodySmall,
-                        color = TableThemes.tableThemes[habit.colorTheme].fontColor
+                        color = TableThemes.tableThemes[habit.colorTheme].fontColor,
+                        softWrap = true
                     )
                 }
             }
-            
 
-
-            Spacer(modifier = Modifier.weight(1f))
-
-            IconButton(
-                onClick = {
-                    navHostController
-                        .navigate("${Screen.AddHabitTable.route}?habitId=${habit.id}") {
-                            launchSingleTop = true
+            Row(
+                modifier = Modifier.padding(end = 5.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ){
+                IconButton(
+                    modifier = Modifier.draggableHandle(
+                        onDragStarted = {
+                            ViewCompat.performHapticFeedback(
+                                view,
+                                HapticFeedbackConstantsCompat.GESTURE_START
+                            )
+                        },
+                        onDragStopped = {
+                            ViewCompat.performHapticFeedback(
+                                view,
+                                HapticFeedbackConstantsCompat.GESTURE_END
+                            )
                         }
+                    ),
+                    onClick = {}
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Menu,
+                        contentDescription = "Move icon"
+                    )
                 }
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Edit,
-                    contentDescription = "Edit"
-                )
-            }
 
-            IconButton(
-                onClick = {
-                    onDeleteTable(habit)
-                    if (habitList.size == 1) {
-                        Log.i("hello there", "Asd")
-                        navHostController.popBackStack()
+                IconButton(
+                    onClick = {
+                        navHostController
+                            .navigate("${Screen.AddHabitTable.route}?habitId=${habit.id}") {
+                                launchSingleTop = true
+                            }
                     }
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Edit,
+                        contentDescription = "Edit"
+                    )
                 }
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Delete,
-                    contentDescription = "Delete"
-                )
+
+                IconButton(
+                    onClick = {
+                        onDeleteTable(habit)
+                        if (habitList.size == 1) {
+                            Log.i("hello there", "Asd")
+                            navHostController.popBackStack()
+                        }
+                    }
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Delete,
+                        contentDescription = "Delete"
+                    )
+                }
             }
         }
     }
@@ -140,16 +195,39 @@ fun HabitTable(
 @Preview
 @Composable
 fun PreviewHabitTable() {
-    HabitTable(
-        habit = Habit(
-            name = "Example",
-            description = "Description",
-            colorTheme = 0,
-            iconId = 0,
-            category = ""
-        ),
-        onDeleteTable = {},
-        navHostController = rememberNavController(),
-        habitList = listOf()
-    )
+    val dummyScope = object : ReorderableCollectionItemScope {
+        override fun Modifier.draggableHandle(
+            enabled: Boolean,
+            interactionSource: MutableInteractionSource?,
+            onDragStarted: (startedPosition: Offset) -> Unit,
+            onDragStopped: () -> Unit
+        ): Modifier {
+            return this
+        }
+
+        override fun Modifier.longPressDraggableHandle(
+            enabled: Boolean,
+            interactionSource: MutableInteractionSource?,
+            onDragStarted: (startedPosition: Offset) -> Unit,
+            onDragStopped: () -> Unit
+        ): Modifier {
+            return this
+        }
+    }
+
+    with (dummyScope) {
+        HabitTable(
+            habit = Habit(
+                name = "wwwwwwwwwwwww",
+                description = "wwwwwwwwwwwwwwwwwwwwwww",
+                colorTheme = 0,
+                iconId = 0,
+                category = ""
+            ),
+            onDeleteTable = {},
+            navHostController = rememberNavController(),
+            habitList = listOf(),
+            view = LocalView.current
+        )
+    }
 }

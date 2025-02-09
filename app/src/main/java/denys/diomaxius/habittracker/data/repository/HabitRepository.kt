@@ -23,4 +23,8 @@ class HabitRepository @Inject constructor(
     suspend fun deleteHabit(habit: Habit) {
         dao.deleteHabit(habit)
     }
+
+    suspend fun updateHabits(habits: List<Habit>) {
+        dao.updateHabits(habits)
+    }
 }

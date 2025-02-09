@@ -7,7 +7,6 @@ import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -90,7 +89,7 @@ fun HabitTable(
                 )
 
                 Column(
-                    modifier = Modifier.padding(start = 8.dp)
+                    modifier = Modifier.padding(start = 8.dp).weight(1f)
                 ) {
                     Text(
                         text = habit.name,
@@ -107,9 +106,8 @@ fun HabitTable(
                     }
                 }
 
-                Spacer(modifier = Modifier.weight(1f))
-
                 CheckedIcon(
+                    modifier = Modifier.padding(end = 5.dp),
                     habitId = habit.id,
                     insertProgress = insertProgress,
                     isHabitTrackedForToday = isHabitTrackedForToday,
@@ -135,6 +133,7 @@ fun HabitTable(
 
 @Composable
 fun CheckedIcon(
+    modifier: Modifier = Modifier,
     insertProgress: (HabitProgress) -> Unit,
     isHabitTrackedForToday: Boolean,
     toggleTracked: () -> Unit,
@@ -153,7 +152,7 @@ fun CheckedIcon(
     )
 
     IconButton(
-        modifier = Modifier.scale(scale),
+        modifier = modifier.scale(scale),
         colors = IconButtonDefaults.iconButtonColors(
             containerColor = checkIconColor(isHabitTrackedForToday, habitColorTheme)
         ),
