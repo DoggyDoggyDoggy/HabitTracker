@@ -1,6 +1,7 @@
 package denys.diomaxius.habittracker.ui.screen.addHabitTable.components
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
@@ -41,7 +42,7 @@ fun CategoryDropdown(
                 readOnly = true,
                 label = { Text("Choose category") },
                 trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
-                modifier = Modifier.menuAnchor()
+                modifier = Modifier.fillMaxWidth(0.75f).menuAnchor()
             )
 
             ExposedDropdownMenu(

@@ -72,7 +72,6 @@ fun AddHabitTable(
         )
 
         CategoryDropdown(
-            modifier = Modifier.fillMaxWidth(0.90f),
             category = category,
             onCategoryChange = { viewModel.onCategoryChanged(it) }
         )
