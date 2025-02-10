@@ -9,31 +9,24 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.Layout
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
 import denys.diomaxius.habittracker.data.model.HabitProgress
 
 @Composable
 fun HabitGrid(
     modifier: Modifier = Modifier,
-    spacing: Int = 4,
-    boxSize: Int = 16,
-    fixHeight: Int = 1,
-    days: Int = 365,
-    rows: Int = 7,
+    config: HabitGridConfig,
     habitProgress: List<HabitProgress>,
     boxColorUnchecked: Color,
     boxColorChecked: Color
 ) {
-    val density = LocalDensity.current.density
-
     Layout(
         modifier = modifier,
         content = {
-            repeat(days) { day ->
+            repeat(config.days) { day ->
                 Box(
                     modifier = Modifier
-                        .size(boxSize.dp)
+                        .size(config.boxSize.dp)
                         .clip(RoundedCornerShape(5.dp))
                         .background(
                             if (habitProgress.any { it.date.dayOfYear == (day + 1) && it.isCompleted })
@@ -44,8 +37,8 @@ fun HabitGrid(
         }
     ) { measurables, constraints ->
         layout(
-            width = (((boxSize * density) + spacing) * days/rows + ((boxSize * density) + spacing)).toInt(),
-            height = (((boxSize * density) + spacing - fixHeight) * rows).toInt()
+            width = config.getLayoutWidth(),
+            height = config.getLayoutHeight()
         ) {
             var x = 0
             var y = 0
@@ -57,10 +50,10 @@ fun HabitGrid(
             placeables.forEach { placeable ->
                 placeable.placeRelative(x = x, y = y)
                 if (index % 7 == 0) {
-                    x += placeable.width + spacing
+                    x += placeable.width + config.spacing
                     y = 0
                 } else {
-                    y += placeable.height + spacing
+                    y += placeable.height + config.spacing
                 }
                 index++
             }

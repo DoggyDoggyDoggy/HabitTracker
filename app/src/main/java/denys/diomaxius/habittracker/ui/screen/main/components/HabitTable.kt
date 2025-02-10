@@ -32,6 +32,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import denys.diomaxius.habittracker.data.model.Habit
@@ -40,6 +41,42 @@ import denys.diomaxius.habittracker.ui.icons.IconData
 import denys.diomaxius.habittracker.ui.tableThemes.TableThemes
 import kotlinx.coroutines.delay
 import java.time.LocalDate
+
+data class HabitGridConfig(
+    val spacing: Int = 4,
+    val boxSize: Int = 16,
+    val fixHeight: Int = 1,
+    val days: Int = 365,
+    val rows: Int = 7,
+    val density: Float
+) {
+    private fun boxSizePx(): Int {
+        return (density * boxSize).toInt()
+    }
+
+    fun getInitialScrollPosition(month: Int): Int {
+        return when (month) {
+            4 -> (boxSizePx() + spacing) * 4
+            5 -> (boxSizePx() + spacing) * 10
+            6 -> (boxSizePx() + spacing) * 14
+            7 -> (boxSizePx() + spacing) * 18
+            8 -> (boxSizePx() + spacing) * 22
+            9 -> (boxSizePx() + spacing) * 27
+            10 -> (boxSizePx() + spacing) * 31
+            11 -> (boxSizePx() + spacing) * 33
+            12 -> (boxSizePx() + spacing) * 33
+            else -> 0
+        }
+    }
+
+    fun getLayoutWidth(): Int {
+        return (((boxSize * density) + spacing) * days/rows + ((boxSize * density) + spacing)).toInt()
+    }
+
+    fun getLayoutHeight(): Int {
+        return (((boxSize * density) + spacing - fixHeight) * rows).toInt()
+    }
+}
 
 @Composable
 fun HabitTable(
@@ -50,6 +87,12 @@ fun HabitTable(
 ) {
     var isHabitTrackedForToday by remember(habit.id) { mutableStateOf(false) }
     var currentDate by remember(habit.id) { mutableStateOf(LocalDate.now()) }
+
+    val habitGridConfig = HabitGridConfig(density = LocalDensity.current.density)
+
+    val scroll = rememberScrollState(
+        habitGridConfig.getInitialScrollPosition(currentDate.monthValue)
+    )
 
     LaunchedEffect(habit.id, currentDate) {
         isHabitTrackedForToday = checkTodayProgress(habit.id, currentDate)
@@ -89,7 +132,9 @@ fun HabitTable(
                 )
 
                 Column(
-                    modifier = Modifier.padding(start = 8.dp).weight(1f)
+                    modifier = Modifier
+                        .padding(start = 8.dp)
+                        .weight(1f)
                 ) {
                     Text(
                         text = habit.name,
@@ -119,9 +164,10 @@ fun HabitTable(
             Row(
                 modifier = Modifier
                     .wrapContentWidth()
-                    .horizontalScroll(rememberScrollState())
+                    .horizontalScroll(scroll)
             ) {
                 HabitGrid(
+                    config = habitGridConfig,
                     habitProgress = habitProgress,
                     boxColorUnchecked = TableThemes.tableThemes[habit.colorTheme].boxColorUnchecked,
                     boxColorChecked = TableThemes.tableThemes[habit.colorTheme].boxColorChecked
@@ -148,7 +194,7 @@ fun CheckedIcon(
         targetValue = if (playAnimation) 1.2f else 1f,
         animationSpec = tween(durationMillis = 350, easing = LinearEasing),
         label = "",
-        finishedListener = {playAnimation = false}
+        finishedListener = { playAnimation = false }
     )
 
     IconButton(
