@@ -97,12 +97,14 @@ fun DeleteDialog(
         onDismissRequest = toggleDeleteDialog,
         title = {
                 Text(
-                    text = "Delete the habit?"
+                    text = "Delete the habit?",
+                    style = MaterialTheme.typography.displayMedium
                 )
         },
         text = {
                Text(
-                   text = "This action is permanent and cannot be reverted."
+                   text = "This action is permanent and cannot be reverted.",
+                   style = MaterialTheme.typography.bodyMedium
                )
         },
         dismissButton = {
@@ -286,4 +288,15 @@ fun PreviewHabitTable() {
             view = LocalView.current
         )
     }
+}
+
+@Preview
+@Composable
+fun PreviewDeleteDialog() {
+    DeleteDialog(
+        onDeleteTable = { },
+        toggleDeleteDialog = { },
+        lastTable = false,
+        prevPage = {}
+    )
 }

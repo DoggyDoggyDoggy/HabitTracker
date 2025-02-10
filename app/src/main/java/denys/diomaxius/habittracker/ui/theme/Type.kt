@@ -18,7 +18,24 @@ val Ubuntu = FontFamily(
     Font(R.font.ubuntu_light, FontWeight.Light)
 )
 
+val DotSans = FontFamily(
+    Font(R.font.dotsans_regular, FontWeight.Normal),
+    Font(R.font.dotsans_medium, FontWeight.Medium)
+)
+
 val Typography = Typography(
+    //DeleteDialog title
+    displayMedium = TextStyle(
+        fontWeight = FontWeight.Medium,
+        fontFamily = DotSans,
+        fontSize = 32.sp
+    ),
+    //DeleteDialog text
+    bodyMedium = TextStyle(
+        fontWeight = FontWeight.Normal,
+        fontFamily = DotSans,
+        fontSize = 16.sp
+    ),
     //Main screen "No habits"
     headlineMedium = TextStyle(
         fontWeight = FontWeight.Bold,
