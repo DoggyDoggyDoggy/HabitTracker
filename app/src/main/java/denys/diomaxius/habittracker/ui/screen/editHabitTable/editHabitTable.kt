@@ -1,6 +1,5 @@
 package denys.diomaxius.habittracker.ui.screen.editHabitTable
 
-import android.util.Log
 import android.view.View
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Column
@@ -16,15 +15,20 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
@@ -68,7 +72,7 @@ fun EditHabitTable(
         modifier = Modifier.fillMaxSize(),
         state = lazyListState,
     ) {
-        items(habitList, key = {it.id}) { habit ->
+        items(habitList, key = { it.id }) { habit ->
             ReorderableItem(state = reorderableLazyListState, key = habit.id) {
                 HabitTable(
                     habit = habit,
@@ -83,14 +87,62 @@ fun EditHabitTable(
 }
 
 @Composable
+fun DeleteDialog(
+    onDeleteTable: () -> Unit,
+    toggleDeleteDialog: () -> Unit,
+    lastTable: Boolean,
+    prevPage: () -> Unit
+) {
+    AlertDialog(
+        onDismissRequest = toggleDeleteDialog,
+        title = {
+                Text(
+                    text = "Delete the habit?"
+                )
+        },
+        text = {
+               Text(
+                   text = "This action is permanent and cannot be reverted."
+               )
+        },
+        dismissButton = {
+            TextButton(onClick = toggleDeleteDialog) {
+                Text(text = "Dismiss")
+            }
+        },
+        confirmButton = {
+            TextButton(
+                onClick = {
+                    onDeleteTable()
+                    if (lastTable) {
+                        prevPage()
+                    }
+                }
+            ) {
+                Text(
+                    text = "Delete",
+                    color = Color.Red
+                    )
+            }
+        }
+    )
+}
+
+@Composable
 fun ReorderableCollectionItemScope.HabitTable(
     modifier: Modifier = Modifier,
     habit: Habit,
     onDeleteTable: (Habit) -> Unit,
     navHostController: NavHostController,
     habitList: List<Habit>,
-    view: View
+    view: View,
 ) {
+    var showDeleteDialog by remember {
+        mutableStateOf(false)
+    }
+
+    val toggleDeleteDialog = { showDeleteDialog = !showDeleteDialog }
+
     Card(
         modifier = modifier
             .fillMaxWidth()
@@ -115,7 +167,7 @@ fun ReorderableCollectionItemScope.HabitTable(
                 modifier = Modifier
                     .weight(1f)
                     .padding(start = 8.dp)
-            ){
+            ) {
                 Text(
                     text = habit.name,
                     style = MaterialTheme.typography.titleSmall,
@@ -135,7 +187,7 @@ fun ReorderableCollectionItemScope.HabitTable(
             Row(
                 modifier = Modifier.padding(end = 5.dp),
                 verticalAlignment = Alignment.CenterVertically
-            ){
+            ) {
                 IconButton(
                     modifier = Modifier.draggableHandle(
                         onDragStarted = {
@@ -174,23 +226,27 @@ fun ReorderableCollectionItemScope.HabitTable(
                 }
 
                 IconButton(
-                    onClick = {
-                        onDeleteTable(habit)
-                        if (habitList.size == 1) {
-                            Log.i("hello there", "Asd")
-                            navHostController.popBackStack()
-                        }
-                    }
+                    onClick = toggleDeleteDialog
                 ) {
                     Icon(
                         imageVector = Icons.Default.Delete,
                         contentDescription = "Delete"
                     )
                 }
+
+                if (showDeleteDialog) {
+                    DeleteDialog(
+                        onDeleteTable = { onDeleteTable(habit) },
+                        toggleDeleteDialog = toggleDeleteDialog,
+                        lastTable = habitList.size == 1,
+                        prevPage = { navHostController.popBackStack() }
+                    )
+                }
             }
         }
     }
 }
+
 
 @Preview
 @Composable
@@ -215,7 +271,7 @@ fun PreviewHabitTable() {
         }
     }
 
-    with (dummyScope) {
+    with(dummyScope) {
         HabitTable(
             habit = Habit(
                 name = "wwwwwwwwwwwww",
