@@ -53,6 +53,12 @@ android {
 
 dependencies {
     val room_version = "2.6.1"
+    //DataStore
+    implementation ("androidx.datastore:datastore-preferences:1.1.2")
+
+    //Gson
+    implementation ("com.google.code.gson:gson:2.8.9")
+
     //Room
     implementation("androidx.room:room-runtime:$room_version")
     kapt("androidx.room:room-compiler:$room_version")
@@ -65,6 +71,9 @@ dependencies {
 
     //Reodable LazyColumn
     implementation("sh.calvin.reorderable:reorderable:2.4.3")
+
+    //Extanded icons
+    implementation ("androidx.compose.material:material-icons-extended:1.7.7")
 
     implementation("androidx.core:core-ktx:1.15.0")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.8.7")

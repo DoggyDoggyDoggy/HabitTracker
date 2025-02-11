@@ -1,8 +1,5 @@
-package denys.diomaxius.habittracker.ui.screen.main.components
+package denys.diomaxius.habittracker.ui.components.table
 
-import androidx.compose.animation.core.LinearEasing
-import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -12,13 +9,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Check
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.ui.Modifier
@@ -30,7 +23,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
@@ -38,61 +30,52 @@ import androidx.compose.ui.tooling.preview.Preview
 import denys.diomaxius.habittracker.data.model.Habit
 import denys.diomaxius.habittracker.data.model.HabitProgress
 import denys.diomaxius.habittracker.ui.icons.IconData
+import denys.diomaxius.habittracker.ui.screen.main.dummyHabit
+import denys.diomaxius.habittracker.ui.screen.main.dummyHabitProgress
 import denys.diomaxius.habittracker.ui.tableThemes.TableThemes
 import kotlinx.coroutines.delay
 import java.time.LocalDate
-
-data class HabitGridConfig(
-    val spacing: Int = 4,
-    val boxSize: Int = 16,
-    val fixHeight: Int = 1,
-    val days: Int = 365,
-    val rows: Int = 7,
-    val density: Float
-) {
-    private fun boxSizePx(): Int {
-        return (density * boxSize).toInt()
-    }
-
-    fun getInitialScrollPosition(month: Int): Int {
-        return when (month) {
-            4 -> (boxSizePx() + spacing) * 4
-            5 -> (boxSizePx() + spacing) * 10
-            6 -> (boxSizePx() + spacing) * 14
-            7 -> (boxSizePx() + spacing) * 18
-            8 -> (boxSizePx() + spacing) * 22
-            9 -> (boxSizePx() + spacing) * 27
-            10 -> (boxSizePx() + spacing) * 31
-            11 -> (boxSizePx() + spacing) * 33
-            12 -> (boxSizePx() + spacing) * 33
-            else -> 0
-        }
-    }
-
-    fun getLayoutWidth(): Int {
-        return (((boxSize * density) + spacing) * days/rows + ((boxSize * density) + spacing)).toInt()
-    }
-
-    fun getLayoutHeight(): Int {
-        return (((boxSize * density) + spacing - fixHeight) * rows).toInt()
-    }
-}
 
 @Composable
 fun HabitTable(
     habit: Habit,
     habitProgress: List<HabitProgress>,
-    insertProgress: (HabitProgress) -> Unit,
-    checkTodayProgress: suspend (Int, LocalDate) -> Boolean
+    insertProgress: ((HabitProgress) -> Unit)? = null,
+    checkTodayProgress: (suspend (Int, LocalDate) -> Boolean)? = null
 ) {
-    var isHabitTrackedForToday by remember(habit.id) { mutableStateOf(false) }
-    var currentDate by remember(habit.id) { mutableStateOf(LocalDate.now()) }
-
     val habitGridConfig = HabitGridConfig(density = LocalDensity.current.density)
 
-    val scroll = rememberScrollState(
-        habitGridConfig.getInitialScrollPosition(currentDate.monthValue)
-    )
+    if (insertProgress != null && checkTodayProgress != null) {
+        InteractiveHabitTable(
+            habit = habit,
+            habitProgress = habitProgress,
+            insertProgress = insertProgress,
+            checkTodayProgress = checkTodayProgress,
+            habitGridConfig = habitGridConfig
+        )
+    } else {
+        NonInteractiveHabitTable(
+            habit = habit,
+            habitProgress = habitProgress,
+            habitGridConfig = habitGridConfig)
+    }
+}
+
+
+@Composable
+fun InteractiveHabitTable(
+    habit: Habit,
+    habitProgress: List<HabitProgress>,
+    insertProgress: (HabitProgress) -> Unit,
+    checkTodayProgress: suspend (Int, LocalDate) -> Boolean,
+    habitGridConfig: HabitGridConfig
+    ) {
+
+    var currentDate by remember(habit.id) { mutableStateOf(LocalDate.now()) }
+    val scroll =
+        rememberScrollState(habitGridConfig.getInitialScrollPosition(currentDate.monthValue))
+    var isHabitTrackedForToday by remember(habit.id) { mutableStateOf(false) }
+
 
     LaunchedEffect(habit.id, currentDate) {
         isHabitTrackedForToday = checkTodayProgress(habit.id, currentDate)
@@ -151,6 +134,7 @@ fun HabitTable(
                     }
                 }
 
+
                 CheckedIcon(
                     modifier = Modifier.padding(end = 5.dp),
                     habitId = habit.id,
@@ -159,6 +143,7 @@ fun HabitTable(
                     toggleTracked = { isHabitTrackedForToday = !isHabitTrackedForToday },
                     habitColorTheme = habit.colorTheme
                 )
+
             }
 
             Row(
@@ -178,80 +163,82 @@ fun HabitTable(
 }
 
 @Composable
-fun CheckedIcon(
-    modifier: Modifier = Modifier,
-    insertProgress: (HabitProgress) -> Unit,
-    isHabitTrackedForToday: Boolean,
-    toggleTracked: () -> Unit,
-    habitId: Int,
-    habitColorTheme: Int
+fun NonInteractiveHabitTable(
+    habit: Habit,
+    habitProgress: List<HabitProgress>,
+    habitGridConfig: HabitGridConfig
 ) {
-    var playAnimation by remember {
-        mutableStateOf(false)
-    }
-
-    val scale by animateFloatAsState(
-        targetValue = if (playAnimation) 1.2f else 1f,
-        animationSpec = tween(durationMillis = 350, easing = LinearEasing),
-        label = "",
-        finishedListener = { playAnimation = false }
-    )
-
-    IconButton(
-        modifier = modifier.scale(scale),
-        colors = IconButtonDefaults.iconButtonColors(
-            containerColor = checkIconColor(isHabitTrackedForToday, habitColorTheme)
-        ),
-        onClick = {
-            playAnimation = !isHabitTrackedForToday
-            insertProgress(
-                HabitProgress(
-                    habitId = habitId,
-                    date = LocalDate.now(),
-                    isCompleted = !isHabitTrackedForToday
-                )
-            )
-            toggleTracked()
-        }
-    ) {
-        Icon(
-            imageVector = Icons.Default.Check,
-            contentDescription = "Check",
-            tint = checkIconTint(isHabitTrackedForToday, habitColorTheme)
+    Card(
+        modifier = Modifier
+            .padding(8.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = TableThemes.tableThemes[habit.colorTheme].tableColor
         )
-    }
-}
+    ) {
+        Column(
+            modifier = Modifier
+                .padding(8.dp)
+        ) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.End
+            ) {
+                Icon(
+                    modifier = Modifier.size(42.dp),
+                    painter = painterResource(id = IconData.icons[habit.iconId]),
+                    contentDescription = "Habit icon",
+                    tint = Color.Unspecified
+                )
 
-fun checkIconColor(
-    isHabitTrackedForToday: Boolean,
-    habitColorTheme: Int
-): Color {
-    return if (isHabitTrackedForToday) {
-        TableThemes.tableThemes[habitColorTheme].checkedIcon
-    } else {
-        TableThemes.tableThemes[habitColorTheme].unCheckedIcon
-    }
-}
+                Column(
+                    modifier = Modifier
+                        .padding(start = 8.dp)
+                        .weight(1f)
+                ) {
+                    Text(
+                        text = habit.name,
+                        style = MaterialTheme.typography.titleSmall,
+                        color = TableThemes.tableThemes[habit.colorTheme].fontColor
+                    )
 
-fun checkIconTint(
-    isHabitTrackedForToday: Boolean,
-    habitColorTheme: Int
-): Color {
-    return if (isHabitTrackedForToday) {
-        TableThemes.tableThemes[habitColorTheme].iconTintChecked
-    } else {
-        Color.Black
+                    if (habit.description.isNotEmpty()) {
+                        Text(
+                            text = habit.description,
+                            style = MaterialTheme.typography.bodySmall,
+                            color = TableThemes.tableThemes[habit.colorTheme].fontColor
+                        )
+                    }
+                }
+            }
+
+            Row(
+                modifier = Modifier
+                    .wrapContentWidth()
+                    .horizontalScroll(rememberScrollState())
+            ) {
+                HabitGrid(
+                    config = habitGridConfig,
+                    habitProgress = habitProgress,
+                    boxColorUnchecked = TableThemes.tableThemes[habit.colorTheme].boxColorUnchecked,
+                    boxColorChecked = TableThemes.tableThemes[habit.colorTheme].boxColorChecked
+                )
+            }
+        }
     }
 }
 
 @Preview
 @Composable
 fun PreviewHabitTable() {
-    HabitTable(
+    val habitGridConfig = HabitGridConfig(density = LocalDensity.current.density)
+
+    InteractiveHabitTable(
         habit = dummyHabit,
         habitProgress = dummyHabitProgress,
         insertProgress = {},
-        checkTodayProgress = { _, _ -> false }
+        checkTodayProgress = { _, _ -> false },
+        habitGridConfig = habitGridConfig
     )
 }
 

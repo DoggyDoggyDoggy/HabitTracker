@@ -16,8 +16,8 @@ class HabitRepository @Inject constructor(
         return dao.getHabitById(habitId)
     }
 
-    fun getAllHabits(): Flow<List<Habit>> {
-        return dao.getAllHabits()
+    fun getAllHabits(year: Int): Flow<List<Habit>> {
+        return dao.getAllHabits(year)
     }
 
     suspend fun deleteHabit(habit: Habit) {

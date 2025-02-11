@@ -8,6 +8,7 @@ import denys.diomaxius.habittracker.data.repository.HabitRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import java.time.LocalDate
 import javax.inject.Inject
 
 @HiltViewModel
@@ -19,7 +20,7 @@ class EditHabitTableViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            habitRepository.getAllHabits().collect { _habitList.value = it }
+            habitRepository.getAllHabits(LocalDate.now().year).collect { _habitList.value = it }
         }
     }
 

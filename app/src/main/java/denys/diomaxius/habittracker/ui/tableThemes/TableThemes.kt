@@ -2,12 +2,14 @@ package denys.diomaxius.habittracker.ui.tableThemes
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.tooling.preview.Preview
 import denys.diomaxius.habittracker.data.model.TableTheme
+import denys.diomaxius.habittracker.ui.components.table.HabitGridConfig
 import denys.diomaxius.habittracker.ui.screen.addHabitTable.components.ColorTable
-import denys.diomaxius.habittracker.ui.screen.main.components.HabitTable
-import denys.diomaxius.habittracker.ui.screen.main.components.dummyHabit
-import denys.diomaxius.habittracker.ui.screen.main.components.dummyHabitProgress
+import denys.diomaxius.habittracker.ui.components.table.InteractiveHabitTable
+import denys.diomaxius.habittracker.ui.screen.main.dummyHabit
+import denys.diomaxius.habittracker.ui.screen.main.dummyHabitProgress
 
 object TableThemes {
     val tableThemes = listOf<TableTheme>(
@@ -200,11 +202,14 @@ object TableThemes {
 @Preview
 @Composable
 fun PreviewHabitTable() {
-    HabitTable(
+    val habitGridConfig = HabitGridConfig(density = LocalDensity.current.density)
+
+    InteractiveHabitTable(
         habit = dummyHabit,
         habitProgress = dummyHabitProgress,
         insertProgress = {},
-        checkTodayProgress = { _, _ -> false }
+        checkTodayProgress = { _, _ -> false },
+        habitGridConfig = habitGridConfig
     )
 }
 

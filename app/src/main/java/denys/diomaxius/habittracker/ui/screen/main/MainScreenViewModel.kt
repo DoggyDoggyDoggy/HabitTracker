@@ -7,6 +7,7 @@ import denys.diomaxius.habittracker.data.model.Habit
 import denys.diomaxius.habittracker.data.model.HabitProgress
 import denys.diomaxius.habittracker.data.repository.HabitProgressRepository
 import denys.diomaxius.habittracker.data.repository.HabitRepository
+import denys.diomaxius.habittracker.data.repository.YearStorageRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -16,9 +17,10 @@ import java.time.LocalDate
 import javax.inject.Inject
 
 @HiltViewModel
-class MainScreenViewModel @Inject constructor(
+open class MainScreenViewModel @Inject constructor(
     private val habitRepository: HabitRepository,
-    private val habitProgressRepository: HabitProgressRepository
+    private val habitProgressRepository: HabitProgressRepository,
+    private val yearStorageRepository: YearStorageRepository
 ) : ViewModel() {
 
     private val _habitList = MutableStateFlow<List<Habit>>(emptyList())
@@ -31,9 +33,20 @@ class MainScreenViewModel @Inject constructor(
     val isLoading = _isLoading.asStateFlow()
 
     init {
+        getListOfHabits()
+        addYear()
+    }
+
+    private fun addYear() {
+        viewModelScope.launch {
+            yearStorageRepository.addYear(LocalDate.now().year)
+        }
+    }
+
+    protected fun getListOfHabits (year: Int = LocalDate.now().year) {
         viewModelScope.launch {
             combine(
-                habitRepository.getAllHabits(),
+                habitRepository.getAllHabits(year),
                 habitProgressRepository.getAllProgress()
             ) { habits, progress ->
                 habits to progress.groupBy { it.habitId }

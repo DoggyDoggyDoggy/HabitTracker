@@ -280,7 +280,8 @@ fun PreviewHabitTable() {
                 description = "wwwwwwwwwwwwwwwwwwwwwww",
                 colorTheme = 0,
                 iconId = 0,
-                category = ""
+                category = "",
+                year = 2024
             ),
             onDeleteTable = {},
             navHostController = rememberNavController(),

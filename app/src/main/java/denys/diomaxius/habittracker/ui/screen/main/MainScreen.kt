@@ -14,7 +14,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.DateRange
+import androidx.compose.material.icons.filled.Archive
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
@@ -34,7 +34,7 @@ import androidx.navigation.NavHostController
 import denys.diomaxius.habittracker.data.model.Habit
 import denys.diomaxius.habittracker.data.model.HabitProgress
 import denys.diomaxius.habittracker.navigation.Screen
-import denys.diomaxius.habittracker.ui.screen.main.components.HabitTable
+import denys.diomaxius.habittracker.ui.components.table.HabitTable
 import java.time.LocalDate
 
 @Composable
@@ -163,7 +163,7 @@ fun TopBar(
         IconButton(onClick = {
             navHostController.navigate(Screen.Archive.route) { launchSingleTop = true }
         }) {
-            Icon(imageVector = Icons.Default.DateRange, contentDescription = "Archive")
+            Icon(imageVector = Icons.Default.Archive, contentDescription = "Archive")
         }
         IconButton(
             enabled = habitListIsNotEmpty,

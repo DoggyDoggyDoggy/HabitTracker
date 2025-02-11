@@ -8,6 +8,7 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import denys.diomaxius.habittracker.data.database.HabitDatabase
+import denys.diomaxius.habittracker.data.datastore.DataStoreManager
 import javax.inject.Singleton
 
 @Module
@@ -30,4 +31,8 @@ object AppModule {
     @Provides
     @Singleton
     fun provideProgressDao(db: HabitDatabase) = db.habitProgressDao()
+
+    @Provides
+    @Singleton
+    fun provideDatastore(@ApplicationContext context: Context) = DataStoreManager(context)
 }

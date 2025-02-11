@@ -20,6 +20,7 @@ import denys.diomaxius.habittracker.data.model.Habit
 import denys.diomaxius.habittracker.ui.screen.addHabitTable.components.CategoryDropdown
 import denys.diomaxius.habittracker.ui.screen.addHabitTable.components.IconsTable
 import denys.diomaxius.habittracker.ui.screen.addHabitTable.components.ColorTable
+import java.time.LocalDate
 
 @Composable
 fun AddHabitTable(
@@ -104,7 +105,8 @@ fun AddHabitTable(
                                 iconId = iconId,
                                 category = category,
                                 description = description,
-                                colorTheme = themeId
+                                colorTheme = themeId,
+                                year = LocalDate.now().year
                             )
                         )
                     } else {
@@ -114,7 +116,8 @@ fun AddHabitTable(
                                 iconId = iconId,
                                 category = category,
                                 description = description,
-                                colorTheme = themeId
+                                colorTheme = themeId,
+                                year = LocalDate.now().year
                             )
                         )
                     }

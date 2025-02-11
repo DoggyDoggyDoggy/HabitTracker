@@ -1,4 +1,4 @@
-package denys.diomaxius.habittracker.ui.screen.main.components
+package denys.diomaxius.habittracker.ui.components.table
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
