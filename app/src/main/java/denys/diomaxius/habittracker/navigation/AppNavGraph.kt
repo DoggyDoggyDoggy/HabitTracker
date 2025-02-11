@@ -8,6 +8,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import denys.diomaxius.habittracker.ui.screen.addHabitTable.AddHabitTable
+import denys.diomaxius.habittracker.ui.screen.archive.Archive
 import denys.diomaxius.habittracker.ui.screen.editHabitTable.EditHabitTable
 import denys.diomaxius.habittracker.ui.screen.main.MainScreen
 
@@ -47,6 +48,12 @@ fun AppNavGraph(
             EditHabitTable(
                 navHostController = navHostController
             )
+        }
+
+        composable(
+            route = Screen.Archive.route
+        ){
+            Archive()
         }
     }
 }

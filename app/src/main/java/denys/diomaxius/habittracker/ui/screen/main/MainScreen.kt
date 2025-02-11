@@ -14,6 +14,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
@@ -159,6 +160,11 @@ fun TopBar(
         modifier = modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.End
     ) {
+        IconButton(onClick = {
+            navHostController.navigate(Screen.Archive.route) { launchSingleTop = true }
+        }) {
+            Icon(imageVector = Icons.Default.DateRange, contentDescription = "Archive")
+        }
         IconButton(
             enabled = habitListIsNotEmpty,
             onClick = {
