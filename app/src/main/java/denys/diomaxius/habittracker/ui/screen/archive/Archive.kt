@@ -1,6 +1,8 @@
 package denys.diomaxius.habittracker.ui.screen.archive
 
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -24,6 +26,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import denys.diomaxius.habittracker.ui.components.table.HabitTable
 import java.time.LocalDate
@@ -34,31 +38,46 @@ fun Archive(
 ) {
     val habitList by viewModel.habitList.collectAsState()
     val habitProgressMap by viewModel.habitProgressMap.collectAsState()
-    val isLoading by viewModel.isLoading.collectAsState()
-
     val yearList by viewModel.yearList.collectAsState()
-
-
+    val isLoading by viewModel.isLoading.collectAsState()
 
     Scaffold(
         topBar = {
             TopBar(
                 yearList = yearList,
-                chooseYear = {viewModel.getListOfHabitsByYear(it)}
+                chooseYear = { viewModel.getListOfHabitsByYear(it) }
             )
         }
     ) { innerPadding ->
-        LazyColumn(
-            modifier = Modifier
-                .padding(innerPadding)
-                .fillMaxSize()
-        ) {
-            items(habitList) { habit ->
-                val habitProgress = habitProgressMap[habit.id] ?: emptyList()
-                HabitTable(
-                    habit = habit,
-                    habitProgress = habitProgress
-                )
+        if (isLoading) {
+            Column (
+                modifier = Modifier.fillMaxSize().padding(innerPadding)
+            ){ Text(
+                text = "Loading...",
+                fontSize = 36.sp,
+                fontWeight = FontWeight.Bold
+            ) }
+        } else if (habitList.isEmpty()) {
+            Column (
+                modifier = Modifier.fillMaxSize().padding(innerPadding)
+            ){ Text(
+                text = "Empty",
+                fontSize = 36.sp,
+                fontWeight = FontWeight.Bold
+            ) }
+        }else {
+            LazyColumn(
+                modifier = Modifier
+                    .padding(innerPadding)
+                    .fillMaxSize()
+            ) {
+                items(habitList) { habit ->
+                    val habitProgress = habitProgressMap[habit.id] ?: emptyList()
+                    HabitTable(
+                        habit = habit,
+                        habitProgress = habitProgress
+                    )
+                }
             }
         }
     }
@@ -69,39 +88,41 @@ fun TopBar(
     yearList: List<Int>,
     chooseYear: (Int) -> Unit
 ) {
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.Center
-    ) {
-        var expanded by remember { mutableStateOf(false) }
-        var selected by remember { mutableStateOf(LocalDate.now().year) }
-
+    if (yearList.size > 1) {
         Row(
-            verticalAlignment = Alignment.CenterVertically
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Center
         ) {
-            Text(text = "$selected")
+            var expanded by remember { mutableStateOf(false) }
+            var selected by remember { mutableStateOf(LocalDate.now().year - 1) }
 
-            IconButton(onClick = { expanded = true }) {
-                Icon(
-                    if (expanded) Icons.Default.ArrowDropUp else Icons.Default.ArrowDropDown,
-                    contentDescription = "Open menu"
-                )
-            }
-
-            DropdownMenu(
-                expanded = expanded,
-                onDismissRequest = { expanded = false }
+            Row(
+                verticalAlignment = Alignment.CenterVertically
             ) {
-                yearList.forEach { year ->
-                    DropdownMenuItem(
-                        text = { Text(text = "$year") },
-                        onClick = {
-                            selected = year
-                            chooseYear(year)
-                            expanded = false
-                        }
+                Text(text = "$selected")
+
+                IconButton(onClick = { expanded = true }) {
+                    Icon(
+                        if (expanded) Icons.Default.ArrowDropUp else Icons.Default.ArrowDropDown,
+                        contentDescription = "Open menu"
                     )
+                }
+
+                DropdownMenu(
+                    expanded = expanded,
+                    onDismissRequest = { expanded = false }
+                ) {
+                    yearList.sorted().reversed().drop(1).forEach { year ->
+                        DropdownMenuItem(
+                            text = { Text(text = "$year") },
+                            onClick = {
+                                selected = year
+                                chooseYear(year)
+                                expanded = false
+                            }
+                        )
+                    }
                 }
             }
         }

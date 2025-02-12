@@ -43,7 +43,7 @@ open class MainScreenViewModel @Inject constructor(
         }
     }
 
-    protected fun getListOfHabits (year: Int = LocalDate.now().year) {
+    private fun getListOfHabits(year: Int = LocalDate.now().year) {
         viewModelScope.launch {
             combine(
                 habitRepository.getAllHabits(year),
