@@ -8,10 +8,15 @@ import denys.diomaxius.habittracker.data.model.TableTheme
 import denys.diomaxius.habittracker.ui.components.table.HabitGridConfig
 import denys.diomaxius.habittracker.ui.screen.addHabitTable.components.ColorTable
 import denys.diomaxius.habittracker.ui.components.table.InteractiveHabitTable
-import denys.diomaxius.habittracker.ui.screen.main.dummyHabit
-import denys.diomaxius.habittracker.ui.screen.main.dummyHabitProgress
+import denys.diomaxius.habittracker.ui.dummyHabit
+import denys.diomaxius.habittracker.ui.dummyHabitProgress
+
+
+const val checked = true
 
 object TableThemes {
+    private val checkedIcon = Color(0xFF25A244)
+
     val tableThemes = listOf<TableTheme>(
         //First Row
         TableTheme(
@@ -21,7 +26,7 @@ object TableThemes {
             fontColor = Color(0xFFFFFFFF),
             boxColorUnchecked = Color(0xFFE2EAFC),
             boxColorChecked = Color(0xFFC8B6FF),
-            checkedIcon = Color(0xFF89D2A3),
+            checkedIcon = checkedIcon,
             unCheckedIcon = Color(0xFFE2EAFC)
         ),
         TableTheme(
@@ -31,7 +36,7 @@ object TableThemes {
             fontColor = Color(0xFFFFFFFF),
             boxColorUnchecked = Color(0xFFFCD6F9),
             boxColorChecked = Color(0xFFC19BFF),
-            checkedIcon = Color(0xFF89D2A3),
+            checkedIcon = checkedIcon,
             unCheckedIcon = Color(0xFFFCD6F9)
         ),
         TableTheme(
@@ -41,7 +46,7 @@ object TableThemes {
             fontColor = Color(0xFFFFFFFF),
             boxColorUnchecked = Color(0xFFDBD0F5),
             boxColorChecked = Color(0xFF68C72E),
-            checkedIcon = Color(0xFF89D2A3),
+            checkedIcon = checkedIcon,
             unCheckedIcon = Color(0xFFDBD0F5)
         ),
         TableTheme(
@@ -52,7 +57,7 @@ object TableThemes {
             boxColorChecked = Color(0xFFFFE8D6),
             boxColorUnchecked = Color(0xFFB7B7A4),
             unCheckedIcon = Color(0xFFB7B7A4),
-            checkedIcon = Color(0xFF89D2A3)
+            checkedIcon = checkedIcon
         ),
         TableTheme(
             themeButton = Color(0xFF97A869),
@@ -62,7 +67,7 @@ object TableThemes {
             boxColorChecked = Color(0xFFEE6055),
             boxColorUnchecked = Color(0xFFDDE5B6),
             unCheckedIcon = Color(0xFFDDE5B6),
-            checkedIcon = Color(0xFF89D2A3)
+            checkedIcon = checkedIcon
         ),
         TableTheme(
             themeButton = Color(0xFFC3A18E),
@@ -71,7 +76,7 @@ object TableThemes {
             iconTintChecked = Color(0xFFFFFFFF),
             boxColorUnchecked = Color(0xFFE3D5CA),
             boxColorChecked = Color(0xFFD5BDAF),
-            checkedIcon = Color(0xFF89D2A3),
+            checkedIcon = checkedIcon,
             unCheckedIcon = Color(0xFFE3D5CA)
         ),
         //Second Row
@@ -82,7 +87,7 @@ object TableThemes {
             iconTintChecked = Color(0xFFFFFFFF),
             boxColorUnchecked = Color(0xD39971E4),
             boxColorChecked = Color(0xFF48248B),
-            checkedIcon = Color(0xFF89D2A3),
+            checkedIcon = checkedIcon,
             unCheckedIcon = Color(0xD39971E4)
         ),
         TableTheme(
@@ -92,7 +97,7 @@ object TableThemes {
             iconTintChecked = Color(0xFFFFFFFF),
             boxColorUnchecked = Color(0xFFE3CCAE),
             boxColorChecked = Color(0xFFB8621B),
-            checkedIcon = Color(0xFF89D2A3),
+            checkedIcon = checkedIcon,
             unCheckedIcon = Color(0xFFE3CCAE)
         ),
         TableTheme(
@@ -103,7 +108,7 @@ object TableThemes {
             boxColorChecked = Color(0xFFFFE31A),
             boxColorUnchecked = Color(0xFFABBA7C),
             unCheckedIcon = Color(0xFFABBA7C),
-            checkedIcon = Color(0xFF89D2A3)
+            checkedIcon = checkedIcon
         ),
         TableTheme(
             themeButton = Color(0xFFFF8F00),
@@ -113,88 +118,88 @@ object TableThemes {
             boxColorChecked = Color(0xFF26355D),
             boxColorUnchecked = Color(0xFFFFDB00),
             unCheckedIcon = Color(0xFFFFDB00),
-            checkedIcon = Color(0xFF89D2A3)
+            checkedIcon = checkedIcon
         ),
         TableTheme(
-            themeButton = Color(0xFF000000),
-            tableColor = Color(0xFFFF8F00),
+            themeButton = Color(0xFF1B263B),
+            tableColor = Color(0xFF415A77),
             fontColor = Color(0xFFFFFFFF),
             iconTintChecked = Color(0xFFFFFFFF),
             boxColorChecked = Color(0xFF26355D),
-            boxColorUnchecked = Color(0xFFFFDB00),
-            unCheckedIcon = Color(0xFFFFDB00),
-            checkedIcon = Color(0xFF000000)
+            boxColorUnchecked = Color(0xFF778DA9),
+            unCheckedIcon = Color(0xFF778DA9),
+            checkedIcon = checkedIcon
         ),
         TableTheme(
-            themeButton = Color(0xFF000000),
-            tableColor = Color(0xFFFF8F00),
+            themeButton = Color(0xFFD90429),
+            tableColor = Color(0xFFEF233C),
             fontColor = Color(0xFFFFFFFF),
             iconTintChecked = Color(0xFFFFFFFF),
-            boxColorChecked = Color(0xFF26355D),
-            boxColorUnchecked = Color(0xFFFFDB00),
-            unCheckedIcon = Color(0xFFFFDB00),
-            checkedIcon = Color(0xFF89D2A3)
+            boxColorChecked = Color(0xFF2B2D42),
+            boxColorUnchecked = Color(0xFFEDF2F4),
+            unCheckedIcon = Color(0xFFEDF2F4),
+            checkedIcon = checkedIcon
         ),
         //Third Row
         TableTheme(
-            themeButton = Color(0xFF000000),
-            tableColor = Color(0xFFFF8F00),
-            fontColor = Color(0xFFFFFFFF),
+            themeButton = Color(0xFF5E548E),
+            tableColor = Color(0xFFFFFFFF),
+            fontColor = Color(0xFF000000),
             iconTintChecked = Color(0xFFFFFFFF),
-            boxColorChecked = Color(0xFF26355D),
-            boxColorUnchecked = Color(0xFFFFDB00),
-            unCheckedIcon = Color(0xFFFFDB00),
-            checkedIcon = Color(0xFF89D2A3)
+            boxColorChecked = Color(0xFF5E548E),
+            boxColorUnchecked = Color(0xB2E0C1E6),
+            unCheckedIcon = Color(0xB2E0C1E6),
+            checkedIcon = checkedIcon
+        ),
+        TableTheme(
+            themeButton = Color(0xFF1D2D44),
+            tableColor = Color(0xFFFFFFFF),
+            fontColor = Color(0xFF000000),
+            iconTintChecked = Color(0xFFFFFFFF),
+            boxColorChecked = Color(0xFF1D2D44),
+            boxColorUnchecked = Color(0xBFB0C6E2),
+            unCheckedIcon = Color(0xBFB0C6E2),
+            checkedIcon = checkedIcon
+        ),
+        TableTheme(
+            themeButton = Color(0xFF8E9AAF),
+            tableColor = Color(0xFFFFFFFF),
+            fontColor = Color(0xFF000000),
+            iconTintChecked = Color(0xFFFFFFFF),
+            boxColorChecked = Color(0xFF8E9AAF),
+            boxColorUnchecked = Color(0xFFDEE2FF),
+            unCheckedIcon = Color(0xFFDEE2FF),
+            checkedIcon = checkedIcon
+        ),
+        TableTheme(
+            themeButton = Color(0xFFC59E91),
+            tableColor = Color(0xFFFFFFFF),
+            fontColor = Color(0xFF000000),
+            iconTintChecked = Color(0xFFFFFFFF),
+            boxColorChecked = Color(0xFFAF887B),
+            boxColorUnchecked = Color(0xD7EBD8D0),
+            unCheckedIcon = Color(0xD7EBD8D0),
+            checkedIcon = checkedIcon
+        ),
+        TableTheme(
+            themeButton = Color(0xFF707272),
+            tableColor = Color(0xFFFFFFFF),
+            fontColor = Color(0xFF000000),
+            iconTintChecked = Color(0xFFFFFFFF),
+            boxColorChecked = Color(0xFF707272),
+            boxColorUnchecked = Color(0xBFD0CFCF),
+            unCheckedIcon = Color(0xBFD0CFCF),
+            checkedIcon = checkedIcon
         ),
         TableTheme(
             themeButton = Color(0xFF000000),
-            tableColor = Color(0xFFFF8F00),
-            fontColor = Color(0xFFFFFFFF),
+            tableColor = Color(0xFFFFFFFF),
+            fontColor = Color(0xFF000000),
             iconTintChecked = Color(0xFFFFFFFF),
-            boxColorChecked = Color(0xFF26355D),
-            boxColorUnchecked = Color(0xFFFFDB00),
-            unCheckedIcon = Color(0xFFFFDB00),
-            checkedIcon = Color(0xFF89D2A3)
-        ),
-        TableTheme(
-            themeButton = Color(0xFF000000),
-            tableColor = Color(0xFFFF8F00),
-            fontColor = Color(0xFFFFFFFF),
-            iconTintChecked = Color(0xFFFFFFFF),
-            boxColorChecked = Color(0xFF26355D),
-            boxColorUnchecked = Color(0xFFFFDB00),
-            unCheckedIcon = Color(0xFFFFDB00),
-            checkedIcon = Color(0xFF89D2A3)
-        ),
-        TableTheme(
-            themeButton = Color(0xFF000000),
-            tableColor = Color(0xFFFF8F00),
-            fontColor = Color(0xFFFFFFFF),
-            iconTintChecked = Color(0xFFFFFFFF),
-            boxColorChecked = Color(0xFF26355D),
-            boxColorUnchecked = Color(0xFFFFDB00),
-            unCheckedIcon = Color(0xFFFFDB00),
-            checkedIcon = Color(0xFF89D2A3)
-        ),
-        TableTheme(
-            themeButton = Color(0xFF000000),
-            tableColor = Color(0xFFFF8F00),
-            fontColor = Color(0xFFFFFFFF),
-            iconTintChecked = Color(0xFFFFFFFF),
-            boxColorChecked = Color(0xFF26355D),
-            boxColorUnchecked = Color(0xFFFFDB00),
-            unCheckedIcon = Color(0xFFFFDB00),
-            checkedIcon = Color(0xFF89D2A3)
-        ),
-        TableTheme(
-            themeButton = Color(0xFF000000),
-            tableColor = Color(0xFFFF8F00),
-            fontColor = Color(0xFFFFFFFF),
-            iconTintChecked = Color(0xFFFFFFFF),
-            boxColorChecked = Color(0xFF26355D),
-            boxColorUnchecked = Color(0xFFFFDB00),
-            unCheckedIcon = Color(0xFFFFDB00),
-            checkedIcon = Color(0xFF89D2A3)
+            boxColorChecked = Color(0xFFFF4D6D),
+            boxColorUnchecked = Color(0xBFFFCCD5),
+            unCheckedIcon = Color(0xBFFFCCD5),
+            checkedIcon = checkedIcon
         ),
     )
 }
@@ -208,7 +213,7 @@ fun PreviewHabitTable() {
         habit = dummyHabit,
         habitProgress = dummyHabitProgress,
         insertProgress = {},
-        checkTodayProgress = { _, _ -> false },
+        checkTodayProgress = { _, _ -> checked },
         habitGridConfig = habitGridConfig
     )
 }

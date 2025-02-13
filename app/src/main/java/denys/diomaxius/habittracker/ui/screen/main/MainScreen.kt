@@ -55,7 +55,9 @@ fun MainScreen(
         }
     ) { innerPadding ->
         Content(
-            modifier = Modifier.padding(innerPadding),
+            modifier = Modifier
+                .padding(innerPadding)
+                ,
             habitList = habitList,
             habitProgressMap = habitProgressMap,
             insertProgress = { viewModel.insertProgress(it) },

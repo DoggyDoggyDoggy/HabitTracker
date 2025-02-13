@@ -6,10 +6,12 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -29,29 +31,47 @@ fun ColorTable(
         modifier = modifier
     ) {
         repeat(3) { row ->
-            Row(
+            Column(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 12.dp),
-                horizontalArrangement = Arrangement.Center
+                    .wrapContentSize()
+                    .padding(top = 6.dp)
             ) {
-                repeat(6) { boxId ->
-                    ColorBox(
-                        modifier = Modifier.padding(horizontal = 8.dp),
-                        boxId = when (row) {
-                            0 -> boxId
-                            1 -> boxId + 6
-                            else -> boxId + 12
-                        },
-                        themeId = themeId,
-                        onColorChange = onColorChange
-                    )
+                Text(
+                    text = themeName(row),
+                    style = MaterialTheme.typography.labelSmall,
+                    modifier = Modifier.padding(start = 8.dp)
+                )
+
+                Row(
+                    modifier = Modifier.wrapContentSize(),
+                    horizontalArrangement = Arrangement.Start
+                ) {
+                    repeat(6) { boxId ->
+                        ColorBox(
+                            modifier = Modifier.padding(horizontal = 8.dp),
+                            boxId = when (row) {
+                                0 -> boxId
+                                1 -> boxId + 6
+                                else -> boxId + 12
+                            },
+                            themeId = themeId,
+                            onColorChange = onColorChange
+                        )
+                    }
                 }
             }
         }
     }
 }
 
+fun themeName(row: Int): String {
+    return when (row) {
+        0 -> "Soft color"
+        1 -> "Bright color"
+        2 -> "No frame"
+        else -> ""
+    }
+}
 
 @Composable
 fun ColorBox(

@@ -20,7 +20,9 @@ val Ubuntu = FontFamily(
 
 val DotSans = FontFamily(
     Font(R.font.dotsans_regular, FontWeight.Normal),
-    Font(R.font.dotsans_medium, FontWeight.Medium)
+    Font(R.font.dotsans_medium, FontWeight.Medium),
+    Font(R.font.dotsans_bold, FontWeight.Bold),
+    Font(R.font.dotsans_extra_bold, FontWeight.ExtraBold)
 )
 
 val Roboto = FontFamily(
@@ -72,5 +74,11 @@ val Typography = Typography(
         fontSize = 14.sp,
         fontWeight = FontWeight.Medium,
         fontFamily = Ubuntu
+    ),
+    //Theme description
+    labelSmall = TextStyle(
+        fontSize = 10.sp,
+        fontFamily = DotSans,
+        fontWeight = FontWeight.Bold
     )
 )

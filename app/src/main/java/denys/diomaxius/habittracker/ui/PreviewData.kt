@@ -1,4 +1,4 @@
-package denys.diomaxius.habittracker.ui.screen.main
+package denys.diomaxius.habittracker.ui
 
 import denys.diomaxius.habittracker.data.model.Habit
 import denys.diomaxius.habittracker.data.model.HabitProgress
@@ -10,7 +10,7 @@ val dummyHabit = Habit(
     iconId = 0,
     description = "Dummy description",
     category = "",
-    colorTheme = 0,
+    colorTheme = 17,
     year = 0
 )
 

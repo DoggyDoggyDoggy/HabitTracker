@@ -30,8 +30,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import denys.diomaxius.habittracker.data.model.Habit
 import denys.diomaxius.habittracker.data.model.HabitProgress
 import denys.diomaxius.habittracker.data.constants.IconData
-import denys.diomaxius.habittracker.ui.screen.main.dummyHabit
-import denys.diomaxius.habittracker.ui.screen.main.dummyHabitProgress
+import denys.diomaxius.habittracker.ui.dummyHabit
+import denys.diomaxius.habittracker.ui.dummyHabitProgress
 import denys.diomaxius.habittracker.data.constants.TableThemes
 import kotlinx.coroutines.delay
 import java.time.LocalDate
@@ -57,7 +57,8 @@ fun HabitTable(
         NonInteractiveHabitTable(
             habit = habit,
             habitProgress = habitProgress,
-            habitGridConfig = habitGridConfig)
+            habitGridConfig = habitGridConfig
+        )
     }
 }
 
@@ -69,7 +70,7 @@ fun InteractiveHabitTable(
     insertProgress: (HabitProgress) -> Unit,
     checkTodayProgress: suspend (Int, LocalDate) -> Boolean,
     habitGridConfig: HabitGridConfig
-    ) {
+) {
 
     var currentDate by remember(habit.id) { mutableStateOf(LocalDate.now()) }
     val scroll =
@@ -121,7 +122,11 @@ fun InteractiveHabitTable(
                 ) {
                     Text(
                         text = habit.name,
-                        style = MaterialTheme.typography.titleSmall,
+                        style = if (habit.colorTheme < 12) {
+                            MaterialTheme.typography.titleSmall
+                        } else {
+                            MaterialTheme.typography.titleSmall.copy(shadow = null)
+                        },
                         color = TableThemes.tableThemes[habit.colorTheme].fontColor
                     )
 
