@@ -96,16 +96,16 @@ fun DeleteDialog(
     AlertDialog(
         onDismissRequest = toggleDeleteDialog,
         title = {
-                Text(
-                    text = "Delete the habit?",
-                    style = MaterialTheme.typography.displayMedium
-                )
+            Text(
+                text = "Delete the habit?",
+                style = MaterialTheme.typography.displayMedium
+            )
         },
         text = {
-               Text(
-                   text = "This action is permanent and cannot be reverted.",
-                   style = MaterialTheme.typography.bodyMedium
-               )
+            Text(
+                text = "This action is permanent and cannot be reverted.",
+                style = MaterialTheme.typography.bodyMedium
+            )
         },
         dismissButton = {
             TextButton(onClick = toggleDeleteDialog) {
@@ -124,7 +124,7 @@ fun DeleteDialog(
                 Text(
                     text = "Delete",
                     color = Color.Red
-                    )
+                )
             }
         }
     )
