@@ -46,10 +46,10 @@ fun Archive(
     viewModel: ArchiveViewModel = hiltViewModel(),
     navHostController: NavHostController
 ) {
-    val habitList by viewModel.habitList.collectAsState()
-    val habitProgressMap by viewModel.habitProgressMap.collectAsState()
+    val habitList by viewModel.habitStateHolder.habitList.collectAsState()
+    val habitProgressMap by viewModel.habitStateHolder.habitProgressMap.collectAsState()
+    val isLoading by viewModel.habitStateHolder.isLoading.collectAsState()
     val yearList by viewModel.yearList.collectAsState()
-    val isLoading by viewModel.isLoading.collectAsState()
 
     //Category selection
     var expanded by remember { mutableStateOf(false) }
@@ -69,8 +69,7 @@ fun Archive(
         }
     ) { innerPadding ->
         Content(
-            modifier = Modifier
-                .padding(innerPadding),
+            modifier = Modifier.padding(innerPadding),
             isLoading = isLoading,
             habitList = habitList,
             habitProgressMap = habitProgressMap

@@ -40,9 +40,9 @@ fun MainScreen(
     viewModel: MainScreenViewModel = hiltViewModel(),
     navHostController: NavHostController
 ) {
-    val habitList by viewModel.habitList.collectAsState()
-    val habitProgressMap by viewModel.habitProgressMap.collectAsState()
-    val isLoading by viewModel.isLoading.collectAsState()
+    val habitList by viewModel.habitStateHolder.habitList.collectAsState()
+    val habitProgressMap by viewModel.habitStateHolder.habitProgressMap.collectAsState()
+    val isLoading by viewModel.habitStateHolder.isLoading.collectAsState()
     val showArchiveIcon by viewModel.showArchiveIcon.collectAsState()
 
     Scaffold(
