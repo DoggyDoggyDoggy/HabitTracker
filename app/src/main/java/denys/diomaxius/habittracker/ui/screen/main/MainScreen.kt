@@ -1,7 +1,6 @@
 package denys.diomaxius.habittracker.ui.screen.main
 
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -9,7 +8,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
@@ -17,7 +15,6 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Archive
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.Button
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -34,6 +31,7 @@ import androidx.navigation.NavHostController
 import denys.diomaxius.habittracker.data.model.Habit
 import denys.diomaxius.habittracker.data.model.HabitProgress
 import denys.diomaxius.habittracker.navigation.Screen
+import denys.diomaxius.habittracker.ui.components.Loading
 import denys.diomaxius.habittracker.ui.components.table.HabitTable
 import java.time.LocalDate
 
@@ -45,12 +43,14 @@ fun MainScreen(
     val habitList by viewModel.habitList.collectAsState()
     val habitProgressMap by viewModel.habitProgressMap.collectAsState()
     val isLoading by viewModel.isLoading.collectAsState()
+    val showArchiveIcon by viewModel.showArchiveIcon.collectAsState()
 
     Scaffold(
         topBar = {
             TopBar(
                 navHostController = navHostController,
-                habitListIsNotEmpty = habitList.isNotEmpty()
+                habitListIsNotEmpty = habitList.isNotEmpty(),
+                showArchiveIcon = showArchiveIcon
             )
         }
     ) { innerPadding ->
@@ -78,16 +78,7 @@ fun Content(
     isLoading: Boolean
 ) {
     if (isLoading) {
-        Box(
-            modifier = modifier
-                .fillMaxSize(),
-            contentAlignment = Alignment.Center
-        ) {
-            CircularProgressIndicator(
-                Modifier.size(200.dp),
-                strokeWidth = 18.dp
-            )
-        }
+        Loading()
     } else {
         if (habitList.isNotEmpty()) {
             LazyColumn(
@@ -154,16 +145,19 @@ fun EmptyHabitList(
 fun TopBar(
     modifier: Modifier = Modifier,
     navHostController: NavHostController,
-    habitListIsNotEmpty: Boolean
+    habitListIsNotEmpty: Boolean,
+    showArchiveIcon: Boolean
 ) {
     Row(
         modifier = modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.End
     ) {
-        IconButton(onClick = {
-            navHostController.navigate(Screen.Archive.route) { launchSingleTop = true }
-        }) {
-            Icon(imageVector = Icons.Default.Archive, contentDescription = "Archive")
+        if (showArchiveIcon){
+            IconButton(onClick = {
+                navHostController.navigate(Screen.Archive.route) { launchSingleTop = true }
+            }) {
+                Icon(imageVector = Icons.Default.Archive, contentDescription = "Archive")
+            }
         }
         IconButton(
             enabled = habitListIsNotEmpty,

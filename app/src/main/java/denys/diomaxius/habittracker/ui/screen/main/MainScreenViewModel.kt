@@ -11,6 +11,7 @@ import denys.diomaxius.habittracker.data.repository.YearStorageRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 import java.time.LocalDate
@@ -32,6 +33,9 @@ open class MainScreenViewModel @Inject constructor(
     private val _isLoading = MutableStateFlow(true)
     val isLoading = _isLoading.asStateFlow()
 
+    private val _showArchiveIcon = MutableStateFlow(false)
+    val showArchiveIcon = _showArchiveIcon.asStateFlow()
+
     init {
         getListOfHabits()
         addYear()
@@ -40,6 +44,11 @@ open class MainScreenViewModel @Inject constructor(
     private fun addYear() {
         viewModelScope.launch {
             yearStorageRepository.addYear(LocalDate.now().year)
+        }
+        viewModelScope.launch {
+            yearStorageRepository.yearsFlow.collectLatest { years ->
+                _showArchiveIcon.value = years.size > 1
+            }
         }
     }
 

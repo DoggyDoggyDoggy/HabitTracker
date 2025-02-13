@@ -23,7 +23,17 @@ val DotSans = FontFamily(
     Font(R.font.dotsans_medium, FontWeight.Medium)
 )
 
+val Roboto = FontFamily(
+    Font(R.font.roboto_condensed_bold, FontWeight.Bold)
+)
+
 val Typography = Typography(
+    //Loading text
+    titleLarge = TextStyle(
+        fontWeight = FontWeight.Bold,
+        fontFamily = Roboto,
+        fontSize = 56.sp
+    ),
     //DeleteDialog title
     displayMedium = TextStyle(
         fontWeight = FontWeight.Medium,
@@ -54,7 +64,7 @@ val Typography = Typography(
     titleSmall = TextStyle(
         fontSize = 16.sp,
         fontWeight = FontWeight.Bold,
-        shadow = Shadow(Color.Black, Offset(1f,1f), blurRadius = 1.5f),
+        shadow = Shadow(Color.Black, Offset(1f, 1f), blurRadius = 1.5f),
         fontFamily = Ubuntu
     ),
     //Habit table description

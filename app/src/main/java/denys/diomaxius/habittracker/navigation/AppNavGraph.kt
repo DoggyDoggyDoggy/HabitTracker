@@ -53,7 +53,7 @@ fun AppNavGraph(
         composable(
             route = Screen.Archive.route
         ){
-            Archive()
+            Archive(navHostController = navHostController)
         }
     }
 }
