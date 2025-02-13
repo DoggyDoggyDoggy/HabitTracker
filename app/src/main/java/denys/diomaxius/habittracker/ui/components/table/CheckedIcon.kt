@@ -17,7 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import denys.diomaxius.habittracker.data.model.HabitProgress
-import denys.diomaxius.habittracker.ui.tableThemes.TableThemes
+import denys.diomaxius.habittracker.data.constants.TableThemes
 import java.time.LocalDate
 
 @Composable

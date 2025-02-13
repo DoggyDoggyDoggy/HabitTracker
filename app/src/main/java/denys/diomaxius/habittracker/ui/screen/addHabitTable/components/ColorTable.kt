@@ -17,7 +17,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import denys.diomaxius.habittracker.ui.tableThemes.TableThemes
+import denys.diomaxius.habittracker.data.constants.TableThemes
 
 @Composable
 fun ColorTable(

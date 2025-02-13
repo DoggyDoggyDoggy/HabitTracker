@@ -29,10 +29,10 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import denys.diomaxius.habittracker.data.model.Habit
 import denys.diomaxius.habittracker.data.model.HabitProgress
-import denys.diomaxius.habittracker.ui.icons.IconData
+import denys.diomaxius.habittracker.data.constants.IconData
 import denys.diomaxius.habittracker.ui.screen.main.dummyHabit
 import denys.diomaxius.habittracker.ui.screen.main.dummyHabitProgress
-import denys.diomaxius.habittracker.ui.tableThemes.TableThemes
+import denys.diomaxius.habittracker.data.constants.TableThemes
 import kotlinx.coroutines.delay
 import java.time.LocalDate
 

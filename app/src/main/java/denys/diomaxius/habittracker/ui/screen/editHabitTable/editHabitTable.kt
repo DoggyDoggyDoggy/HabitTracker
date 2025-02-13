@@ -44,8 +44,8 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import denys.diomaxius.habittracker.data.model.Habit
 import denys.diomaxius.habittracker.navigation.Screen
-import denys.diomaxius.habittracker.ui.icons.IconData
-import denys.diomaxius.habittracker.ui.tableThemes.TableThemes
+import denys.diomaxius.habittracker.data.constants.IconData
+import denys.diomaxius.habittracker.data.constants.TableThemes
 import sh.calvin.reorderable.ReorderableCollectionItemScope
 import sh.calvin.reorderable.ReorderableItem
 import sh.calvin.reorderable.rememberReorderableLazyListState

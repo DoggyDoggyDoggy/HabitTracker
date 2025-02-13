@@ -1,4 +1,4 @@
-package denys.diomaxius.habittracker.ui.state
+package denys.diomaxius.habittracker.domain.state
 
 import denys.diomaxius.habittracker.data.model.Habit
 import denys.diomaxius.habittracker.data.model.HabitProgress

@@ -6,8 +6,8 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import denys.diomaxius.habittracker.data.model.HabitProgress
 import denys.diomaxius.habittracker.data.repository.HabitProgressRepository
 import denys.diomaxius.habittracker.data.repository.YearStorageRepository
-import denys.diomaxius.habittracker.ui.state.HabitStateHolder
-import denys.diomaxius.habittracker.usecase.GetHabitsUseCase
+import denys.diomaxius.habittracker.domain.state.HabitStateHolder
+import denys.diomaxius.habittracker.domain.usecase.GetHabitsUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest

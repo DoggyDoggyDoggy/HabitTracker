@@ -1,4 +1,4 @@
-package denys.diomaxius.habittracker.ui.tableThemes
+package denys.diomaxius.habittracker.data.constants
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color

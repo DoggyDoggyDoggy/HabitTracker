@@ -1,4 +1,4 @@
-package denys.diomaxius.habittracker.ui.icons
+package denys.diomaxius.habittracker.data.constants
 
 import denys.diomaxius.habittracker.R
 
