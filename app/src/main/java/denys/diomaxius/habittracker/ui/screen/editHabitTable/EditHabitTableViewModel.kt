@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import denys.diomaxius.habittracker.data.model.Habit
-import denys.diomaxius.habittracker.data.repository.HabitRepository
+import denys.diomaxius.habittracker.data.repository.HabitRepositoryImpl
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
@@ -13,20 +13,20 @@ import javax.inject.Inject
 
 @HiltViewModel
 class EditHabitTableViewModel @Inject constructor(
-    private val habitRepository: HabitRepository
+    private val habitRepositoryImpl: HabitRepositoryImpl
 ):ViewModel() {
     private val _habitList = MutableStateFlow<List<Habit>>(emptyList())
     val habitList = _habitList.asStateFlow()
 
     init {
         viewModelScope.launch {
-            habitRepository.getAllHabits(LocalDate.now().year).collect { _habitList.value = it }
+            habitRepositoryImpl.getAllHabits(LocalDate.now().year).collect { _habitList.value = it }
         }
     }
 
     fun deleteHabit(habit: Habit) {
         viewModelScope.launch {
-            habitRepository.deleteHabit(habit)
+            habitRepositoryImpl.deleteHabit(habit)
         }
     }
 
@@ -50,7 +50,7 @@ class EditHabitTableViewModel @Inject constructor(
             _habitList.value = updatedNotes
 
             // Updating the order in the database
-            habitRepository.updateHabits(updatedNotes)
+            habitRepositoryImpl.updateHabits(updatedNotes)
         }
     }
 }

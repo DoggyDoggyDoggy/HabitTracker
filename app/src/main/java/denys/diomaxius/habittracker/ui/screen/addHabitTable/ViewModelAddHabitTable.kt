@@ -6,13 +6,15 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import denys.diomaxius.habittracker.data.model.Habit
-import denys.diomaxius.habittracker.data.repository.HabitRepository
+import denys.diomaxius.habittracker.domain.usecase.GetHabitByIdUseCase
+import denys.diomaxius.habittracker.domain.usecase.InsertHabitUseCase
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class ViewModelAddHabitTable @Inject constructor(
-    private val habitRepository: HabitRepository
+    private val insertHabitUseCase: InsertHabitUseCase,
+    private val getHabitByIdUseCase: GetHabitByIdUseCase
 ) : ViewModel() {
     private val _name = mutableStateOf("")
     val name: State<String> get() = _name
@@ -38,7 +40,7 @@ class ViewModelAddHabitTable @Inject constructor(
     fun getHabitById(habitId: Int) {
         if (!_isHabitLoaded.value) {
             viewModelScope.launch {
-                val habit: Habit = habitRepository.getHabitById(habitId)
+                val habit: Habit = getHabitByIdUseCase(habitId)
                 _name.value = habit.name
                 _description.value = habit.description
                 _category.value = habit.category
@@ -77,7 +79,7 @@ class ViewModelAddHabitTable @Inject constructor(
 
     fun addHabit(habit: Habit) {
         viewModelScope.launch {
-            habitRepository.insertHabit(habit)
+            insertHabitUseCase(habit)
         }
     }
 }

@@ -4,10 +4,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import denys.diomaxius.habittracker.data.model.HabitProgress
-import denys.diomaxius.habittracker.data.repository.HabitProgressRepository
-import denys.diomaxius.habittracker.data.repository.YearStorageRepository
 import denys.diomaxius.habittracker.domain.state.HabitStateHolder
+import denys.diomaxius.habittracker.domain.usecase.AddYearUseCase
+import denys.diomaxius.habittracker.domain.usecase.CheckCurrentDateUseCase
 import denys.diomaxius.habittracker.domain.usecase.GetHabitsUseCase
+import denys.diomaxius.habittracker.domain.usecase.InsertHabitProgressUseCase
+import denys.diomaxius.habittracker.domain.usecase.ObserveYearsUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
@@ -18,8 +20,10 @@ import javax.inject.Inject
 @HiltViewModel
 class MainScreenViewModel @Inject constructor(
     private val getHabitsUseCase: GetHabitsUseCase,
-    private val habitProgressRepository: HabitProgressRepository,
-    private val yearStorageRepository: YearStorageRepository
+    private val observeYearsUseCase: ObserveYearsUseCase,
+    private val addYearUseCase: AddYearUseCase,
+    private val insertHabitProgressUseCase: InsertHabitProgressUseCase,
+    private val checkCurrentDateUseCase: CheckCurrentDateUseCase
 ) : ViewModel() {
 
     val habitStateHolder = HabitStateHolder()
@@ -38,22 +42,22 @@ class MainScreenViewModel @Inject constructor(
 
     private fun addYear() {
         viewModelScope.launch {
-            yearStorageRepository.addYear(LocalDate.now().year)
+            addYearUseCase(LocalDate.now().year)
         }
         viewModelScope.launch {
-            yearStorageRepository.yearsFlow.collectLatest { years ->
+            observeYearsUseCase().collectLatest { years ->
                 _showArchiveIcon.value = years.size > 1
             }
         }
     }
 
     suspend fun checkTodayProgress(habitId: Int, date: LocalDate): Boolean {
-        return habitProgressRepository.checkCurrentDate(habitId, date) > 0
+        return checkCurrentDateUseCase(habitId, date) > 0
     }
 
     fun insertProgress(habitProgress: HabitProgress) {
         viewModelScope.launch {
-            habitProgressRepository.insertProgress(habitProgress)
+            insertHabitProgressUseCase(habitProgress)
         }
     }
 }
