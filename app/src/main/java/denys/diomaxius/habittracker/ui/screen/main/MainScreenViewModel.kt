@@ -7,7 +7,7 @@ import denys.diomaxius.habittracker.data.model.HabitProgress
 import denys.diomaxius.habittracker.domain.state.HabitStateHolder
 import denys.diomaxius.habittracker.domain.usecase.AddYearUseCase
 import denys.diomaxius.habittracker.domain.usecase.CheckCurrentDateUseCase
-import denys.diomaxius.habittracker.domain.usecase.GetHabitsUseCase
+import denys.diomaxius.habittracker.domain.usecase.GetHabitsWithProgressUseCase
 import denys.diomaxius.habittracker.domain.usecase.InsertHabitProgressUseCase
 import denys.diomaxius.habittracker.domain.usecase.ObserveYearsUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -19,7 +19,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainScreenViewModel @Inject constructor(
-    private val getHabitsUseCase: GetHabitsUseCase,
+    private val getHabitsWithProgressUseCase: GetHabitsWithProgressUseCase,
     private val observeYearsUseCase: ObserveYearsUseCase,
     private val addYearUseCase: AddYearUseCase,
     private val insertHabitProgressUseCase: InsertHabitProgressUseCase,
@@ -33,7 +33,7 @@ class MainScreenViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            getHabitsUseCase.execute(LocalDate.now().year).collect { (habits, progressMap) ->
+            getHabitsWithProgressUseCase.execute(LocalDate.now().year).collect { (habits, progressMap) ->
                 habitStateHolder.updateState(habits, progressMap)
             }
         }

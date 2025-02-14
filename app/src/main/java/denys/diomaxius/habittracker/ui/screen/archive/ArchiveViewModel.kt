@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import denys.diomaxius.habittracker.domain.state.HabitStateHolder
-import denys.diomaxius.habittracker.domain.usecase.GetHabitsUseCase
+import denys.diomaxius.habittracker.domain.usecase.GetHabitsWithProgressUseCase
 import denys.diomaxius.habittracker.domain.usecase.ObserveYearsUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -14,7 +14,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ArchiveViewModel @Inject constructor(
-    private val getHabitsUseCase: GetHabitsUseCase,
+    private val getHabitsWithProgressUseCase: GetHabitsWithProgressUseCase,
     private val observeYearsUseCase: ObserveYearsUseCase
 ) : ViewModel() {
 
@@ -34,7 +34,7 @@ class ArchiveViewModel @Inject constructor(
 
     fun getListOfHabitsByYear(year: Int) {
         viewModelScope.launch {
-            getHabitsUseCase.execute(year).collect { (habits, progressMap) ->
+            getHabitsWithProgressUseCase.execute(year).collect { (habits, progressMap) ->
                 habitStateHolder.updateState(habits, progressMap)
             }
         }

@@ -4,7 +4,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import denys.diomaxius.habittracker.data.model.Habit
-import denys.diomaxius.habittracker.data.repository.HabitRepositoryImpl
+import denys.diomaxius.habittracker.domain.usecase.DeleteHabitUseCase
+import denys.diomaxius.habittracker.domain.usecase.GetHabitsByYearUseCase
+import denys.diomaxius.habittracker.domain.usecase.UpdateHabitsUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
@@ -13,20 +15,22 @@ import javax.inject.Inject
 
 @HiltViewModel
 class EditHabitTableViewModel @Inject constructor(
-    private val habitRepositoryImpl: HabitRepositoryImpl
+    private val deleteHabitUseCase: DeleteHabitUseCase,
+    private val updateHabitsUseCase: UpdateHabitsUseCase,
+    private val getHabitsByYearUseCase: GetHabitsByYearUseCase
 ):ViewModel() {
     private val _habitList = MutableStateFlow<List<Habit>>(emptyList())
     val habitList = _habitList.asStateFlow()
 
     init {
         viewModelScope.launch {
-            habitRepositoryImpl.getAllHabits(LocalDate.now().year).collect { _habitList.value = it }
+           getHabitsByYearUseCase(LocalDate.now().year).collect { _habitList.value = it }
         }
     }
 
     fun deleteHabit(habit: Habit) {
         viewModelScope.launch {
-            habitRepositoryImpl.deleteHabit(habit)
+            deleteHabitUseCase(habit)
         }
     }
 
@@ -38,19 +42,19 @@ class EditHabitTableViewModel @Inject constructor(
             }
 
             // Move an element in a list
-            val movedNote = currentHabit.removeAt(fromIndex)
-            currentHabit.add(toIndex, movedNote)
+            val movedHabits = currentHabit.removeAt(fromIndex)
+            currentHabit.add(toIndex, movedHabits)
 
             // Update the order: for each element, set a new position value
-            val updatedNotes = currentHabit.mapIndexed { index, habit ->
+            val updatedHabits = currentHabit.mapIndexed { index, habit ->
                 habit.copy(position = index)
             }
 
             // Updating local StateFlow
-            _habitList.value = updatedNotes
+            _habitList.value = updatedHabits
 
             // Updating the order in the database
-            habitRepositoryImpl.updateHabits(updatedNotes)
+            updateHabitsUseCase(updatedHabits)
         }
     }
 }

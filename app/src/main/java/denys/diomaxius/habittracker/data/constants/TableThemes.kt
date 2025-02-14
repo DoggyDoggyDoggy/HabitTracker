@@ -192,7 +192,7 @@ object TableThemes {
             checkedIcon = checkedIcon
         ),
         TableTheme(
-            themeButton = Color(0xFF000000),
+            themeButton = Color(0xFFFF4D6D),
             tableColor = Color(0xFFFFFFFF),
             fontColor = Color(0xFF000000),
             iconTintChecked = Color(0xFFFFFFFF),

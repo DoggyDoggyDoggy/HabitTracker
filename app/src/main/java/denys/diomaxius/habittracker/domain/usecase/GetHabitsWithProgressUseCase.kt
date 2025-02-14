@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import javax.inject.Inject
 
-class GetHabitsUseCase @Inject constructor(
+class GetHabitsWithProgressUseCase @Inject constructor(
     private val habitRepositoryImpl: HabitRepositoryImpl,
     private val habitProgressRepositoryImpl: HabitProgressRepositoryImpl
 ) {
