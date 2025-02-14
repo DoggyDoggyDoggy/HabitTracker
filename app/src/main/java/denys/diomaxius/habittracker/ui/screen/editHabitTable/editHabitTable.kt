@@ -172,7 +172,11 @@ fun ReorderableCollectionItemScope.HabitTable(
             ) {
                 Text(
                     text = habit.name,
-                    style = MaterialTheme.typography.titleSmall,
+                    style = if (habit.colorTheme < 12) {
+                        MaterialTheme.typography.titleSmall
+                    } else {
+                        MaterialTheme.typography.titleSmall.copy(shadow = null)
+                    },
                     color = TableThemes.tableThemes[habit.colorTheme].fontColor
                 )
 
