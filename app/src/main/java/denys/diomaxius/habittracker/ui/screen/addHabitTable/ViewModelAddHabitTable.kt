@@ -8,13 +8,15 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import denys.diomaxius.habittracker.data.model.Habit
 import denys.diomaxius.habittracker.domain.usecase.GetHabitByIdUseCase
 import denys.diomaxius.habittracker.domain.usecase.InsertHabitUseCase
+import denys.diomaxius.habittracker.domain.usecase.UpdateHabitUseCase
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class ViewModelAddHabitTable @Inject constructor(
     private val insertHabitUseCase: InsertHabitUseCase,
-    private val getHabitByIdUseCase: GetHabitByIdUseCase
+    private val getHabitByIdUseCase: GetHabitByIdUseCase,
+    private val updateHabitUseCase: UpdateHabitUseCase
 ) : ViewModel() {
     private val _name = mutableStateOf("")
     val name: State<String> get() = _name
@@ -36,21 +38,6 @@ class ViewModelAddHabitTable @Inject constructor(
 
     private val _isHabitLoaded = mutableStateOf(false)
     val isHabitLoaded: State<Boolean> get() = _isHabitLoaded
-
-    fun getHabitById(habitId: Int) {
-        if (!_isHabitLoaded.value) {
-            viewModelScope.launch {
-                val habit: Habit = getHabitByIdUseCase(habitId)
-                _name.value = habit.name
-                _description.value = habit.description
-                _category.value = habit.category
-                _iconId.value = habit.iconId
-                _themeId.value = habit.colorTheme
-                _iconId.value = habit.iconId
-                _isHabitLoaded.value = true
-            }
-        }
-    }
 
     fun onNameFieldErrorChange() {
         _nameFieldError.value = _name.value.isEmpty()
@@ -77,9 +64,30 @@ class ViewModelAddHabitTable @Inject constructor(
         _description.value = description.trimStart()
     }
 
+    fun getHabitById(habitId: Int) {
+        if (!_isHabitLoaded.value) {
+            viewModelScope.launch {
+                val habit: Habit = getHabitByIdUseCase(habitId)
+                _name.value = habit.name
+                _description.value = habit.description
+                _category.value = habit.category
+                _iconId.value = habit.iconId
+                _themeId.value = habit.colorTheme
+                _iconId.value = habit.iconId
+                _isHabitLoaded.value = true
+            }
+        }
+    }
+
     fun addHabit(habit: Habit) {
         viewModelScope.launch {
             insertHabitUseCase(habit)
+        }
+    }
+
+    fun updateHabit(habit: Habit) {
+        viewModelScope.launch {
+            updateHabitUseCase(habit)
         }
     }
 }

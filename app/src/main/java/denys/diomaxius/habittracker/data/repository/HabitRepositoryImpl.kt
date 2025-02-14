@@ -28,4 +28,8 @@ class HabitRepositoryImpl @Inject constructor(
     override suspend fun updateHabits(habits: List<Habit>) {
         dao.updateHabits(habits)
     }
+
+    override suspend fun updateHabit(habit: Habit) {
+        dao.updateHabit(habit)
+    }
 }

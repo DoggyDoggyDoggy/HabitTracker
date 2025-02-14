@@ -25,4 +25,7 @@ interface HabitDao {
 
     @Update
     suspend fun updateHabits(habits: List<Habit>)
+
+    @Update
+    suspend fun updateHabit(habits: Habit)
 }

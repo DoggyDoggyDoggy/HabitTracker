@@ -98,7 +98,7 @@ fun AddHabitTable(
                 viewModel.onNameFieldErrorChange()
                 if (!nameFieldError && name.isNotEmpty()) {
                     if (habitId != null) {
-                        viewModel.addHabit(
+                        viewModel.updateHabit(
                             Habit(
                                 id = habitId,
                                 name = name,

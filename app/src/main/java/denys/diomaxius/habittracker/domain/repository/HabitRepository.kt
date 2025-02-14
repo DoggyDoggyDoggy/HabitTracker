@@ -9,4 +9,5 @@ interface HabitRepository {
     fun getAllHabits(year: Int): Flow<List<Habit>>
     suspend fun deleteHabit(habit: Habit)
     suspend fun updateHabits(habits: List<Habit>)
+    suspend fun updateHabit(habit: Habit)
 }
