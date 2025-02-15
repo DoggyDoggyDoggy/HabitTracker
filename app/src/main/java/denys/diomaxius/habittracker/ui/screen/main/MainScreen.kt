@@ -13,6 +13,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Archive
+import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
@@ -160,6 +161,13 @@ fun TopBar(
             }) {
                 Icon(imageVector = Icons.Default.Archive, contentDescription = "Archive")
             }
+        }
+        //Testing purpose
+        //Remove after making separate button
+        IconButton(onClick = {
+            navHostController.navigate(Screen.Weekly.route) { launchSingleTop = true }
+        }) {
+            Icon(imageVector = Icons.Default.DateRange, contentDescription = "Weekly screen")
         }
         IconButton(
             enabled = habitListIsNotEmpty,
