@@ -1,7 +1,8 @@
 package denys.diomaxius.habittracker.ui
 
-import denys.diomaxius.habittracker.data.model.Habit
-import denys.diomaxius.habittracker.data.model.HabitProgress
+
+import denys.diomaxius.habittracker.domain.model.Habit
+import denys.diomaxius.habittracker.domain.model.HabitProgress
 import java.time.LocalDate
 
 val dummyHabit = Habit(

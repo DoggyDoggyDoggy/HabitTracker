@@ -3,7 +3,7 @@ package denys.diomaxius.habittracker.ui.screen.editHabitTable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import denys.diomaxius.habittracker.data.model.Habit
+import denys.diomaxius.habittracker.domain.model.Habit
 import denys.diomaxius.habittracker.domain.usecase.DeleteHabitUseCase
 import denys.diomaxius.habittracker.domain.usecase.GetHabitsByYearUseCase
 import denys.diomaxius.habittracker.domain.usecase.UpdateHabitsUseCase

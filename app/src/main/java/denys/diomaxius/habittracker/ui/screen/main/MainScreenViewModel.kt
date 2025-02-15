@@ -3,7 +3,7 @@ package denys.diomaxius.habittracker.ui.screen.main
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import denys.diomaxius.habittracker.data.model.HabitProgress
+import denys.diomaxius.habittracker.domain.model.HabitProgress
 import denys.diomaxius.habittracker.domain.state.HabitStateHolder
 import denys.diomaxius.habittracker.domain.usecase.AddYearUseCase
 import denys.diomaxius.habittracker.domain.usecase.CheckCurrentDateUseCase

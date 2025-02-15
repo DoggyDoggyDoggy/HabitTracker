@@ -1,6 +1,7 @@
 package denys.diomaxius.habittracker.domain.repository
 
-import denys.diomaxius.habittracker.data.model.HabitProgress
+
+import denys.diomaxius.habittracker.domain.model.HabitProgress
 import kotlinx.coroutines.flow.Flow
 import java.time.LocalDate
 

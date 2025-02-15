@@ -10,7 +10,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.unit.dp
-import denys.diomaxius.habittracker.data.model.HabitProgress
+import denys.diomaxius.habittracker.domain.model.HabitProgress
 
 @Composable
 fun HabitGrid(

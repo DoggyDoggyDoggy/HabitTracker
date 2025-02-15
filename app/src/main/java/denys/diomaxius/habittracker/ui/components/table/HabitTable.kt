@@ -27,12 +27,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
-import denys.diomaxius.habittracker.data.model.Habit
-import denys.diomaxius.habittracker.data.model.HabitProgress
 import denys.diomaxius.habittracker.data.constants.IconData
 import denys.diomaxius.habittracker.ui.dummyHabit
 import denys.diomaxius.habittracker.ui.dummyHabitProgress
 import denys.diomaxius.habittracker.data.constants.TableThemes
+import denys.diomaxius.habittracker.domain.model.Habit
+import denys.diomaxius.habittracker.domain.model.HabitProgress
 import kotlinx.coroutines.delay
 import java.time.LocalDate
 

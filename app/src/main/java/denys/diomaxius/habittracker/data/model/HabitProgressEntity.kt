@@ -3,13 +3,13 @@ package denys.diomaxius.habittracker.data.model
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.Index
+import denys.diomaxius.habittracker.domain.model.HabitProgress
 import java.time.LocalDate
-import java.util.Date
 
 @Entity(
     tableName = "habit_progress",
     foreignKeys = [ForeignKey(
-        entity = Habit::class,
+        entity = HabitEntity::class,
         parentColumns = ["id"],
         childColumns = ["habitId"],
         onDelete = ForeignKey.CASCADE
@@ -17,8 +17,18 @@ import java.util.Date
     primaryKeys = ["habitId", "date"],
     indices = [Index("habitId")]
 )
-data class HabitProgress(
+data class HabitProgressEntity(
     val habitId: Int,
     val date: LocalDate,
     val isCompleted: Boolean
-)
+) {
+    fun toDomain(): HabitProgress {
+        return HabitProgress(habitId, date, isCompleted)
+    }
+
+    companion object {
+        fun fromDomain(progress: HabitProgress): HabitProgressEntity {
+            return HabitProgressEntity(progress.habitId, progress.date, progress.isCompleted)
+        }
+    }
+}

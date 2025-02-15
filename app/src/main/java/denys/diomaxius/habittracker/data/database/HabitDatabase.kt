@@ -5,11 +5,11 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import denys.diomaxius.habittracker.data.dao.HabitDao
 import denys.diomaxius.habittracker.data.dao.HabitProgressDao
-import denys.diomaxius.habittracker.data.model.Habit
-import denys.diomaxius.habittracker.data.model.HabitProgress
+import denys.diomaxius.habittracker.data.model.HabitEntity
+import denys.diomaxius.habittracker.data.model.HabitProgressEntity
 
 @Database(
-    entities = [Habit::class, HabitProgress::class],
+    entities = [HabitEntity::class, HabitProgressEntity::class],
     version = 1,
     exportSchema = false
 )

@@ -16,7 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import denys.diomaxius.habittracker.data.model.Habit
+import denys.diomaxius.habittracker.domain.model.Habit
 import denys.diomaxius.habittracker.ui.screen.addHabitTable.components.CategoryDropdown
 import denys.diomaxius.habittracker.ui.screen.addHabitTable.components.IconsTable
 import denys.diomaxius.habittracker.ui.screen.addHabitTable.components.ColorTable

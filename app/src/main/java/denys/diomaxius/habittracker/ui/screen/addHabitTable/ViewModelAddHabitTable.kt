@@ -5,7 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import denys.diomaxius.habittracker.data.model.Habit
+import denys.diomaxius.habittracker.domain.model.Habit
 import denys.diomaxius.habittracker.domain.usecase.GetHabitByIdUseCase
 import denys.diomaxius.habittracker.domain.usecase.InsertHabitUseCase
 import denys.diomaxius.habittracker.domain.usecase.UpdateHabitUseCase

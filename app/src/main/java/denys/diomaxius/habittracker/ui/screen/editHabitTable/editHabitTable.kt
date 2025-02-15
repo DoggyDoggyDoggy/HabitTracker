@@ -42,10 +42,10 @@ import androidx.core.view.ViewCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import denys.diomaxius.habittracker.data.model.Habit
 import denys.diomaxius.habittracker.navigation.Screen
 import denys.diomaxius.habittracker.data.constants.IconData
 import denys.diomaxius.habittracker.data.constants.TableThemes
+import denys.diomaxius.habittracker.domain.model.Habit
 import sh.calvin.reorderable.ReorderableCollectionItemScope
 import sh.calvin.reorderable.ReorderableItem
 import sh.calvin.reorderable.rememberReorderableLazyListState

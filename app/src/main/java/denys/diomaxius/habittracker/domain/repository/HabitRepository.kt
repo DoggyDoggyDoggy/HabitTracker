@@ -1,6 +1,7 @@
 package denys.diomaxius.habittracker.domain.repository
 
-import denys.diomaxius.habittracker.data.model.Habit
+
+import denys.diomaxius.habittracker.domain.model.Habit
 import kotlinx.coroutines.flow.Flow
 
 interface HabitRepository {
