@@ -21,11 +21,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import java.time.LocalDate
-
-val week = listOf(6, 5, 4, 3, 2, 1, 0)
+import java.time.temporal.TemporalAdjusters
 
 @Composable
 fun WeeklyScreen(
@@ -43,7 +43,6 @@ fun WeeklyScreen(
         LazyColumn() {
             items(doneList) { habit ->
                 Row(
-
                 ) {
                     Text(text = habit.name)
                 }
@@ -63,37 +62,48 @@ fun DayOfWeek(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center
     ) {
-        week.forEach { weekDayOrder ->
+        calcDay().forEach { date ->
             Box(
                 modifier = Modifier
                     .weight(1f)
                     .height(64.dp)
                     .padding(2.dp)
+                    .background(Color.White)
                     .border(1.dp, Color.Black, RectangleShape)
-                    .background(Color.Cyan)
-                    .clickable {
-                        changeDayOfWeek(
-                            LocalDate
-                                .now()
-                                .minusDays(weekDayOrder.toLong())
-                        )
-                    },
+                    .clickable { changeDayOfWeek(date) },
                 contentAlignment = Alignment.Center
             ) {
                 Column {
                     Text(
                         text = "${
-                            LocalDate.now().minusDays(weekDayOrder.toLong()).dayOfWeek.name[0]
+                            date.dayOfWeek.name.take(3)
+                        }".toLowerCase().capitalize()
+                    )
+
+                    Text(
+                        text = "${
+                            date.dayOfMonth
                         }"
                     )
 
                     Text(
                         text = "${
-                            LocalDate.now().minusDays(weekDayOrder.toLong()).dayOfMonth
-                        }"
+                            date.month.name.take(3)
+                        }".toLowerCase().capitalize()
                     )
                 }
             }
         }
     }
+}
+
+fun calcDay(): List<LocalDate> {
+    val monday = LocalDate.now().with(TemporalAdjusters.previousOrSame(java.time.DayOfWeek.MONDAY))
+    return (0..6).map { monday.plusDays(it.toLong()) }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun PreviewDayOfWeek() {
+    DayOfWeek(changeDayOfWeek = {})
 }
