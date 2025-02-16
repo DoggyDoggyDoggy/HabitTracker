@@ -60,7 +60,7 @@ fun AppNavGraph(
         composable(
             route = Screen.Weekly.route
         ){
-            WeeklyScreen()
+            WeeklyScreen(navHostController = navHostController)
         }
     }
 }

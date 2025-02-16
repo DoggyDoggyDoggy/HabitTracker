@@ -15,6 +15,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -26,32 +27,76 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavHostController
 import denys.diomaxius.habittracker.data.constants.IconData
 import denys.diomaxius.habittracker.data.constants.TableThemes
 import denys.diomaxius.habittracker.domain.model.Habit
+import denys.diomaxius.habittracker.navigation.Screen
+import denys.diomaxius.habittracker.ui.components.TopBar
+import denys.diomaxius.habittracker.ui.components.ViewSwitcher
 import java.time.LocalDate
 import java.time.temporal.TemporalAdjusters
 import java.util.Locale
 
 @Composable
 fun WeeklyScreen(
-    viewModel: WeeklyViewModel = hiltViewModel()
+    viewModel: WeeklyViewModel = hiltViewModel(),
+    navHostController: NavHostController
 ) {
     val doneList by viewModel.doneHabitList.collectAsState()
+    val showArchiveIcon by viewModel.showArchiveIcon.collectAsState()
+    val showEditIcon by viewModel.showEditIcon.collectAsState()
 
-    Column(
-        modifier = Modifier.fillMaxSize()
-    ) {
-        DayOfWeek(
-            changeDayOfWeek = { viewModel.changeDayOfWeek(it) }
+    Scaffold(
+        topBar = {
+            TopBar(
+                navHostController = navHostController,
+                habitListIsNotEmpty = showEditIcon,
+                showArchiveIcon = showArchiveIcon
+            )
+        }
+    ) { innerPadding ->
+        Content(
+            modifier = Modifier.padding(innerPadding),
+            changeDayOfWeek = { viewModel.changeDayOfWeek(it) },
+            doneList = doneList,
+            navHostController = navHostController,
+            showEditIcon = showEditIcon
         )
+    }
+}
 
-        LazyColumn() {
-            items(doneList) { habit ->
-                DoneHabitTable(habit = habit)
+@Composable
+fun Content(
+    modifier: Modifier,
+    changeDayOfWeek: (LocalDate) -> Unit,
+    doneList: List<Habit>,
+    navHostController: NavHostController,
+    showEditIcon: Boolean
+) {
+    if (showEditIcon) {
+        Column(
+            modifier = modifier.fillMaxSize()
+        ) {
+            ViewSwitcher(navHostController = navHostController)
+
+            DayOfWeek(
+                changeDayOfWeek = changeDayOfWeek
+            )
+
+            LazyColumn {
+                items(doneList) { habit ->
+                    DoneHabitTable(habit = habit)
+                }
             }
         }
+    } else {
+        navHostController.navigate(Screen.MainScreen.route) {
+            navHostController.graph.startDestinationRoute?.let { popUpTo(it) }
+            launchSingleTop = true
+        }
     }
+
 }
 
 @Composable

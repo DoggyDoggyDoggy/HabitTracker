@@ -2,22 +2,13 @@ package denys.diomaxius.habittracker.ui.screen.main
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Archive
-import androidx.compose.material.icons.filled.DateRange
-import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.Button
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -33,6 +24,8 @@ import denys.diomaxius.habittracker.domain.model.Habit
 import denys.diomaxius.habittracker.domain.model.HabitProgress
 import denys.diomaxius.habittracker.navigation.Screen
 import denys.diomaxius.habittracker.ui.components.Loading
+import denys.diomaxius.habittracker.ui.components.TopBar
+import denys.diomaxius.habittracker.ui.components.ViewSwitcher
 import denys.diomaxius.habittracker.ui.components.table.HabitTable
 import java.time.LocalDate
 
@@ -84,18 +77,22 @@ fun Content(
         Loading()
     } else {
         if (habitList.isNotEmpty()) {
-            LazyColumn(
+            Column (
                 modifier = modifier
-            ) {
-                items(habitList) { habit ->
-                    val habitProgress = habitProgressMap[habit.id] ?: emptyList()
+            ){
+                ViewSwitcher(navHostController = navHostController)
 
-                    HabitTable(
-                        habit = habit,
-                        habitProgress = habitProgress,
-                        insertProgress = insertProgress,
-                        checkTodayProgress = checkTodayProgress
-                    )
+                LazyColumn {
+                    items(habitList) { habit ->
+                        val habitProgress = habitProgressMap[habit.id] ?: emptyList()
+
+                        HabitTable(
+                            habit = habit,
+                            habitProgress = habitProgress,
+                            insertProgress = insertProgress,
+                            checkTodayProgress = checkTodayProgress
+                        )
+                    }
                 }
             }
         } else {
@@ -140,47 +137,6 @@ fun EmptyHabitList(
                 text = "Start Tracking",
                 style = MaterialTheme.typography.labelMedium
             )
-        }
-    }
-}
-
-@Composable
-fun TopBar(
-    modifier: Modifier = Modifier,
-    navHostController: NavHostController,
-    habitListIsNotEmpty: Boolean,
-    showArchiveIcon: Boolean
-) {
-    Row(
-        modifier = modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.End
-    ) {
-        if (showArchiveIcon){
-            IconButton(onClick = {
-                navHostController.navigate(Screen.Archive.route) { launchSingleTop = true }
-            }) {
-                Icon(imageVector = Icons.Default.Archive, contentDescription = "Archive")
-            }
-        }
-        //Testing purpose
-        //Remove after making separate button
-        IconButton(onClick = {
-            navHostController.navigate(Screen.Weekly.route) { launchSingleTop = true }
-        }) {
-            Icon(imageVector = Icons.Default.DateRange, contentDescription = "Weekly screen")
-        }
-        IconButton(
-            enabled = habitListIsNotEmpty,
-            onClick = {
-                navHostController.navigate(Screen.EditHabitTable.route) { launchSingleTop = true }
-            }
-        ) {
-            Icon(imageVector = Icons.Default.Edit, contentDescription = "Edit habits")
-        }
-        IconButton(onClick = {
-            navHostController.navigate(Screen.AddHabitTable.route) { launchSingleTop = true }
-        }) {
-            Icon(imageVector = Icons.Default.Add, contentDescription = "Add new habit")
         }
     }
 }
