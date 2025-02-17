@@ -6,6 +6,14 @@ object CategoryData {
         "Fitness",
         "Health",
         "Study",
-        "Work"
+        "Work",
+        "Self-Improvement",
+        "Finance",
+        "Creativity",
+        "Relaxation",
+        "Social",
+        "Household",
+        "Digital Detox",
+        "Mental Health"
     )
 }
