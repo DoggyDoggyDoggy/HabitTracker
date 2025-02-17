@@ -11,9 +11,12 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Check
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -44,6 +47,9 @@ fun WeeklyScreen(
     navHostController: NavHostController
 ) {
     val doneList by viewModel.doneHabitList.collectAsState()
+    val inProgressHabitList by viewModel.inProgressHabitList.collectAsState()
+    val dayOfWeek by viewModel.dayOfWeek.collectAsState()
+
     val showArchiveIcon by viewModel.showArchiveIcon.collectAsState()
     val showEditIcon by viewModel.showEditIcon.collectAsState()
 
@@ -61,7 +67,9 @@ fun WeeklyScreen(
             changeDayOfWeek = { viewModel.changeDayOfWeek(it) },
             doneList = doneList,
             navHostController = navHostController,
-            showEditIcon = showEditIcon
+            showEditIcon = showEditIcon,
+            inProgressHabitList = inProgressHabitList,
+            dayOfWeek = dayOfWeek
         )
     }
 }
@@ -72,7 +80,9 @@ fun Content(
     changeDayOfWeek: (LocalDate) -> Unit,
     doneList: List<Habit>,
     navHostController: NavHostController,
-    showEditIcon: Boolean
+    showEditIcon: Boolean,
+    inProgressHabitList: List<Habit>,
+    dayOfWeek: LocalDate
 ) {
     if (showEditIcon) {
         Column(
@@ -84,10 +94,12 @@ fun Content(
                 changeDayOfWeek = changeDayOfWeek
             )
 
-            LazyColumn {
-                items(doneList) { habit ->
-                    DoneHabitTable(habit = habit)
-                }
+            if (inProgressHabitList.isNotEmpty() && dayOfWeek >= LocalDate.now()) {
+                InProgressHabits(inProgressHabitList = inProgressHabitList)
+            }
+
+            if (doneList.isNotEmpty()) {
+                DoneHabits(doneList = doneList)
             }
         }
     } else {
@@ -98,6 +110,56 @@ fun Content(
     }
 
 }
+@Composable
+fun InProgressHabits(inProgressHabitList: List<Habit>) {
+    Card (
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 8.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = Color(0xFF3F51B5)
+        )
+    ) {
+        Text(
+            modifier = Modifier
+                .padding(6.dp),
+            text = "In Progress:",
+            style = MaterialTheme.typography.titleMedium,
+            color = Color.White
+        )
+    }
+
+    LazyColumn {
+        items(inProgressHabitList) { habit ->
+            DoneHabitTable(habit = habit)
+        }
+    }
+}
+@Composable
+fun DoneHabits(doneList: List<Habit>) {
+    Card (
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 8.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = Color(0xFF4CAF50)
+        )
+    ) {
+        Text(
+            modifier = Modifier
+                .padding(6.dp),
+            text = "Done:",
+            style = MaterialTheme.typography.titleMedium,
+            color = Color.White
+        )
+    }
+
+    LazyColumn {
+        items(doneList) { habit ->
+            DoneHabitTable(habit = habit)
+        }
+    }
+}
 
 @Composable
 fun DoneHabitTable(
@@ -107,7 +169,10 @@ fun DoneHabitTable(
     Card(
         modifier = modifier
             .fillMaxWidth()
-            .padding(12.dp),
+            .padding(
+                vertical = 6.dp,
+                horizontal = 14.dp
+            ),
         colors = CardDefaults.cardColors(
             containerColor = TableThemes.tableThemes[habit.colorTheme].tableColor
         )
@@ -147,6 +212,10 @@ fun DoneHabitTable(
                         softWrap = true
                     )
                 }
+            }
+
+            IconButton(onClick = { /*TODO*/ }) {
+                Icon(imageVector = Icons.Default.Check, contentDescription = "Check")
             }
         }
     }

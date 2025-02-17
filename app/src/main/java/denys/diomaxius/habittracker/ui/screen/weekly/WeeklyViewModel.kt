@@ -10,6 +10,7 @@ import denys.diomaxius.habittracker.domain.usecase.ObserveYearsUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 import javax.inject.Inject
@@ -25,6 +26,13 @@ class WeeklyViewModel @Inject constructor(
     private val _doneHabitList = MutableStateFlow<List<Habit>>(emptyList())
     val doneHabitList = _doneHabitList.asStateFlow()
 
+    private val _inProgressHabitList = MutableStateFlow<List<Habit>>(emptyList())
+    val inProgressHabitList = _inProgressHabitList.asStateFlow()
+
+    private val _dayOfWeek = MutableStateFlow<LocalDate>(LocalDate.now())
+    val dayOfWeek = _dayOfWeek.asStateFlow()
+
+    //Move to another ViewModel
     private val _showArchiveIcon = MutableStateFlow(false)
     val showArchiveIcon = _showArchiveIcon.asStateFlow()
 
@@ -34,8 +42,18 @@ class WeeklyViewModel @Inject constructor(
     init {
         getHabitList()
         observeYear()
+        getInProgressHabitList()
     }
 
+    private fun getInProgressHabitList() {
+        viewModelScope.launch {
+            combine(_habitList, _doneHabitList) { allHabits, doneHabits ->
+                allHabits - doneHabits.toSet()
+            }.collect { filteredList ->
+                _inProgressHabitList.value = filteredList
+            }
+        }
+    }
     private fun observeYear() {
         viewModelScope.launch {
             observeYearsUseCase().collectLatest { years ->
@@ -45,12 +63,13 @@ class WeeklyViewModel @Inject constructor(
     }
 
     fun changeDayOfWeek(date: LocalDate) {
+        _dayOfWeek.value = date
         viewModelScope.launch {
-            getDoneHabit(date)
+            getDoneHabit(_dayOfWeek.value)
         }
     }
 
-    private fun getHabitList(date: LocalDate = LocalDate.now()) {
+    private fun getHabitList(date: LocalDate = _dayOfWeek.value) {
         viewModelScope.launch {
             getHabitsByYearUseCase(LocalDate.now().year).collect {
                 _habitList.value = it
