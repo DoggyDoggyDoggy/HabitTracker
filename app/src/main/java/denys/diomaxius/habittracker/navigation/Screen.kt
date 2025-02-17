@@ -6,4 +6,5 @@ sealed class Screen(val route: String) {
     object EditHabitTable : Screen("editHabitTable")
     object Archive : Screen("archive")
     object Weekly : Screen("weekly")
+    object Tips : Screen("tips")
 }

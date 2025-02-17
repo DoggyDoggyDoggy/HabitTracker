@@ -11,6 +11,7 @@ import denys.diomaxius.habittracker.ui.screen.addHabitTable.AddHabitTable
 import denys.diomaxius.habittracker.ui.screen.archive.Archive
 import denys.diomaxius.habittracker.ui.screen.editHabitTable.EditHabitTable
 import denys.diomaxius.habittracker.ui.screen.main.MainScreen
+import denys.diomaxius.habittracker.ui.screen.tips.TipsScreen
 import denys.diomaxius.habittracker.ui.screen.weekly.WeeklyScreen
 
 @Composable
@@ -61,6 +62,12 @@ fun AppNavGraph(
             route = Screen.Weekly.route
         ){
             WeeklyScreen(navHostController = navHostController)
+        }
+
+        composable(
+            route = Screen.Tips.route
+        ) {
+            TipsScreen(navHostController = navHostController)
         }
     }
 }

@@ -79,6 +79,29 @@ fun ViewSwitcher(
                 text = "Weekly"
             )
         }
+
+        Card(
+            modifier = Modifier
+                .padding(start = 8.dp)
+                .clickable {
+                    navHostController.navigate(Screen.Tips.route) {
+                        launchSingleTop = true
+                    }
+                },
+            border = CardDefaults.outlinedCardBorder(
+                true
+            ),
+            elevation = CardDefaults.cardElevation(5.dp),
+            colors = CardDefaults.cardColors(
+                containerColor = if (currentRoute == Screen.Tips.route) Color(0xFFB2E9AC)
+                else CardDefaults.cardColors().containerColor
+            )
+        ) {
+            Text(
+                modifier = Modifier.padding(12.dp),
+                text = "Tips"
+            )
+        }
     }
 }
 

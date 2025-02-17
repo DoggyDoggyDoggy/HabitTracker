@@ -1,5 +1,21 @@
 package denys.diomaxius.habittracker.data.constants
 
+object Tips {
+    val title = listOf<String>(
+        "Why Habits Matter",
+        "How to Build Habits (The Four Laws of Behavior)",
+        "Practical Tips for Habit Formation",
+        "Why Are Habits Essential?"
+    )
+    val subTitle = listOf<String>(
+        "Make It Obvious",
+        "Make It Attractive",
+        "Make It Easy",
+        "Make It Satisfying"
+    )
+
+}
+
 //Why Habits Matter
 
 //Behavior Automation: Good habits help automate routine actions, saving mental energy for more important decisions.
@@ -14,14 +30,17 @@ package denys.diomaxius.habittracker.data.constants
 //
 //Cues: Place reminders or visual signals in your environment (e.g., a sticky note on the fridge for healthy eating).
 //Planning: Set a specific time and place to perform your new habit.
+
 //Make It Attractive
-//
+
 //Positive Reinforcement: Pair the habit with something you enjoy (for example, listen to your favorite music while exercising).
 //Association: Link the new habit with a rewarding action (such as having a cup of tea after a short meditation).
+
 //Make It Easy
 //
 //Reduce Friction: Start with small, manageable steps—think of the “2-minute rule,” where you reduce the habit to its simplest form.
 //Prepare Your Environment: Remove obstacles and create conditions that make it as easy as possible to complete the habit.
+
 //Make It Satisfying
 //
 //Reward Yourself: Small rewards after completing the habit can help reinforce positive behavior.
