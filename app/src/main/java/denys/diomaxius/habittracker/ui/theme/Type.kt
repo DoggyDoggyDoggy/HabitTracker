@@ -80,5 +80,11 @@ val Typography = Typography(
         fontSize = 10.sp,
         fontFamily = DotSans,
         fontWeight = FontWeight.Bold
+    ),
+    //AppNameTopBar
+    titleMedium = TextStyle(
+        fontSize = 18.sp,
+        fontFamily = Ubuntu,
+        fontWeight = FontWeight.Bold
     )
 )

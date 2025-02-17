@@ -1,10 +1,11 @@
 package denys.diomaxius.habittracker.ui.components
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -28,41 +29,55 @@ fun ViewSwitcher(
     Row(
         modifier = Modifier
             .fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically,
+        verticalAlignment = Alignment.CenterVertically
     ) {
-        OutlinedButton(
+        Card(
             modifier = Modifier
-                .padding(start = 12.dp),
-            onClick = {
-                navHostController.navigate(Screen.MainScreen.route) {
-                    navHostController.graph.startDestinationRoute?.let { route ->
-                        popUpTo(route) { inclusive = true }
+                .padding(start = 8.dp)
+                .clickable {
+                    navHostController.navigate(Screen.MainScreen.route) {
+                        navHostController.graph.startDestinationRoute?.let { route ->
+                            popUpTo(route) { inclusive = true }
+                        }
+                        launchSingleTop = true
                     }
-                    launchSingleTop = true
-                }
-            },
-            colors = ButtonDefaults.outlinedButtonColors(
-                containerColor = if (currentRoute == Screen.MainScreen.route) Color(0xFFB0F1EC)
-                else ButtonDefaults.outlinedButtonColors().containerColor
+                },
+            border = CardDefaults.outlinedCardBorder(
+                true
+            ),
+            elevation = CardDefaults.cardElevation(5.dp),
+            colors = CardDefaults.cardColors(
+                containerColor = if (currentRoute == Screen.MainScreen.route) Color(0xFFB2E9AC)
+                else CardDefaults.cardColors().containerColor
             )
         ) {
-            Text(text = "Annual")
+            Text(
+                modifier = Modifier.padding(12.dp),
+                text = "Annual"
+            )
         }
 
-        OutlinedButton(
+        Card(
             modifier = Modifier
-                .padding(start = 12.dp),
-            onClick = {
-                navHostController.navigate(Screen.Weekly.route) {
-                    launchSingleTop = true
-                }
-            },
-            colors = ButtonDefaults.outlinedButtonColors(
-                containerColor = if (currentRoute == Screen.Weekly.route) Color(0xFFB0F1EC)
-                else ButtonDefaults.outlinedButtonColors().containerColor
+                .padding(start = 8.dp)
+                .clickable {
+                    navHostController.navigate(Screen.Weekly.route) {
+                        launchSingleTop = true
+                    }
+                },
+            border = CardDefaults.outlinedCardBorder(
+                true
+            ),
+            elevation = CardDefaults.cardElevation(5.dp),
+            colors = CardDefaults.cardColors(
+                containerColor = if (currentRoute == Screen.Weekly.route) Color(0xFFB2E9AC)
+                else CardDefaults.cardColors().containerColor
             )
         ) {
-            Text(text = "Weekly")
+            Text(
+                modifier = Modifier.padding(12.dp),
+                text = "Weekly"
+            )
         }
     }
 }
