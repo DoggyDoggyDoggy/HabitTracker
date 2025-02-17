@@ -1,23 +1,31 @@
 package denys.diomaxius.habittracker.ui.screen.tips
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import denys.diomaxius.habittracker.data.constants.Tips
 import denys.diomaxius.habittracker.ui.components.TopBar
 import denys.diomaxius.habittracker.ui.components.ViewSwitcher
+import denys.diomaxius.habittracker.ui.theme.TipsTypography
 
 @Composable
 fun TipsScreen(
-    navHostController : NavHostController
+    navHostController: NavHostController
 ) {
     val slides = listOf<@Composable () -> Unit>(
         { FirstSlide() },
@@ -51,16 +59,17 @@ fun Content(
     modifier: Modifier,
     slides: List<@Composable () -> Unit>,
     pagerState: PagerState,
-    navHostController : NavHostController
+    navHostController: NavHostController
 ) {
-    Column (
+    Column(
         modifier = modifier.fillMaxSize()
-    ){
+    ) {
         ViewSwitcher(navHostController = navHostController)
 
         HorizontalPager(
             state = pagerState,
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier.fillMaxSize(),
+            verticalAlignment = Alignment.Top
         ) {
             slides[it]()
         }
@@ -70,93 +79,150 @@ fun Content(
 
 @Composable
 fun FirstSlide() {
-    Column {
-        Text(text = "Title")
-        Row {
-            Text(text = "Text")
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(horizontal = 12.dp)
+    ) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.Center
+        ) {
+            Text(
+                text = Tips.title[0],
+                style = TipsTypography.titleLarge
+            )
         }
-        Row {
-            Text(text = "Text")
-        }
-        Row {
-            Text(text = "Text")
+        repeat(3) {
+            Row {
+                Text(
+                    modifier = Modifier.padding(top = 12.dp),
+                    style = TipsTypography.headlineMedium,
+                    text = Tips.firstSlidePoint[it]
+                )
+            }
+            Row {
+                Text(
+                    style = TipsTypography.bodyMedium,
+                    text = Tips.firstSlideText[it]
+                )
+            }
         }
     }
 }
 
 @Composable
 fun SecondSlide() {
-    Column {
-        Text(text = "Title")
-
-        Text(text = "SubTitle")
-        Row {
-            Text(text = "Text")
-        }
-        Row {
-            Text(text = "Text")
-        }
-
-        Text(text = "SubTitle")
-        Row {
-            Text(text = "Text")
-        }
-        Row {
-            Text(text = "Text")
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(horizontal = 12.dp)
+    ) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.Center
+        ) {
+            Text(
+                text = Tips.title[1],
+                style = TipsTypography.titleLarge
+            )
         }
 
-        Text(text = "SubTitle")
-        Row {
-            Text(text = "Text")
-        }
-        Row {
-            Text(text = "Text")
-        }
-
-        Text(text = "SubTitle")
-        Row {
-            Text(text = "Text")
-        }
-        Row {
-            Text(text = "Text")
+        Column(
+            modifier = Modifier
+                .verticalScroll(rememberScrollState())
+        ) {
+            repeat(4) { subTitleScope ->
+                Row {
+                    Text(
+                        modifier = Modifier.padding(top = 12.dp, bottom = 6.dp),
+                        text = Tips.subTitle[subTitleScope],
+                        style = TipsTypography.headlineLarge
+                    )
+                }
+                repeat(2) {
+                    Row {
+                        Text(
+                            style = TipsTypography.headlineMedium,
+                            text = Tips.secondSlidePoint[subTitleScope * 2 + it]
+                        )
+                    }
+                    Row {
+                        Text(
+                            style = TipsTypography.bodyMedium,
+                            text = Tips.secondSlideText[subTitleScope * 2 + it]
+                        )
+                    }
+                }
+            }
         }
     }
 }
 
 @Composable
 fun ThirdSlide() {
-    Column {
-        Text(text = "Title")
-        Row {
-            Text(text = "Text")
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(horizontal = 12.dp)
+    ) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.Center
+        ) {
+            Text(
+                text = Tips.title[2],
+                style = TipsTypography.titleLarge
+            )
         }
-        Row {
-            Text(text = "Text")
-        }
-        Row {
-            Text(text = "Text")
-        }
-        Row {
-            Text(text = "Text")
-        }
-        Row {
-            Text(text = "Text")
+        repeat(5) {
+            Row {
+                Text(
+                    modifier = Modifier.padding(top = 12.dp),
+                    style = TipsTypography.headlineMedium,
+                    text = Tips.thirdSlidePoint[it]
+                )
+            }
+            Row {
+                Text(
+                    style = TipsTypography.bodyMedium,
+                    text = Tips.thirdSlideText[it]
+                )
+            }
         }
     }
 }
 
 @Composable
 fun FourthSlide() {
-    Column {
-        Text(text = "Title")
-        Row {
-            Text(text = "Text")
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(horizontal = 12.dp)
+    ) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.Center
+        ) {
+            Text(
+                text = Tips.title[3],
+                style = TipsTypography.titleLarge
+            )
         }
-        Row {
-            Text(text = "Text")
-        }
-        Row {
-            Text(text = "Text")
+        repeat(3) {
+            Row {
+                Text(
+                    modifier = Modifier.padding(top = 12.dp),
+                    style = TipsTypography.headlineMedium,
+                    text = Tips.fourthSlidePoint[it]
+                )
+            }
+            Row {
+                Text(
+                    style = TipsTypography.bodyMedium,
+                    text = Tips.fourthSlideText[it]
+                )
+            }
         }
     }
 }

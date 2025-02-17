@@ -26,7 +26,11 @@ val DotSans = FontFamily(
 )
 
 val Roboto = FontFamily(
-    Font(R.font.roboto_condensed_bold, FontWeight.Bold)
+    Font(R.font.roboto_condensed_bold, FontWeight.Bold),
+    Font(R.font.roboto_condensed_medium, FontWeight.Medium),
+    Font(R.font.roboto_condensed_regular, FontWeight.Normal),
+    Font(R.font.roboto_condensed_semibold, FontWeight.SemiBold),
+    Font(R.font.roboto_condensed_extrabold, FontWeight.ExtraBold)
 )
 
 val Typography = Typography(
