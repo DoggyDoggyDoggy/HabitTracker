@@ -82,6 +82,7 @@ fun InProgressHabits(
             )
         }
 
+
         LazyColumn {
             items(inProgressHabitList, key = { it.id }) { habit ->
                 val isPendingDeletion = pendingDeletions.contains(habit)

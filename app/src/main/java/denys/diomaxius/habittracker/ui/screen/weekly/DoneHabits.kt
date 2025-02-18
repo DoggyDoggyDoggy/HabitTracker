@@ -1,5 +1,9 @@
 package denys.diomaxius.habittracker.ui.screen.weekly
 
+import android.annotation.SuppressLint
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.expandHorizontally
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -7,23 +11,34 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import denys.diomaxius.habittracker.data.constants.IconData
 import denys.diomaxius.habittracker.data.constants.TableThemes
 import denys.diomaxius.habittracker.domain.model.Habit
 
+@SuppressLint("RememberReturnType")
 @Composable
-fun DoneHabits(doneList: List<Habit>) {
+fun DoneHabits(
+    doneList: List<Habit>,
+    doneHabitsViewModel: DoneHabitsViewModel = viewModel()
+) {
+    val listState = rememberLazyListState()
+    val visibleItems by doneHabitsViewModel.visibleItems.collectAsState()
+
     Column {
         Card(
             modifier = Modifier
@@ -42,9 +57,24 @@ fun DoneHabits(doneList: List<Habit>) {
             )
         }
 
-        LazyColumn {
-            items(doneList) { habit ->
-                DoneHabitTable(habit = habit)
+        LazyColumn(state = listState) {
+            items(items = doneList, key = { it.id }) { habit ->
+                val isVisible = visibleItems[habit.id] ?: false
+
+                doneHabitsViewModel.setVisibility(habit.id, true)
+
+                AnimatedVisibility(
+                    visible = isVisible,
+                    enter = expandHorizontally(
+                        animationSpec = tween(500),
+                        expandFrom = Alignment.Start
+                    )
+                ) {
+                    DoneHabitTable(
+                        habit = habit,
+                        modifier = Modifier.animateItem(fadeInSpec = null, fadeOutSpec = null)
+                    )
+                }
             }
         }
     }

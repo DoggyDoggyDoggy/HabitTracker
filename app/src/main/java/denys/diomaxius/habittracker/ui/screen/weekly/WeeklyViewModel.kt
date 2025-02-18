@@ -1,5 +1,6 @@
 package denys.diomaxius.habittracker.ui.screen.weekly
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -8,9 +9,11 @@ import denys.diomaxius.habittracker.domain.model.HabitProgress
 import denys.diomaxius.habittracker.domain.usecase.CheckCurrentDateUseCase
 import denys.diomaxius.habittracker.domain.usecase.GetHabitsByYearUseCase
 import denys.diomaxius.habittracker.domain.usecase.InsertHabitProgressUseCase
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 import javax.inject.Inject
@@ -35,19 +38,24 @@ class WeeklyViewModel @Inject constructor(
     private val _habitListIsNotEmpty = MutableStateFlow(true)
     val habitListIsNotEmpty = _habitListIsNotEmpty.asStateFlow()
 
+    private val _doneHabitListIsNotEmpty = MutableStateFlow(false)
+    val doneHabitListIsNotEmpty = _doneHabitListIsNotEmpty.asStateFlow()
 
     init {
         getHabitList()
         getInProgressHabitList()
     }
 
+    @OptIn(FlowPreview::class)
     private fun getInProgressHabitList() {
         viewModelScope.launch {
             combine(_habitList, _doneHabitList) { allHabits, doneHabits ->
                 allHabits - doneHabits.toSet()
-            }.collect { filteredList ->
-                _inProgressHabitList.value = filteredList
-            }
+            }.debounce(100)
+                .collect { filteredList ->
+                    Log.i("filteredList", "$filteredList")
+                    _inProgressHabitList.value = filteredList
+                }
         }
     }
 
@@ -75,6 +83,7 @@ class WeeklyViewModel @Inject constructor(
             if (checkCurrentDateUseCase(habit.id, date) == 1) {
                 newList.add(habit)
                 _doneHabitList.value = newList.toList()
+                _doneHabitListIsNotEmpty.value = _doneHabitList.value.isNotEmpty()
             }
         }
     }

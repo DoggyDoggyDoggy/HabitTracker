@@ -1,7 +1,7 @@
 package denys.diomaxius.habittracker.ui.screen.weekly
 
+import android.annotation.SuppressLint
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.core.tween
 import androidx.compose.animation.shrinkHorizontally
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -30,6 +30,7 @@ fun WeeklyScreen(
     val inProgressHabitList by viewModel.inProgressHabitList.collectAsState()
     val dayOfWeek by viewModel.dayOfWeek.collectAsState()
     val habitListIsNotEmpty by viewModel.habitListIsNotEmpty.collectAsState()
+    val doneHabitListIsNotEmpty by viewModel.doneHabitListIsNotEmpty.collectAsState()
 
     Scaffold(
         topBar = {
@@ -46,11 +47,13 @@ fun WeeklyScreen(
             listsNotEmpty = habitListIsNotEmpty,
             inProgressHabitList = inProgressHabitList,
             dayOfWeek = dayOfWeek,
-            insertProgress = { viewModel.insertProgress(it) }
+            insertProgress = { viewModel.insertProgress(it) },
+            doneHabitListIsNotEmpty = doneHabitListIsNotEmpty
         )
     }
 }
 
+@SuppressLint("CoroutineCreationDuringComposition")
 @Composable
 fun Content(
     modifier: Modifier,
@@ -60,11 +63,13 @@ fun Content(
     listsNotEmpty: Boolean,
     inProgressHabitList: List<Habit>,
     dayOfWeek: LocalDate,
-    insertProgress: (HabitProgress) -> Unit
+    insertProgress: (HabitProgress) -> Unit,
+    doneHabitListIsNotEmpty: Boolean
 ) {
     if (listsNotEmpty) {
         Column(
-            modifier = modifier.fillMaxSize()
+            modifier = modifier
+                .fillMaxSize()
         ) {
             ViewSwitcher(navHostController = navHostController)
 
@@ -73,9 +78,8 @@ fun Content(
             )
 
             AnimatedVisibility(
-                visible = inProgressHabitList.isNotEmpty() && dayOfWeek >= LocalDate.now(),
+                visible = inProgressHabitList.isNotEmpty(),
                 exit = shrinkHorizontally(
-                    animationSpec = tween(800),
                     shrinkTowards = Alignment.End
                 )
             ) {
@@ -86,11 +90,11 @@ fun Content(
                 )
             }
 
-           if(doneList.isNotEmpty()) {
-               DoneHabits(
-                   doneList = doneList
-               )
-           }
+            if (doneHabitListIsNotEmpty) {
+                DoneHabits(
+                    doneList = doneList
+                )
+            }
         }
     } else {
         navHostController.navigate(Screen.MainScreen.route) {
