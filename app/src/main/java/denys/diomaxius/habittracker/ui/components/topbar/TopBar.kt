@@ -1,4 +1,4 @@
-package denys.diomaxius.habittracker.ui.components
+package denys.diomaxius.habittracker.ui.components.topbar
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -14,9 +14,12 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import denys.diomaxius.habittracker.navigation.Screen
@@ -25,9 +28,11 @@ import denys.diomaxius.habittracker.navigation.Screen
 fun TopBar(
     modifier: Modifier = Modifier,
     navHostController: NavHostController,
-    habitListIsNotEmpty: Boolean,
-    showArchiveIcon: Boolean
+    viewModel: TopBarViewModel = hiltViewModel()
 ) {
+    val showArchiveIcon by viewModel.showArchiveIcon.collectAsState()
+    val showEditIcon by viewModel.showEditIcon.collectAsState()
+
     Row(
         modifier = modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically
@@ -56,7 +61,7 @@ fun TopBar(
                 }
             }
             IconButton(
-                enabled = habitListIsNotEmpty,
+                enabled = showEditIcon,
                 onClick = {
                     navHostController.navigate(Screen.EditHabitTable.route) {
                         launchSingleTop = true
@@ -78,9 +83,6 @@ fun TopBar(
 @Composable
 fun PreviewTopBar() {
     TopBar(
-        navHostController = rememberNavController(),
-        habitListIsNotEmpty = true,
-        showArchiveIcon = false
-
+        navHostController = rememberNavController()
     )
 }

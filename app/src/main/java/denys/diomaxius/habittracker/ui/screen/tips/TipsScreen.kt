@@ -14,26 +14,19 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import denys.diomaxius.habittracker.data.constants.Tips
-import denys.diomaxius.habittracker.ui.components.TopBar
+import denys.diomaxius.habittracker.ui.components.topbar.TopBar
 import denys.diomaxius.habittracker.ui.components.ViewSwitcher
 import denys.diomaxius.habittracker.ui.theme.TipsTypography
 
 @Composable
 fun TipsScreen(
-    navHostController: NavHostController,
-    viewModel: TipsScreenViewModel = hiltViewModel()
+    navHostController: NavHostController
 ) {
-    val showArchiveIcon by viewModel.showArchiveIcon.collectAsState()
-    val showEditIcon by viewModel.showEditIcon.collectAsState()
-
     val slides = listOf<@Composable () -> Unit>(
         { FirstSlide() },
         { SecondSlide() },
@@ -45,9 +38,7 @@ fun TipsScreen(
     Scaffold(
         topBar = {
             TopBar(
-                navHostController = navHostController,
-                habitListIsNotEmpty = showEditIcon,
-                showArchiveIcon = showArchiveIcon
+                navHostController = navHostController
             )
         }
     ) { innerPadding ->

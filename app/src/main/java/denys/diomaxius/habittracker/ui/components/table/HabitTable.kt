@@ -84,7 +84,7 @@ fun InteractiveHabitTable(
 
     LaunchedEffect(Unit) {
         while (true) {
-            delay(30_000) //30 seconds
+            delay(5000)
             val newDate = LocalDate.now()
             if (newDate != currentDate) {
                 currentDate = newDate

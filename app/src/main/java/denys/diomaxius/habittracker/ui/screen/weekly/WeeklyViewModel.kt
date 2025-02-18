@@ -4,12 +4,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import denys.diomaxius.habittracker.domain.model.Habit
+import denys.diomaxius.habittracker.domain.model.HabitProgress
 import denys.diomaxius.habittracker.domain.usecase.CheckCurrentDateUseCase
 import denys.diomaxius.habittracker.domain.usecase.GetHabitsByYearUseCase
-import denys.diomaxius.habittracker.domain.usecase.ObserveYearsUseCase
+import denys.diomaxius.habittracker.domain.usecase.InsertHabitProgressUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 import java.time.LocalDate
@@ -19,7 +19,7 @@ import javax.inject.Inject
 class WeeklyViewModel @Inject constructor(
     private val getHabitsByYearUseCase: GetHabitsByYearUseCase,
     private val checkCurrentDateUseCase: CheckCurrentDateUseCase,
-    private val observeYearsUseCase: ObserveYearsUseCase
+    private val insertHabitProgressUseCase: InsertHabitProgressUseCase
 ) : ViewModel() {
     private val _habitList = MutableStateFlow<List<Habit>>(emptyList())
 
@@ -32,16 +32,12 @@ class WeeklyViewModel @Inject constructor(
     private val _dayOfWeek = MutableStateFlow<LocalDate>(LocalDate.now())
     val dayOfWeek = _dayOfWeek.asStateFlow()
 
-    //Move to another ViewModel
-    private val _showArchiveIcon = MutableStateFlow(false)
-    val showArchiveIcon = _showArchiveIcon.asStateFlow()
+    private val _habitListIsNotEmpty = MutableStateFlow(true)
+    val habitListIsNotEmpty = _habitListIsNotEmpty.asStateFlow()
 
-    private val _showEditIcon = MutableStateFlow(true)
-    val showEditIcon = _showEditIcon.asStateFlow()
 
     init {
         getHabitList()
-        observeYear()
         getInProgressHabitList()
     }
 
@@ -51,13 +47,6 @@ class WeeklyViewModel @Inject constructor(
                 allHabits - doneHabits.toSet()
             }.collect { filteredList ->
                 _inProgressHabitList.value = filteredList
-            }
-        }
-    }
-    private fun observeYear() {
-        viewModelScope.launch {
-            observeYearsUseCase().collectLatest { years ->
-                _showArchiveIcon.value = years.size > 1
             }
         }
     }
@@ -73,7 +62,7 @@ class WeeklyViewModel @Inject constructor(
         viewModelScope.launch {
             getHabitsByYearUseCase(LocalDate.now().year).collect {
                 _habitList.value = it
-                _showEditIcon.value = _habitList.value.isNotEmpty()
+                _habitListIsNotEmpty.value = _habitList.value.isNotEmpty()
                 getDoneHabit(date)
             }
         }
@@ -87,6 +76,13 @@ class WeeklyViewModel @Inject constructor(
                 newList.add(habit)
                 _doneHabitList.value = newList.toList()
             }
+        }
+    }
+
+    fun insertProgress(habitProgress: HabitProgress) {
+        viewModelScope.launch {
+            insertHabitProgressUseCase(habitProgress)
+            getDoneHabit(_dayOfWeek.value)
         }
     }
 }

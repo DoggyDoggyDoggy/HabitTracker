@@ -17,12 +17,17 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -34,9 +39,11 @@ import androidx.navigation.NavHostController
 import denys.diomaxius.habittracker.data.constants.IconData
 import denys.diomaxius.habittracker.data.constants.TableThemes
 import denys.diomaxius.habittracker.domain.model.Habit
+import denys.diomaxius.habittracker.domain.model.HabitProgress
 import denys.diomaxius.habittracker.navigation.Screen
-import denys.diomaxius.habittracker.ui.components.TopBar
+import denys.diomaxius.habittracker.ui.components.topbar.TopBar
 import denys.diomaxius.habittracker.ui.components.ViewSwitcher
+import kotlinx.coroutines.delay
 import java.time.LocalDate
 import java.time.temporal.TemporalAdjusters
 import java.util.Locale
@@ -46,30 +53,27 @@ fun WeeklyScreen(
     viewModel: WeeklyViewModel = hiltViewModel(),
     navHostController: NavHostController
 ) {
-    val doneList by viewModel.doneHabitList.collectAsState()
+    val doneHabitList by viewModel.doneHabitList.collectAsState()
     val inProgressHabitList by viewModel.inProgressHabitList.collectAsState()
     val dayOfWeek by viewModel.dayOfWeek.collectAsState()
-
-    val showArchiveIcon by viewModel.showArchiveIcon.collectAsState()
-    val showEditIcon by viewModel.showEditIcon.collectAsState()
+    val habitListIsNotEmpty by viewModel.habitListIsNotEmpty.collectAsState()
 
     Scaffold(
         topBar = {
             TopBar(
-                navHostController = navHostController,
-                habitListIsNotEmpty = showEditIcon,
-                showArchiveIcon = showArchiveIcon
+                navHostController = navHostController
             )
         }
     ) { innerPadding ->
         Content(
             modifier = Modifier.padding(innerPadding),
             changeDayOfWeek = { viewModel.changeDayOfWeek(it) },
-            doneList = doneList,
+            doneList = doneHabitList,
             navHostController = navHostController,
-            showEditIcon = showEditIcon,
+            listsNotEmpty = habitListIsNotEmpty,
             inProgressHabitList = inProgressHabitList,
-            dayOfWeek = dayOfWeek
+            dayOfWeek = dayOfWeek,
+            insertProgress = { viewModel.insertProgress(it) }
         )
     }
 }
@@ -80,11 +84,12 @@ fun Content(
     changeDayOfWeek: (LocalDate) -> Unit,
     doneList: List<Habit>,
     navHostController: NavHostController,
-    showEditIcon: Boolean,
+    listsNotEmpty: Boolean,
     inProgressHabitList: List<Habit>,
-    dayOfWeek: LocalDate
+    dayOfWeek: LocalDate,
+    insertProgress: (HabitProgress) -> Unit
 ) {
-    if (showEditIcon) {
+    if (listsNotEmpty) {
         Column(
             modifier = modifier.fillMaxSize()
         ) {
@@ -95,11 +100,17 @@ fun Content(
             )
 
             if (inProgressHabitList.isNotEmpty() && dayOfWeek >= LocalDate.now()) {
-                InProgressHabits(inProgressHabitList = inProgressHabitList)
+                InProgressHabits(
+                    inProgressHabitList = inProgressHabitList,
+                    insertProgress = insertProgress,
+                    dayOfWeek = dayOfWeek
+                )
             }
 
             if (doneList.isNotEmpty()) {
-                DoneHabits(doneList = doneList)
+                DoneHabits(
+                    doneList = doneList
+                )
             }
         }
     } else {
@@ -110,9 +121,14 @@ fun Content(
     }
 
 }
+
 @Composable
-fun InProgressHabits(inProgressHabitList: List<Habit>) {
-    Card (
+fun InProgressHabits(
+    inProgressHabitList: List<Habit>,
+    insertProgress: (HabitProgress) -> Unit,
+    dayOfWeek: LocalDate
+) {
+    Card(
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 8.dp),
@@ -131,13 +147,18 @@ fun InProgressHabits(inProgressHabitList: List<Habit>) {
 
     LazyColumn {
         items(inProgressHabitList) { habit ->
-            DoneHabitTable(habit = habit)
+            InProgressHabitTable(
+                habit = habit,
+                insertProgress = insertProgress,
+                dayOfWeek = dayOfWeek
+            )
         }
     }
 }
+
 @Composable
 fun DoneHabits(doneList: List<Habit>) {
-    Card (
+    Card(
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 8.dp),
@@ -213,9 +234,89 @@ fun DoneHabitTable(
                     )
                 }
             }
+        }
+    }
+}
 
-            IconButton(onClick = { /*TODO*/ }) {
-                Icon(imageVector = Icons.Default.Check, contentDescription = "Check")
+@Composable
+fun InProgressHabitTable(
+    modifier: Modifier = Modifier,
+    habit: Habit,
+    insertProgress: (HabitProgress) -> Unit,
+    dayOfWeek: LocalDate
+) {
+
+    Card(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(
+                vertical = 6.dp,
+                horizontal = 14.dp
+            ),
+        colors = CardDefaults.cardColors(
+            containerColor = TableThemes.tableThemes[habit.colorTheme].tableColor
+        )
+    ) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Icon(
+                modifier = Modifier
+                    .padding(8.dp)
+                    .size(42.dp),
+                painter = painterResource(id = IconData.icons[habit.iconId]),
+                contentDescription = "Icon",
+                tint = Color.Unspecified
+            )
+
+            Column(
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(start = 8.dp)
+            ) {
+                Text(
+                    text = habit.name,
+                    style = if (habit.colorTheme < 12) {
+                        MaterialTheme.typography.titleSmall
+                    } else {
+                        MaterialTheme.typography.titleSmall.copy(shadow = null)
+                    },
+                    color = TableThemes.tableThemes[habit.colorTheme].fontColor
+                )
+
+                if (habit.description.isNotEmpty()) {
+                    Text(
+                        text = habit.description,
+                        style = MaterialTheme.typography.bodySmall,
+                        color = TableThemes.tableThemes[habit.colorTheme].fontColor,
+                        softWrap = true
+                    )
+                }
+            }
+
+
+            if (dayOfWeek == LocalDate.now()) {
+                IconButton(
+                    modifier = Modifier.padding(end = 5.dp),
+                    onClick = {
+                        insertProgress(
+                            HabitProgress(
+                                habitId = habit.id,
+                                date = LocalDate.now(),
+                                isCompleted = true
+                            )
+                        )
+
+                    },
+                    colors = IconButtonDefaults.iconButtonColors(
+                        containerColor = TableThemes.tableThemes[habit.colorTheme].unCheckedIcon
+                    )
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Check,
+                        contentDescription = "Check"
+                    )
+                }
             }
         }
     }
@@ -225,6 +326,21 @@ fun DoneHabitTable(
 fun DayOfWeek(
     changeDayOfWeek: (LocalDate) -> Unit
 ) {
+    var currentDate by remember {
+        mutableStateOf(LocalDate.now())
+    }
+
+    LaunchedEffect(Unit) {
+        while (true) {
+            delay(5000)
+            val newDate = LocalDate.now()
+            if (currentDate != newDate) {
+                currentDate = newDate
+                changeDayOfWeek(currentDate)
+            }
+        }
+    }
+
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -242,7 +358,7 @@ fun DayOfWeek(
                 border = CardDefaults.outlinedCardBorder(true),
                 elevation = CardDefaults.cardElevation(5.dp),
                 colors = CardDefaults.cardColors(
-                    containerColor = if (date == LocalDate.now()) Color(0xFFB2E9AC)
+                    containerColor = if (date == currentDate) Color(0xFFB2E9AC)
                     else CardDefaults.cardColors().containerColor
                 )
             ) {
@@ -286,5 +402,7 @@ fun calcDay(): List<LocalDate> {
 @Preview(showBackground = true)
 @Composable
 fun PreviewDayOfWeek() {
-    DayOfWeek(changeDayOfWeek = {})
+    DayOfWeek(
+        changeDayOfWeek = {}
+    )
 }

@@ -24,7 +24,7 @@ import denys.diomaxius.habittracker.domain.model.Habit
 import denys.diomaxius.habittracker.domain.model.HabitProgress
 import denys.diomaxius.habittracker.navigation.Screen
 import denys.diomaxius.habittracker.ui.components.Loading
-import denys.diomaxius.habittracker.ui.components.TopBar
+import denys.diomaxius.habittracker.ui.components.topbar.TopBar
 import denys.diomaxius.habittracker.ui.components.ViewSwitcher
 import denys.diomaxius.habittracker.ui.components.table.HabitTable
 import java.time.LocalDate
@@ -37,14 +37,11 @@ fun MainScreen(
     val habitList by viewModel.habitStateHolder.habitList.collectAsState()
     val habitProgressMap by viewModel.habitStateHolder.habitProgressMap.collectAsState()
     val isLoading by viewModel.habitStateHolder.isLoading.collectAsState()
-    val showArchiveIcon by viewModel.showArchiveIcon.collectAsState()
 
     Scaffold(
         topBar = {
             TopBar(
-                navHostController = navHostController,
-                habitListIsNotEmpty = habitList.isNotEmpty(),
-                showArchiveIcon = showArchiveIcon
+                navHostController = navHostController
             )
         }
     ) { innerPadding ->

@@ -9,10 +9,6 @@ import denys.diomaxius.habittracker.domain.usecase.AddYearUseCase
 import denys.diomaxius.habittracker.domain.usecase.CheckCurrentDateUseCase
 import denys.diomaxius.habittracker.domain.usecase.GetHabitsWithProgressUseCase
 import denys.diomaxius.habittracker.domain.usecase.InsertHabitProgressUseCase
-import denys.diomaxius.habittracker.domain.usecase.ObserveYearsUseCase
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 import javax.inject.Inject
@@ -20,16 +16,12 @@ import javax.inject.Inject
 @HiltViewModel
 class MainScreenViewModel @Inject constructor(
     private val getHabitsWithProgressUseCase: GetHabitsWithProgressUseCase,
-    private val observeYearsUseCase: ObserveYearsUseCase,
     private val addYearUseCase: AddYearUseCase,
     private val insertHabitProgressUseCase: InsertHabitProgressUseCase,
     private val checkCurrentDateUseCase: CheckCurrentDateUseCase
 ) : ViewModel() {
 
     val habitStateHolder = HabitStateHolder()
-
-    private val _showArchiveIcon = MutableStateFlow(false)
-    val showArchiveIcon = _showArchiveIcon.asStateFlow()
 
     init {
         viewModelScope.launch {
@@ -43,11 +35,6 @@ class MainScreenViewModel @Inject constructor(
     private fun addYear() {
         viewModelScope.launch {
             addYearUseCase(LocalDate.now().year)
-        }
-        viewModelScope.launch {
-            observeYearsUseCase().collectLatest { years ->
-                _showArchiveIcon.value = years.size > 1
-            }
         }
     }
 

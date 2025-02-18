@@ -1,4 +1,4 @@
-package denys.diomaxius.habittracker.ui.screen.tips
+package denys.diomaxius.habittracker.ui.components.topbar
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -13,10 +13,11 @@ import java.time.LocalDate
 import javax.inject.Inject
 
 @HiltViewModel
-class TipsScreenViewModel @Inject constructor(
+class TopBarViewModel @Inject constructor(
     private val getHabitsByYearUseCase: GetHabitsByYearUseCase,
     private val observeYearsUseCase: ObserveYearsUseCase
 ) : ViewModel() {
+
     private val _showArchiveIcon = MutableStateFlow(false)
     val showArchiveIcon = _showArchiveIcon.asStateFlow()
 
@@ -24,19 +25,14 @@ class TipsScreenViewModel @Inject constructor(
     val showEditIcon = _showEditIcon.asStateFlow()
 
     init {
-        observeYear()
-        viewModelScope.launch {
-            getHabitsByYearUseCase(LocalDate.now().year).collect {
-               _showEditIcon.value = it.isNotEmpty()
-            }
-        }
-
-    }
-
-    private fun observeYear() {
         viewModelScope.launch {
             observeYearsUseCase().collectLatest { years ->
                 _showArchiveIcon.value = years.size > 1
+            }
+        }
+        viewModelScope.launch {
+            getHabitsByYearUseCase(LocalDate.now().year).collect {
+                _showEditIcon.value = it.isNotEmpty()
             }
         }
     }
