@@ -11,9 +11,6 @@ import denys.diomaxius.habittracker.ui.components.table.InteractiveHabitTable
 import denys.diomaxius.habittracker.ui.dummyHabit
 import denys.diomaxius.habittracker.ui.dummyHabitProgress
 
-
-const val checked = true
-
 object TableThemes {
     private val checkedIcon = Color(0xFF25A244)
 
@@ -213,7 +210,7 @@ fun PreviewHabitTable() {
         habit = dummyHabit,
         habitProgress = dummyHabitProgress,
         insertProgress = {},
-        checkTodayProgress = { _, _ -> checked },
+        checkTodayProgress = { _, _ -> false},
         habitGridConfig = habitGridConfig
     )
 }

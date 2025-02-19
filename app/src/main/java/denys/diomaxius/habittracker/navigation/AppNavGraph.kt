@@ -11,6 +11,7 @@ import denys.diomaxius.habittracker.ui.screen.addHabitTable.AddHabitTable
 import denys.diomaxius.habittracker.ui.screen.archive.Archive
 import denys.diomaxius.habittracker.ui.screen.editHabitTable.EditHabitTable
 import denys.diomaxius.habittracker.ui.screen.main.MainScreen
+import denys.diomaxius.habittracker.ui.screen.onboarding.OnBoardingScreen
 import denys.diomaxius.habittracker.ui.screen.tips.TipsScreen
 import denys.diomaxius.habittracker.ui.screen.weekly.WeeklyScreen
 
@@ -68,6 +69,12 @@ fun AppNavGraph(
             route = Screen.Tips.route
         ) {
             TipsScreen(navHostController = navHostController)
+        }
+
+        composable(
+            route = Screen.OnBoarding.route
+        ) {
+            OnBoardingScreen()
         }
     }
 }

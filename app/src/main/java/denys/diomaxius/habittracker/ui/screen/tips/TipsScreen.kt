@@ -254,7 +254,7 @@ fun CustomPagerIndicator(
                     )
                     .border(
                         width = 1.dp,
-                        color = Color.Black,
+                        color = Color.Gray,
                         shape = CircleShape
                     )
                     .size(16.dp)

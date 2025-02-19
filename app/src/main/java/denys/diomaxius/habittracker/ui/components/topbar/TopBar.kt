@@ -9,6 +9,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Archive
 import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.Key
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -53,6 +54,13 @@ fun TopBar(
             modifier = Modifier.weight(1f),
             horizontalArrangement = Arrangement.End
         ) {
+            //Testing purpose
+            IconButton(onClick = {
+                navHostController.navigate(Screen.OnBoarding.route) { launchSingleTop = true }
+            }) {
+                Icon(imageVector = Icons.Default.Key, contentDescription = "Key")
+            }
+
             if (showArchiveIcon) {
                 IconButton(onClick = {
                     navHostController.navigate(Screen.Archive.route) { launchSingleTop = true }
