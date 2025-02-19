@@ -1,4 +1,4 @@
-package denys.diomaxius.habittracker.ui.screen.weekly
+package denys.diomaxius.habittracker.ui.screen.weekly.donehabits
 
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow

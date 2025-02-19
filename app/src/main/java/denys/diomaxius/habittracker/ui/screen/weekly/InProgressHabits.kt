@@ -2,6 +2,8 @@ package denys.diomaxius.habittracker.ui.screen.weekly
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.shrinkHorizontally
 import androidx.compose.foundation.layout.Column
@@ -29,6 +31,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
@@ -36,6 +39,8 @@ import denys.diomaxius.habittracker.data.constants.IconData
 import denys.diomaxius.habittracker.data.constants.TableThemes
 import denys.diomaxius.habittracker.domain.model.Habit
 import denys.diomaxius.habittracker.domain.model.HabitProgress
+import denys.diomaxius.habittracker.ui.utils.checkIconColor
+import denys.diomaxius.habittracker.ui.utils.checkIconTint
 import kotlinx.coroutines.delay
 import java.time.LocalDate
 
@@ -119,6 +124,15 @@ fun InProgressHabitTable(
     dayOfWeek: LocalDate,
     toggleVisible: () -> Unit
 ) {
+    var playAnimation by remember {
+        mutableStateOf(false)
+    }
+    val scale by animateFloatAsState(
+        targetValue = if (playAnimation) 1.2f else 1f,
+        animationSpec = tween(durationMillis = 350, easing = LinearEasing),
+        label = "",
+        finishedListener = { toggleVisible() }
+    )
     Card(
         modifier = modifier
             .fillMaxWidth()
@@ -170,17 +184,20 @@ fun InProgressHabitTable(
 
             if (dayOfWeek == LocalDate.now()) {
                 IconButton(
-                    modifier = Modifier.padding(end = 5.dp),
+                    modifier = Modifier
+                        .scale(scale)
+                        .padding(end = 5.dp),
                     onClick = {
-                        toggleVisible()
+                        playAnimation = true
                     },
                     colors = IconButtonDefaults.iconButtonColors(
-                        containerColor = TableThemes.tableThemes[habit.colorTheme].unCheckedIcon
+                        containerColor = checkIconColor(playAnimation, habit.colorTheme)
                     )
                 ) {
                     Icon(
                         imageVector = Icons.Default.Check,
-                        contentDescription = "Check"
+                        contentDescription = "Check",
+                        tint = checkIconTint(playAnimation, habit.colorTheme)
                     )
                 }
             }

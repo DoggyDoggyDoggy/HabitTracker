@@ -19,6 +19,7 @@ import denys.diomaxius.habittracker.domain.model.HabitProgress
 import denys.diomaxius.habittracker.navigation.Screen
 import denys.diomaxius.habittracker.ui.components.topbar.TopBar
 import denys.diomaxius.habittracker.ui.components.ViewSwitcher
+import denys.diomaxius.habittracker.ui.screen.weekly.donehabits.DoneHabits
 import java.time.LocalDate
 
 @Composable

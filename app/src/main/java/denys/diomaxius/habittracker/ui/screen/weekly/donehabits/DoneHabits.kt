@@ -1,4 +1,4 @@
-package denys.diomaxius.habittracker.ui.screen.weekly
+package denys.diomaxius.habittracker.ui.screen.weekly.donehabits
 
 import android.annotation.SuppressLint
 import androidx.compose.animation.AnimatedVisibility

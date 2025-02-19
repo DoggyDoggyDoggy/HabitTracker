@@ -15,9 +15,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
-import androidx.compose.ui.graphics.Color
-import denys.diomaxius.habittracker.data.constants.TableThemes
 import denys.diomaxius.habittracker.domain.model.HabitProgress
+import denys.diomaxius.habittracker.ui.utils.checkIconColor
+import denys.diomaxius.habittracker.ui.utils.checkIconTint
 import java.time.LocalDate
 
 @Composable
@@ -62,27 +62,5 @@ fun CheckedIcon(
             contentDescription = "Check",
             tint = checkIconTint(isHabitTrackedForToday, habitColorTheme)
         )
-    }
-}
-
-fun checkIconColor(
-    isHabitTrackedForToday: Boolean,
-    habitColorTheme: Int
-): Color {
-    return if (isHabitTrackedForToday) {
-        TableThemes.tableThemes[habitColorTheme].checkedIcon
-    } else {
-        TableThemes.tableThemes[habitColorTheme].unCheckedIcon
-    }
-}
-
-fun checkIconTint(
-    isHabitTrackedForToday: Boolean,
-    habitColorTheme: Int
-): Color {
-    return if (isHabitTrackedForToday) {
-        TableThemes.tableThemes[habitColorTheme].iconTintChecked
-    } else {
-        Color.Black
     }
 }
