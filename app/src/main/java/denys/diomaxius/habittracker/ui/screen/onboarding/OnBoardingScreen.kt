@@ -1,5 +1,6 @@
 package denys.diomaxius.habittracker.ui.screen.onboarding
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -9,16 +10,28 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.scale
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import denys.diomaxius.habittracker.R
+import denys.diomaxius.habittracker.ui.components.CustomPagerIndicator
 import denys.diomaxius.habittracker.ui.theme.OnBoardingTypography
 
 @Composable
@@ -28,7 +41,7 @@ fun OnBoardingScreen(
     val slides = listOf<@Composable () -> Unit>(
         { FirstSlide() },
         { SecondSlide() },
-        { ThirdScreen() },
+        { ThirdSlide() },
         { FourthSlide() }
     )
 
@@ -44,13 +57,21 @@ fun OnBoardingScreen(
 fun Content(
     pagerState: PagerState,
     slides: List<@Composable () -> Unit>,
+) {
+    Column(
+        modifier = Modifier.fillMaxSize()
+    ) {
+        HorizontalPager(
+            modifier = Modifier.weight(1f),
+            state = pagerState
+        ) {
+            slides[it]()
+        }
 
-    ) {
-    HorizontalPager(
-        modifier = Modifier.fillMaxSize(),
-        state = pagerState
-    ) {
-        slides[it]()
+        CustomPagerIndicator(
+            index = pagerState.currentPage,
+            size = slides.size
+        )
     }
 }
 
@@ -110,23 +131,110 @@ fun FirstSlide() {
 @Composable
 fun SecondSlide() {
     Column(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(horizontal = 14.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        Text(text = "Show adding screen")
+        Card(
+            colors = CardDefaults.cardColors(
+                containerColor = Color(0xFFE3D5CA)
+            )
+        ) {
+
+            Image(
+                modifier = Modifier.padding(12.dp),
+                painter = painterResource(id = R.drawable.topbar_example),
+                contentDescription = "Image",
+                contentScale = ContentScale.FillWidth
+            )
+        }
+
+        Spacer(modifier = Modifier.height(60.dp))
+
+        Icon(
+            modifier = Modifier
+                .scale(2f)
+                .padding(bottom = 6.dp),
+            imageVector = Icons.Default.Add,
+            contentDescription = "Add icon"
+        )
+
+        Text(
+            style = OnBoardingTypography.bodyMedium,
+            text = "Here, you can add a new habit to your list and start tracking it right away."
+        )
+
+        Spacer(modifier = Modifier.height(60.dp))
+
+        Icon(
+            modifier = Modifier
+                .scale(1.5f)
+                .padding(bottom = 6.dp),
+            imageVector = Icons.Default.Edit,
+            contentDescription = "Add icon"
+        )
+
+        Text(
+            style = OnBoardingTypography.bodyMedium,
+            text = "In this tab, you can edit your existing habits, delete the ones you no longer need, and rearrange their order."
+        )
     }
 }
 
 @Composable
-fun ThirdScreen() {
-    Text(text = "Show edit screen")
+fun ThirdSlide() {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(horizontal = 14.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+        Spacer(modifier = Modifier.height(45.dp))
+
+        Text(
+            modifier = Modifier,
+            style = OnBoardingTypography.bodyMedium,
+            text = "On this tab, you can track your habit progress throughout the current year. When the new year begins, your progress will be archived, giving you a fresh start."
+        )
+
+        Spacer(modifier = Modifier.height(12.dp))
+
+        Image(
+            painter = painterResource(id = R.drawable.annual_example),
+            contentDescription = "Image",
+            contentScale = ContentScale.Fit
+        )
+    }
 }
 
 @Composable
 fun FourthSlide() {
-    Text(text = "Show annual and weekly screen")
-    Text(text = "This screen lets you track your habits progress throughout the current year. When the new year begins, your progress will be archived, giving you a fresh start.")
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(horizontal = 14.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Top
+    ) {
+        Spacer(modifier = Modifier.height(110.dp))
+
+        Text(
+            modifier = Modifier,
+            style = OnBoardingTypography.bodyMedium,
+            text = "Use this tab to follow your weekly habit progress. Each day shows your completed tasks, while today’s view keeps you updated on what’s still in progress."
+        )
+
+        Spacer(modifier = Modifier.height(45.dp))
+
+        Image(
+            painter = painterResource(id = R.drawable.weekly_example),
+            contentDescription = "Image",
+            contentScale = ContentScale.FillWidth
+        )
+    }
 }
 
 @Preview(showBackground = true)
@@ -134,3 +242,22 @@ fun FourthSlide() {
 fun PreviewFirstSlide() {
     FirstSlide()
 }
+
+@Preview(showBackground = true)
+@Composable
+fun PreviewSecondSlide() {
+    SecondSlide()
+}
+
+@Preview(showBackground = true)
+@Composable
+fun PreviewFifthSlide() {
+    ThirdSlide()
+}
+
+@Preview(showBackground = true)
+@Composable
+fun PreviewFourthSlide() {
+    FourthSlide()
+}
+

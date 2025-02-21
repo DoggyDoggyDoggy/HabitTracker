@@ -19,6 +19,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
@@ -58,7 +59,7 @@ fun TopBar(
             IconButton(onClick = {
                 navHostController.navigate(Screen.OnBoarding.route) { launchSingleTop = true }
             }) {
-                Icon(imageVector = Icons.Default.Key, contentDescription = "Key")
+                Icon(imageVector = Icons.Default.Key, contentDescription = "Key", tint = Color.White)
             }
 
             if (showArchiveIcon) {
