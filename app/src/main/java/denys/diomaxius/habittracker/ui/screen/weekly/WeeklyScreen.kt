@@ -79,7 +79,7 @@ fun Content(
             )
 
             AnimatedVisibility(
-                visible = inProgressHabitList.isNotEmpty(),
+                visible = inProgressHabitList.isNotEmpty() && LocalDate.now() <= dayOfWeek,
                 exit = shrinkHorizontally(
                     shrinkTowards = Alignment.End
                 )
@@ -91,7 +91,7 @@ fun Content(
                 )
             }
 
-            if (doneHabitListIsNotEmpty) {
+            if (doneHabitListIsNotEmpty && LocalDate.now() >= dayOfWeek) {
                 DoneHabits(
                     doneList = doneList
                 )
