@@ -27,7 +27,9 @@ fun OnBoardingScreen(
 ) {
     val slides = listOf<@Composable () -> Unit>(
         { FirstSlide() },
-        { SecondSlide() }
+        { SecondSlide() },
+        { ThirdScreen() },
+        { FourthSlide() }
     )
 
     val pagerState = rememberPagerState { slides.size }
@@ -52,16 +54,6 @@ fun Content(
     }
 }
 
-@Composable
-fun SecondSlide() {
-    Column(
-        modifier = Modifier.fillMaxSize(),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
-    ) {
-        Text(text = "This screen lets you track your habits progress throughout the current year. When the new year begins, your progress will be archived, giving you a fresh start.")
-    }
-}
 
 @Composable
 fun FirstSlide() {
@@ -113,6 +105,28 @@ fun FirstSlide() {
             )
         }
     }
+}
+
+@Composable
+fun SecondSlide() {
+    Column(
+        modifier = Modifier.fillMaxSize(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+        Text(text = "Show adding screen")
+    }
+}
+
+@Composable
+fun ThirdScreen() {
+    Text(text = "Show edit screen")
+}
+
+@Composable
+fun FourthSlide() {
+    Text(text = "Show annual and weekly screen")
+    Text(text = "This screen lets you track your habits progress throughout the current year. When the new year begins, your progress will be archived, giving you a fresh start.")
 }
 
 @Preview(showBackground = true)
