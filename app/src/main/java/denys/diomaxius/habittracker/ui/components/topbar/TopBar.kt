@@ -9,7 +9,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Archive
 import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material.icons.filled.Key
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -19,7 +18,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
@@ -55,13 +53,6 @@ fun TopBar(
             modifier = Modifier.weight(1f),
             horizontalArrangement = Arrangement.End
         ) {
-            //Testing purpose
-            IconButton(onClick = {
-                navHostController.navigate(Screen.OnBoarding.route) { launchSingleTop = true }
-            }) {
-                Icon(imageVector = Icons.Default.Key, contentDescription = "Key", tint = Color.White)
-            }
-
             if (showArchiveIcon) {
                 IconButton(onClick = {
                     navHostController.navigate(Screen.Archive.route) { launchSingleTop = true }

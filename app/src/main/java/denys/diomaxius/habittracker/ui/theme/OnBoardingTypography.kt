@@ -13,6 +13,11 @@ val OnBoardingTypography = Typography(
         fontWeight = FontWeight.Bold,
         fontFamily = Roboto
     ),
+    titleMedium = TextStyle(
+        fontSize = 22.sp,
+        fontWeight = FontWeight.Bold,
+        fontFamily = Roboto
+    ),
     labelMedium = TextStyle(
         fontSize = 14.sp,
         fontWeight = FontWeight.Light,

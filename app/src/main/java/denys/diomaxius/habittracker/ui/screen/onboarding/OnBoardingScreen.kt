@@ -13,6 +13,7 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
@@ -30,19 +31,22 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
 import denys.diomaxius.habittracker.R
+import denys.diomaxius.habittracker.navigation.Screen
 import denys.diomaxius.habittracker.ui.components.CustomPagerIndicator
 import denys.diomaxius.habittracker.ui.theme.OnBoardingTypography
 
 @Composable
 fun OnBoardingScreen(
-
+    navHostController: NavHostController
 ) {
     val slides = listOf<@Composable () -> Unit>(
         { FirstSlide() },
         { SecondSlide() },
         { ThirdSlide() },
-        { FourthSlide() }
+        { FourthSlide() },
+        { FinalSlide(navHostController = navHostController) }
     )
 
     val pagerState = rememberPagerState { slides.size }
@@ -234,6 +238,42 @@ fun FourthSlide() {
             contentDescription = "Image",
             contentScale = ContentScale.FillWidth
         )
+    }
+}
+
+@Composable
+fun FinalSlide(
+    navHostController: NavHostController
+) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(horizontal = 14.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+        Spacer(modifier = Modifier.weight(1f))
+
+        Text(
+            style = OnBoardingTypography.titleMedium,
+            text = "Ready to take control of your habits?"
+        )
+
+        Spacer(modifier = Modifier.weight(1f))
+
+        Button(onClick = {
+            navHostController.navigate(Screen.MainScreen.route) {
+                navHostController.graph.startDestinationRoute?.let { route ->
+                    popUpTo(route) { inclusive = true }
+                }
+                launchSingleTop = true
+            }
+        }
+        ) {
+            Text(
+                text = "Let's Go!"
+            )
+        }
     }
 }
 

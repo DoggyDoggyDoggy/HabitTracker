@@ -21,7 +21,7 @@ fun AppNavGraph(
 ) {
     NavHost(
         navController = navHostController,
-        startDestination = Screen.MainScreen.route
+        startDestination = Screen.OnBoarding.route
     ) {
         composable(
             route = Screen.MainScreen.route,
@@ -74,7 +74,7 @@ fun AppNavGraph(
         composable(
             route = Screen.OnBoarding.route
         ) {
-            OnBoardingScreen()
+            OnBoardingScreen(navHostController = navHostController)
         }
     }
 }
