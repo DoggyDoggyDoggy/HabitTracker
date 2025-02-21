@@ -38,9 +38,6 @@ class WeeklyViewModel @Inject constructor(
     private val _habitListIsNotEmpty = MutableStateFlow(true)
     val habitListIsNotEmpty = _habitListIsNotEmpty.asStateFlow()
 
-    private val _doneHabitListIsNotEmpty = MutableStateFlow(false)
-    val doneHabitListIsNotEmpty = _doneHabitListIsNotEmpty.asStateFlow()
-
     init {
         getHabitList()
         getInProgressHabitList()
@@ -83,7 +80,6 @@ class WeeklyViewModel @Inject constructor(
             if (checkCurrentDateUseCase(habit.id, date) == 1) {
                 newList.add(habit)
                 _doneHabitList.value = newList.toList()
-                _doneHabitListIsNotEmpty.value = _doneHabitList.value.isNotEmpty()
             }
         }
     }

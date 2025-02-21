@@ -31,7 +31,6 @@ fun WeeklyScreen(
     val inProgressHabitList by viewModel.inProgressHabitList.collectAsState()
     val dayOfWeek by viewModel.dayOfWeek.collectAsState()
     val habitListIsNotEmpty by viewModel.habitListIsNotEmpty.collectAsState()
-    val doneHabitListIsNotEmpty by viewModel.doneHabitListIsNotEmpty.collectAsState()
 
     Scaffold(
         topBar = {
@@ -48,8 +47,7 @@ fun WeeklyScreen(
             listsNotEmpty = habitListIsNotEmpty,
             inProgressHabitList = inProgressHabitList,
             dayOfWeek = dayOfWeek,
-            insertProgress = { viewModel.insertProgress(it) },
-            doneHabitListIsNotEmpty = doneHabitListIsNotEmpty
+            insertProgress = { viewModel.insertProgress(it) }
         )
     }
 }
@@ -64,8 +62,7 @@ fun Content(
     listsNotEmpty: Boolean,
     inProgressHabitList: List<Habit>,
     dayOfWeek: LocalDate,
-    insertProgress: (HabitProgress) -> Unit,
-    doneHabitListIsNotEmpty: Boolean
+    insertProgress: (HabitProgress) -> Unit
 ) {
     if (listsNotEmpty) {
         Column(
@@ -91,7 +88,7 @@ fun Content(
                 )
             }
 
-            if (doneHabitListIsNotEmpty && LocalDate.now() >= dayOfWeek) {
+            if (doneList.isNotEmpty()) {
                 DoneHabits(
                     doneList = doneList
                 )
