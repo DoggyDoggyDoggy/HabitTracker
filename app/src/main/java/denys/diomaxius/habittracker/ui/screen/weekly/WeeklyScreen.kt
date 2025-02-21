@@ -3,10 +3,13 @@ package denys.diomaxius.habittracker.ui.screen.weekly
 import android.annotation.SuppressLint
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.shrinkHorizontally
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -92,6 +95,18 @@ fun Content(
                 DoneHabits(
                     doneList = doneList
                 )
+            }
+        }
+
+        if (doneList.isEmpty() && LocalDate.now() > dayOfWeek) {
+            Box (
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ){
+                Text(
+                    text = "Haven't done anything on that day",
+                    style = MaterialTheme.typography.bodyLarge
+                    )
             }
         }
     } else {
