@@ -6,6 +6,9 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.PagerState
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -22,7 +25,42 @@ import denys.diomaxius.habittracker.ui.theme.OnBoardingTypography
 fun OnBoardingScreen(
 
 ) {
-    FirstSlide()
+    val slides = listOf<@Composable () -> Unit>(
+        { FirstSlide() },
+        { SecondSlide() }
+    )
+
+    val pagerState = rememberPagerState { slides.size }
+
+    Content(
+        pagerState = pagerState,
+        slides = slides
+    )
+}
+
+@Composable
+fun Content(
+    pagerState: PagerState,
+    slides: List<@Composable () -> Unit>,
+
+    ) {
+    HorizontalPager(
+        modifier = Modifier.fillMaxSize(),
+        state = pagerState
+    ) {
+        slides[it]()
+    }
+}
+
+@Composable
+fun SecondSlide() {
+    Column(
+        modifier = Modifier.fillMaxSize(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+        Text(text = "This screen lets you track your habits progress throughout the current year. When the new year begins, your progress will be archived, giving you a fresh start.")
+    }
 }
 
 @Composable
@@ -35,7 +73,7 @@ fun FirstSlide() {
         Column(
             modifier = Modifier,
             horizontalAlignment = Alignment.CenterHorizontally
-        ){
+        ) {
             Text(
                 style = OnBoardingTypography.titleLarge,
                 text = "Welcome to HabitTracker!"
@@ -51,7 +89,7 @@ fun FirstSlide() {
             modifier = Modifier.padding(horizontal = 14.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp),
             horizontalAlignment = Alignment.CenterHorizontally
-        ){
+        ) {
             Text(
                 style = OnBoardingTypography.bodyMedium,
                 text = "Build positive habits effortlessly, track your progress day by day, and reach for your dreams—all in one simple app."
