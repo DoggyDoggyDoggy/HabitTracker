@@ -18,7 +18,7 @@ Habit Tracker is an Android application built with Jetpack Compose designed to h
 - **Reorderable LazyColumn:** For creating a drag-and-drop list interface.
 
 
-## License
+## Contributions
 Contributions are welcome! To contribute:
 
 - Fork the repository.
