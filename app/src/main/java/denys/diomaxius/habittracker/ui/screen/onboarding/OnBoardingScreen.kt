@@ -19,6 +19,7 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
@@ -31,30 +32,54 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import denys.diomaxius.habittracker.R
 import denys.diomaxius.habittracker.navigation.Screen
 import denys.diomaxius.habittracker.ui.components.CustomPagerIndicator
+import denys.diomaxius.habittracker.ui.components.Loading
 import denys.diomaxius.habittracker.ui.theme.OnBoardingTypography
 
 @Composable
 fun OnBoardingScreen(
-    navHostController: NavHostController
+    navHostController: NavHostController,
+    viewModel: OnBoardingScreenViewModel = hiltViewModel()
 ) {
-    val slides = listOf<@Composable () -> Unit>(
-        { FirstSlide() },
-        { SecondSlide() },
-        { ThirdSlide() },
-        { FourthSlide() },
-        { FinalSlide(navHostController = navHostController) }
-    )
+    val isFirstLaunch by viewModel.isFirstLaunch.collectAsStateWithLifecycle(initialValue = null)
 
-    val pagerState = rememberPagerState { slides.size }
+    if (isFirstLaunch != null) {
+        if (isFirstLaunch == true) {
+            navHostController.navigate(Screen.MainScreen.route) {
+                navHostController.graph.startDestinationRoute?.let { route ->
+                    popUpTo(route) { inclusive = true }
+                }
+                launchSingleTop = true
+            }
+        } else {
+            val slides = listOf<@Composable () -> Unit>(
+                { FirstSlide() },
+                { SecondSlide() },
+                { ThirdSlide() },
+                { FourthSlide() },
+                {
+                    FinalSlide(
+                        navHostController = navHostController,
+                        registerFirstEntry = { viewModel.registerFirstEntry() }
+                    )
+                }
+            )
 
-    Content(
-        pagerState = pagerState,
-        slides = slides
-    )
+            val pagerState = rememberPagerState { slides.size }
+
+            Content(
+                pagerState = pagerState,
+                slides = slides
+            )
+        }
+    } else {
+        Loading()
+    }
 }
 
 @Composable
@@ -243,7 +268,8 @@ fun FourthSlide() {
 
 @Composable
 fun FinalSlide(
-    navHostController: NavHostController
+    navHostController: NavHostController,
+    registerFirstEntry: () -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -262,6 +288,7 @@ fun FinalSlide(
         Spacer(modifier = Modifier.weight(1f))
 
         Button(onClick = {
+            registerFirstEntry()
             navHostController.navigate(Screen.MainScreen.route) {
                 navHostController.graph.startDestinationRoute?.let { route ->
                     popUpTo(route) { inclusive = true }

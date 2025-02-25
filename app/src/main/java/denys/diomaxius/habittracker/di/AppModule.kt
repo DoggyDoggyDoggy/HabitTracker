@@ -9,6 +9,7 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import denys.diomaxius.habittracker.data.database.HabitDatabase
 import denys.diomaxius.habittracker.data.datastore.DataStoreManager
+import denys.diomaxius.habittracker.data.datastore.OnboardingDataStoreManager
 import javax.inject.Singleton
 
 @Module
@@ -35,4 +36,8 @@ object AppModule {
     @Provides
     @Singleton
     fun provideDatastore(@ApplicationContext context: Context) = DataStoreManager(context)
+
+    @Provides
+    @Singleton
+    fun provideOnboardingDatastore(@ApplicationContext context: Context) = OnboardingDataStoreManager(context)
 }
