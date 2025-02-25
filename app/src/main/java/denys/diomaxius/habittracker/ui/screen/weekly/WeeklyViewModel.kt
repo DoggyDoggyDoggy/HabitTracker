@@ -1,6 +1,5 @@
 package denys.diomaxius.habittracker.ui.screen.weekly
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -50,7 +49,6 @@ class WeeklyViewModel @Inject constructor(
                 allHabits - doneHabits.toSet()
             }.debounce(100)
                 .collect { filteredList ->
-                    Log.i("filteredList", "$filteredList")
                     _inProgressHabitList.value = filteredList
                 }
         }
