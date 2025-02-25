@@ -4,8 +4,11 @@ import android.annotation.SuppressLint
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.shrinkHorizontally
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -79,35 +82,46 @@ fun Content(
                 dayOfWeek = dayOfWeek
             )
 
-            AnimatedVisibility(
-                visible = inProgressHabitList.isNotEmpty() && LocalDate.now() <= dayOfWeek,
-                exit = shrinkHorizontally(
-                    shrinkTowards = Alignment.End
-                )
-            ) {
-                InProgressHabits(
-                    inProgressHabitList = inProgressHabitList,
-                    insertProgress = insertProgress,
-                    dayOfWeek = dayOfWeek
-                )
-            }
 
-            if (doneList.isNotEmpty()) {
-                DoneHabits(
-                    doneList = doneList
-                )
+            BoxWithConstraints(
+                modifier = Modifier.weight(1f)
+            ) {
+                val availableHeight = maxHeight
+                Column(modifier = Modifier.fillMaxSize()) {
+                    AnimatedVisibility(
+                        modifier = Modifier.heightIn(max = availableHeight / 2),
+                        visible = inProgressHabitList.isNotEmpty() && LocalDate.now() <= dayOfWeek,
+                        exit = shrinkHorizontally(shrinkTowards = Alignment.End)
+                    ) {
+                        InProgressHabits(
+                            modifier = Modifier.fillMaxWidth(),
+                            inProgressHabitList = inProgressHabitList,
+                            insertProgress = insertProgress,
+                            dayOfWeek = dayOfWeek
+                        )
+                    }
+
+                    if (doneList.isNotEmpty()) {
+                        Box(modifier = Modifier.weight(1f)) {
+                            DoneHabits(
+                                modifier = Modifier.fillMaxSize(),
+                                doneList = doneList
+                            )
+                        }
+                    }
+                }
             }
         }
 
         if (doneList.isEmpty() && LocalDate.now() > dayOfWeek) {
-            Box (
+            Box(
                 modifier = Modifier.fillMaxSize(),
                 contentAlignment = Alignment.Center
-            ){
+            ) {
                 Text(
                     text = "Haven't done anything on that day",
                     style = MaterialTheme.typography.bodyLarge
-                    )
+                )
             }
         }
     } else {

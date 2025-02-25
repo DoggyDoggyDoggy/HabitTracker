@@ -46,6 +46,7 @@ import java.time.LocalDate
 
 @Composable
 fun InProgressHabits(
+    modifier: Modifier = Modifier,
     inProgressHabitList: List<Habit>,
     insertProgress: (HabitProgress) -> Unit,
     dayOfWeek: LocalDate
@@ -69,7 +70,9 @@ fun InProgressHabits(
         }
     }
 
-    Column {
+    Column (
+        modifier = modifier
+    ) {
         Card(
             modifier = Modifier
                 .fillMaxWidth()
@@ -88,7 +91,7 @@ fun InProgressHabits(
         }
 
 
-        LazyColumn {
+        LazyColumn () {
             items(inProgressHabitList, key = { it.id }) { habit ->
                 val isPendingDeletion = pendingDeletions.contains(habit)
                 var visible by remember(habit.id) { mutableStateOf(!isPendingDeletion) }
