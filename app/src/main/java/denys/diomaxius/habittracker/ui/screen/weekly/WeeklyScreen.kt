@@ -75,7 +75,8 @@ fun Content(
             ViewSwitcher(navHostController = navHostController)
 
             DayOfWeek(
-                changeDayOfWeek = changeDayOfWeek
+                changeDayOfWeek = changeDayOfWeek,
+                dayOfWeek = dayOfWeek
             )
 
             AnimatedVisibility(

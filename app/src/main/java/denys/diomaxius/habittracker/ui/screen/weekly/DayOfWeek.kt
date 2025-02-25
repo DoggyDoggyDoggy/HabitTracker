@@ -29,7 +29,8 @@ import java.util.Locale
 
 @Composable
 fun DayOfWeek(
-    changeDayOfWeek: (LocalDate) -> Unit
+    changeDayOfWeek: (LocalDate) -> Unit,
+    dayOfWeek: LocalDate
 ) {
     var currentDate by remember {
         mutableStateOf(LocalDate.now())
@@ -63,8 +64,7 @@ fun DayOfWeek(
                 border = CardDefaults.outlinedCardBorder(true),
                 elevation = CardDefaults.cardElevation(5.dp),
                 colors = CardDefaults.cardColors(
-                    containerColor = if (date == currentDate) Color(0xFFB2E9AC)
-                    else CardDefaults.cardColors().containerColor
+                    containerColor = drawContainerColor(date, currentDate, dayOfWeek)
                 )
             ) {
                 Column(
@@ -89,6 +89,14 @@ fun DayOfWeek(
     }
 }
 
+fun drawContainerColor(date: LocalDate, currentDate: LocalDate, dayOfWeek: LocalDate): Color {
+    return when (date) {
+        dayOfWeek -> Color(0xFFB2E9AC)
+        currentDate -> Color(0xFFE9ACAC)
+        else -> Color.Unspecified
+    }
+}
+
 fun nameOfDay(date: LocalDate): String {
     return date.dayOfWeek.name.take(3).lowercase()
         .replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }
@@ -108,6 +116,7 @@ fun calcDay(): List<LocalDate> {
 @Composable
 fun PreviewDayOfWeek() {
     DayOfWeek(
-        changeDayOfWeek = {}
+        changeDayOfWeek = {},
+        dayOfWeek = LocalDate.now()
     )
 }
