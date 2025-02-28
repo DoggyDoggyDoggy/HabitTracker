@@ -96,7 +96,8 @@ fun Content(
                 val habitProgress = habitProgressMap[habit.id] ?: emptyList()
                 HabitTable(
                     habit = habit,
-                    habitProgress = habitProgress
+                    habitProgress = habitProgress,
+                    streak = 0
                 )
             }
         }

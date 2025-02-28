@@ -4,6 +4,7 @@ import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -41,7 +42,8 @@ fun HabitTable(
     habit: Habit,
     habitProgress: List<HabitProgress>,
     insertProgress: ((HabitProgress) -> Unit)? = null,
-    checkTodayProgress: (suspend (Int, LocalDate) -> Boolean)? = null
+    checkTodayProgress: (suspend (Int, LocalDate) -> Boolean)? = null,
+    streak: Int
 ) {
     val habitGridConfig = HabitGridConfig(density = LocalDensity.current.density)
 
@@ -51,7 +53,8 @@ fun HabitTable(
             habitProgress = habitProgress,
             insertProgress = insertProgress,
             checkTodayProgress = checkTodayProgress,
-            habitGridConfig = habitGridConfig
+            habitGridConfig = habitGridConfig,
+            streak = streak
         )
     } else {
         NonInteractiveHabitTable(
@@ -69,7 +72,8 @@ fun InteractiveHabitTable(
     habitProgress: List<HabitProgress>,
     insertProgress: (HabitProgress) -> Unit,
     checkTodayProgress: suspend (Int, LocalDate) -> Boolean,
-    habitGridConfig: HabitGridConfig
+    habitGridConfig: HabitGridConfig,
+    streak: Int
 ) {
 
     var currentDate by remember(habit.id) { mutableStateOf(LocalDate.now()) }
@@ -120,15 +124,26 @@ fun InteractiveHabitTable(
                         .padding(start = 8.dp)
                         .weight(1f)
                 ) {
-                    Text(
-                        text = habit.name,
-                        style = if (habit.colorTheme < 12) {
-                            MaterialTheme.typography.titleSmall
-                        } else {
-                            MaterialTheme.typography.titleSmall.copy(shadow = null)
-                        },
-                        color = TableThemes.tableThemes[habit.colorTheme].fontColor
-                    )
+                    Row (
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(
+                            text = habit.name,
+                            style = if (habit.colorTheme < 12) {
+                                MaterialTheme.typography.titleSmall
+                            } else {
+                                MaterialTheme.typography.titleSmall.copy(shadow = null)
+                            },
+                            color = TableThemes.tableThemes[habit.colorTheme].fontColor
+                        )
+
+                        Spacer(modifier = Modifier.weight(1f))
+
+                        Text(
+                            modifier = Modifier.padding(end = 5.dp),
+                            text = "$streak"
+                        )
+                    }
 
                     if (habit.description.isNotEmpty()) {
                         Text(
@@ -243,7 +258,8 @@ fun PreviewHabitTable() {
         habitProgress = dummyHabitProgress,
         insertProgress = {},
         checkTodayProgress = { _, _ -> false },
-        habitGridConfig = habitGridConfig
+        habitGridConfig = habitGridConfig,
+        streak = 0
     )
 }
 

@@ -33,13 +33,16 @@ import denys.diomaxius.habittracker.domain.model.Habit
 @SuppressLint("RememberReturnType")
 @Composable
 fun DoneHabits(
+    modifier: Modifier = Modifier,
     doneList: List<Habit>,
     doneHabitsViewModel: DoneHabitsViewModel = viewModel()
 ) {
     val listState = rememberLazyListState()
     val visibleItems by doneHabitsViewModel.visibleItems.collectAsState()
 
-    Column {
+    Column(
+        modifier = modifier
+    ) {
         Card(
             modifier = Modifier
                 .fillMaxWidth()
