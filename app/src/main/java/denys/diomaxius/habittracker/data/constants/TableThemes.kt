@@ -211,7 +211,8 @@ fun PreviewHabitTable() {
         habitProgress = dummyHabitProgress,
         insertProgress = {},
         checkTodayProgress = { _, _ -> false},
-        habitGridConfig = habitGridConfig
+        habitGridConfig = habitGridConfig,
+        streak = 0
     )
 }
 

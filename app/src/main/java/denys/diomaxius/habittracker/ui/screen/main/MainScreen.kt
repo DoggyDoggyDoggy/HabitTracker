@@ -37,6 +37,7 @@ fun MainScreen(
     val habitList by viewModel.habitStateHolder.habitList.collectAsState()
     val habitProgressMap by viewModel.habitStateHolder.habitProgressMap.collectAsState()
     val isLoading by viewModel.habitStateHolder.isLoading.collectAsState()
+    val streakMap by viewModel.streakMap.collectAsState()
 
     Scaffold(
         topBar = {
@@ -54,7 +55,8 @@ fun MainScreen(
             insertProgress = { viewModel.insertProgress(it) },
             checkTodayProgress = { id, date -> viewModel.checkTodayProgress(id, date) },
             navHostController = navHostController,
-            isLoading = isLoading
+            isLoading = isLoading,
+            streakMap = streakMap
         )
     }
 }
@@ -68,7 +70,8 @@ fun Content(
     insertProgress: (HabitProgress) -> Unit,
     checkTodayProgress: suspend (Int, LocalDate) -> Boolean,
     navHostController: NavHostController,
-    isLoading: Boolean
+    isLoading: Boolean,
+    streakMap: Map<Int, Int>
 ) {
     if (isLoading) {
         Loading()
@@ -82,12 +85,14 @@ fun Content(
                 LazyColumn {
                     items(habitList) { habit ->
                         val habitProgress = habitProgressMap[habit.id] ?: emptyList()
+                        val streak = streakMap[habit.id] ?: 0
 
                         HabitTable(
                             habit = habit,
                             habitProgress = habitProgress,
                             insertProgress = insertProgress,
-                            checkTodayProgress = checkTodayProgress
+                            checkTodayProgress = checkTodayProgress,
+                            streak = streak
                         )
                     }
                 }

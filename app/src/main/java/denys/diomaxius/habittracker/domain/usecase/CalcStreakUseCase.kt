@@ -35,8 +35,6 @@ class CalcStreakUseCase @Inject constructor(
                 break
             }
         }
-
         return streak
     }
-
 }
