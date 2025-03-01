@@ -59,7 +59,18 @@ class MainScreenViewModel @Inject constructor(
     }
 
     suspend fun checkTodayProgress(habitId: Int, date: LocalDate): Boolean {
+        subscribeToStreak(habitId)
         return checkCurrentDateUseCase(habitId, date) > 0
+    }
+
+    private fun subscribeToStreak(habitId: Int) {
+        viewModelScope.launch {
+            calcStreakUseCase(habitId).collect { streak ->
+                _streakMap.update { currentMap ->
+                    currentMap.toMutableMap().apply { put(habitId, streak) }
+                }
+            }
+        }
     }
 
     fun insertProgress(habitProgress: HabitProgress) {
