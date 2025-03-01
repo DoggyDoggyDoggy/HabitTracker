@@ -1,10 +1,10 @@
 package denys.diomaxius.habittracker.ui.components.table
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -25,9 +25,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
+import denys.diomaxius.habittracker.R
 import denys.diomaxius.habittracker.data.constants.IconData
 import denys.diomaxius.habittracker.ui.dummyHabit
 import denys.diomaxius.habittracker.ui.dummyHabitProgress
@@ -136,13 +138,6 @@ fun InteractiveHabitTable(
                             },
                             color = TableThemes.tableThemes[habit.colorTheme].fontColor
                         )
-
-                        Spacer(modifier = Modifier.weight(1f))
-
-                        Text(
-                            modifier = Modifier.padding(end = 5.dp),
-                            text = "$streak"
-                        )
                     }
 
                     if (habit.description.isNotEmpty()) {
@@ -154,6 +149,14 @@ fun InteractiveHabitTable(
                     }
                 }
 
+                if (streak > 2) {
+                    Image(
+                        modifier = Modifier.size(22.dp),
+                        painter = painterResource(id = R.drawable.fire),
+                        contentDescription = "Fire streak",
+                        contentScale = ContentScale.Fit
+                    )
+                }
 
                 CheckedIcon(
                     modifier = Modifier.padding(end = 5.dp),
