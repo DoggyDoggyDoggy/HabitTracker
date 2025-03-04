@@ -13,7 +13,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -36,6 +35,7 @@ import denys.diomaxius.habittracker.ui.dummyHabitProgress
 import denys.diomaxius.habittracker.data.constants.TableThemes
 import denys.diomaxius.habittracker.domain.model.Habit
 import denys.diomaxius.habittracker.domain.model.HabitProgress
+import denys.diomaxius.habittracker.ui.theme.TableTypography
 import kotlinx.coroutines.delay
 import java.time.LocalDate
 
@@ -132,9 +132,9 @@ fun InteractiveHabitTable(
                         Text(
                             text = habit.name,
                             style = if (habit.colorTheme < 12) {
-                                MaterialTheme.typography.titleSmall
+                                TableTypography.titleSmall
                             } else {
-                                MaterialTheme.typography.titleSmall.copy(shadow = null)
+                                TableTypography.titleSmall.copy(shadow = null)
                             },
                             color = TableThemes.tableThemes[habit.colorTheme].fontColor
                         )
@@ -143,13 +143,16 @@ fun InteractiveHabitTable(
                     if (habit.description.isNotEmpty()) {
                         Text(
                             text = habit.description,
-                            style = MaterialTheme.typography.bodySmall,
+                            style = TableTypography.bodySmall,
                             color = TableThemes.tableThemes[habit.colorTheme].fontColor
                         )
                     }
                 }
 
                 if (streak > 2) {
+                    Text(
+                        text = "$streak"
+                    )
                     Image(
                         modifier = Modifier.size(22.dp),
                         painter = painterResource(id = R.drawable.fire),
@@ -221,14 +224,14 @@ fun NonInteractiveHabitTable(
                 ) {
                     Text(
                         text = habit.name,
-                        style = MaterialTheme.typography.titleSmall,
+                        style = TableTypography.titleSmall,
                         color = TableThemes.tableThemes[habit.colorTheme].fontColor
                     )
 
                     if (habit.description.isNotEmpty()) {
                         Text(
                             text = habit.description,
-                            style = MaterialTheme.typography.bodySmall,
+                            style = TableTypography.bodySmall,
                             color = TableThemes.tableThemes[habit.colorTheme].fontColor
                         )
                     }
@@ -262,7 +265,7 @@ fun PreviewHabitTable() {
         insertProgress = {},
         checkTodayProgress = { _, _ -> false },
         habitGridConfig = habitGridConfig,
-        streak = 0
+        streak = 3
     )
 }
 

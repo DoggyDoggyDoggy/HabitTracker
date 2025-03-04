@@ -39,6 +39,7 @@ import denys.diomaxius.habittracker.data.constants.IconData
 import denys.diomaxius.habittracker.data.constants.TableThemes
 import denys.diomaxius.habittracker.domain.model.Habit
 import denys.diomaxius.habittracker.domain.model.HabitProgress
+import denys.diomaxius.habittracker.ui.theme.TableTypography
 import denys.diomaxius.habittracker.ui.utils.checkIconColor
 import denys.diomaxius.habittracker.ui.utils.checkIconTint
 import kotlinx.coroutines.delay
@@ -167,9 +168,9 @@ fun InProgressHabitTable(
                 Text(
                     text = habit.name,
                     style = if (habit.colorTheme < 12) {
-                        MaterialTheme.typography.titleSmall
+                        TableTypography.titleSmall
                     } else {
-                        MaterialTheme.typography.titleSmall.copy(shadow = null)
+                        TableTypography.titleSmall.copy(shadow = null)
                     },
                     color = TableThemes.tableThemes[habit.colorTheme].fontColor
                 )
@@ -177,7 +178,7 @@ fun InProgressHabitTable(
                 if (habit.description.isNotEmpty()) {
                     Text(
                         text = habit.description,
-                        style = MaterialTheme.typography.bodySmall,
+                        style = TableTypography.bodySmall,
                         color = TableThemes.tableThemes[habit.colorTheme].fontColor,
                         softWrap = true
                     )

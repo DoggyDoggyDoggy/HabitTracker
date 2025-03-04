@@ -29,6 +29,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import denys.diomaxius.habittracker.data.constants.IconData
 import denys.diomaxius.habittracker.data.constants.TableThemes
 import denys.diomaxius.habittracker.domain.model.Habit
+import denys.diomaxius.habittracker.ui.theme.TableTypography
 
 @SuppressLint("RememberReturnType")
 @Composable
@@ -119,9 +120,9 @@ fun DoneHabitTable(
                 Text(
                     text = habit.name,
                     style = if (habit.colorTheme < 12) {
-                        MaterialTheme.typography.titleSmall
+                        TableTypography.titleSmall
                     } else {
-                        MaterialTheme.typography.titleSmall.copy(shadow = null)
+                        TableTypography.titleSmall.copy(shadow = null)
                     },
                     color = TableThemes.tableThemes[habit.colorTheme].fontColor
                 )
@@ -129,7 +130,7 @@ fun DoneHabitTable(
                 if (habit.description.isNotEmpty()) {
                     Text(
                         text = habit.description,
-                        style = MaterialTheme.typography.bodySmall,
+                        style = TableTypography.bodySmall,
                         color = TableThemes.tableThemes[habit.colorTheme].fontColor,
                         softWrap = true
                     )

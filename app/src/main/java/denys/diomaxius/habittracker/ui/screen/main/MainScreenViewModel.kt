@@ -78,6 +78,4 @@ class MainScreenViewModel @Inject constructor(
             insertHabitProgressUseCase(habitProgress)
         }
     }
-
-
 }
