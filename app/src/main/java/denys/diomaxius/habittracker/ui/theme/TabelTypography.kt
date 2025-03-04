@@ -16,6 +16,13 @@ val TableTypography = Typography(
         shadow = Shadow(Color.Black, Offset(1f, 1f), blurRadius = 1.5f),
         fontFamily = Ubuntu
     ),
+    //Number for Streak
+    titleMedium = TextStyle(
+        fontSize = 20.sp,
+        fontFamily = Ubuntu,
+        fontWeight = FontWeight.Bold
+    ),
+
     //Habit table description
     bodySmall = TextStyle(
         fontSize = 14.sp,

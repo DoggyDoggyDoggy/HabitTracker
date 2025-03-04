@@ -138,8 +138,8 @@ fun InteractiveHabitTable(
                             },
                             color = TableThemes.tableThemes[habit.colorTheme].fontColor
                         )
-                    }
 
+                    }
                     if (habit.description.isNotEmpty()) {
                         Text(
                             text = habit.description,
@@ -148,17 +148,23 @@ fun InteractiveHabitTable(
                         )
                     }
                 }
-
                 if (streak > 2) {
-                    Text(
-                        text = "$streak"
-                    )
-                    Image(
-                        modifier = Modifier.size(22.dp),
-                        painter = painterResource(id = R.drawable.fire),
-                        contentDescription = "Fire streak",
-                        contentScale = ContentScale.Fit
-                    )
+                    Row(
+                        modifier = Modifier.padding(start = 12.dp),
+                        verticalAlignment = Alignment.Bottom
+                    ){
+                        Text(
+                            text = "$streak",
+                            style = TableTypography.titleMedium,
+                            color = TableThemes.tableThemes[habit.colorTheme].unCheckedIcon
+                        )
+                        Image(
+                            modifier = Modifier.size(22.dp),
+                            painter = painterResource(id = R.drawable.fire),
+                            contentDescription = "Fire streak",
+                            contentScale = ContentScale.Fit
+                        )
+                    }
                 }
 
                 CheckedIcon(
