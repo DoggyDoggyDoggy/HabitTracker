@@ -27,8 +27,10 @@ fun CheckedIcon(
     isHabitTrackedForToday: Boolean,
     toggleTracked: () -> Unit,
     habitId: Int,
-    habitColorTheme: Int
-) {
+    habitColorTheme: Int,
+    showSnackbar: (String) -> Unit,
+
+    ) {
     var playAnimation by remember {
         mutableStateOf(false)
     }
@@ -47,6 +49,7 @@ fun CheckedIcon(
         ),
         onClick = {
             playAnimation = !isHabitTrackedForToday
+            showSnackbar("Hello World")
             insertProgress(
                 HabitProgress(
                     habitId = habitId,

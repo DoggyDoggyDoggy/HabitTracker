@@ -11,6 +11,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -44,19 +45,20 @@ fun MainScreen(
             TopBar(
                 navHostController = navHostController
             )
-        }
+        },
+        snackbarHost = { SnackbarHost(viewModel.snackbarHostState) }
     ) { innerPadding ->
         Content(
             modifier = Modifier
-                .padding(innerPadding)
-                ,
+                .padding(innerPadding),
             habitList = habitList,
             habitProgressMap = habitProgressMap,
             insertProgress = { viewModel.insertProgress(it) },
             checkTodayProgress = { id, date -> viewModel.checkTodayProgress(id, date) },
             navHostController = navHostController,
             isLoading = isLoading,
-            streakMap = streakMap
+            streakMap = streakMap,
+            showSnackbar = { message -> viewModel.showSnackbar(message) },
         )
     }
 }
@@ -71,15 +73,16 @@ fun Content(
     checkTodayProgress: suspend (Int, LocalDate) -> Boolean,
     navHostController: NavHostController,
     isLoading: Boolean,
-    streakMap: Map<Int, Int>
+    streakMap: Map<Int, Int>,
+    showSnackbar: (String) -> Unit
 ) {
     if (isLoading) {
         Loading()
     } else {
         if (habitList.isNotEmpty()) {
-            Column (
+            Column(
                 modifier = modifier
-            ){
+            ) {
                 ViewSwitcher(navHostController = navHostController)
 
                 LazyColumn {
@@ -92,7 +95,8 @@ fun Content(
                             habitProgress = habitProgress,
                             insertProgress = insertProgress,
                             checkTodayProgress = checkTodayProgress,
-                            streak = streak
+                            streak = streak,
+                            showSnackbar = showSnackbar
                         )
                     }
                 }

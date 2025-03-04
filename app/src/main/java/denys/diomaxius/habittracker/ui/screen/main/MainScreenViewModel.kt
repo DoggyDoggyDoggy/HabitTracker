@@ -1,5 +1,6 @@
 package denys.diomaxius.habittracker.ui.screen.main
 
+import androidx.compose.material3.SnackbarHostState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -31,6 +32,9 @@ class MainScreenViewModel @Inject constructor(
 
     private val _streakMap = MutableStateFlow<Map<Int, Int>>(emptyMap())
     val streakMap: StateFlow<Map<Int, Int>> = _streakMap.asStateFlow()
+
+    var snackbarHostState = SnackbarHostState()
+        private set
 
     init {
         viewModelScope.launch {
@@ -76,6 +80,12 @@ class MainScreenViewModel @Inject constructor(
     fun insertProgress(habitProgress: HabitProgress) {
         viewModelScope.launch {
             insertHabitProgressUseCase(habitProgress)
+        }
+    }
+
+    fun showSnackbar(message: String) {
+        viewModelScope.launch {
+            snackbarHostState.showSnackbar(message)
         }
     }
 }

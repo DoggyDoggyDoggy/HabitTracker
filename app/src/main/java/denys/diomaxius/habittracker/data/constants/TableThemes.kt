@@ -212,7 +212,8 @@ fun PreviewHabitTable() {
         insertProgress = {},
         checkTodayProgress = { _, _ -> false},
         habitGridConfig = habitGridConfig,
-        streak = 0
+        streak = 0,
+        showSnackbar = {}
     )
 }
 

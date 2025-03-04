@@ -97,7 +97,8 @@ fun Content(
                 HabitTable(
                     habit = habit,
                     habitProgress = habitProgress,
-                    streak = 0
+                    streak = 0,
+                    showSnackbar = {}
                 )
             }
         }

@@ -45,7 +45,8 @@ fun HabitTable(
     habitProgress: List<HabitProgress>,
     insertProgress: ((HabitProgress) -> Unit)? = null,
     checkTodayProgress: (suspend (Int, LocalDate) -> Boolean)? = null,
-    streak: Int
+    streak: Int,
+    showSnackbar: (String) -> Unit
 ) {
     val habitGridConfig = HabitGridConfig(density = LocalDensity.current.density)
 
@@ -56,7 +57,8 @@ fun HabitTable(
             insertProgress = insertProgress,
             checkTodayProgress = checkTodayProgress,
             habitGridConfig = habitGridConfig,
-            streak = streak
+            streak = streak,
+            showSnackbar = showSnackbar
         )
     } else {
         NonInteractiveHabitTable(
@@ -75,7 +77,8 @@ fun InteractiveHabitTable(
     insertProgress: (HabitProgress) -> Unit,
     checkTodayProgress: suspend (Int, LocalDate) -> Boolean,
     habitGridConfig: HabitGridConfig,
-    streak: Int
+    streak: Int,
+    showSnackbar: (String) -> Unit
 ) {
 
     var currentDate by remember(habit.id) { mutableStateOf(LocalDate.now()) }
@@ -173,7 +176,8 @@ fun InteractiveHabitTable(
                     insertProgress = insertProgress,
                     isHabitTrackedForToday = isHabitTrackedForToday,
                     toggleTracked = { isHabitTrackedForToday = !isHabitTrackedForToday },
-                    habitColorTheme = habit.colorTheme
+                    habitColorTheme = habit.colorTheme,
+                    showSnackbar = showSnackbar
                 )
 
             }
@@ -271,7 +275,8 @@ fun PreviewHabitTable() {
         insertProgress = {},
         checkTodayProgress = { _, _ -> false },
         habitGridConfig = habitGridConfig,
-        streak = 3
+        streak = 3,
+        showSnackbar = {}
     )
 }
 
