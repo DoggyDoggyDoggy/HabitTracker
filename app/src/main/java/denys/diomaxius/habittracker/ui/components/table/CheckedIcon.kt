@@ -49,7 +49,7 @@ fun CheckedIcon(
         ),
         onClick = {
             playAnimation = !isHabitTrackedForToday
-            showSnackbar("Hello World")
+            //showSnackbar("Hello World") Need to develop
             insertProgress(
                 HabitProgress(
                     habitId = habitId,

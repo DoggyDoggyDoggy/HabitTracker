@@ -41,11 +41,7 @@ fun MainScreen(
     val streakMap by viewModel.streakMap.collectAsState()
 
     Scaffold(
-        topBar = {
-            TopBar(
-                navHostController = navHostController
-            )
-        },
+        topBar = { TopBar(navHostController = navHostController) },
         snackbarHost = { SnackbarHost(viewModel.snackbarHostState) }
     ) { innerPadding ->
         Content(
