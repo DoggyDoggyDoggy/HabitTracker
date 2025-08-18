@@ -17,14 +17,6 @@ Habit Tracker is an Android application built with Jetpack Compose designed to h
 - **Gson:** For JSON parsing.
 - **Reorderable LazyColumn:** For creating a drag-and-drop list interface.
 
-
-## Contributions
-Contributions are welcome! To contribute:
-
-- Fork the repository.
-- Create a new branch for your feature or bug fix.
-- Commit your changes and open a pull request.
-
 ## License
 
 This project is licensed under the [MIT License](./LICENSE).
